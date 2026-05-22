@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+export const runtime = "edge";
+
 type Post = {
   title: string;
   content: string;
