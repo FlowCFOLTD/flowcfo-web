@@ -13,6 +13,10 @@ import {
   MoreHorizontal,
 } from 'lucide-react';
 
+import { useUser } from '@/hooks/api/use-user';
+import { useSubmitOnboardingStep1 } from '@/hooks/api/use-onboarding';
+import { Loader2 } from 'lucide-react';
+
 const posSystems = [
   {
     id: 'toast',
@@ -42,14 +46,45 @@ const posSystems = [
 
 export default function RestaurantStep1() {
   const router = useRouter();
+  const { data: user } = useUser();
+  const { mutate: submitStep1, isPending: isSubmitting } =
+    useSubmitOnboardingStep1();
+
   const [locations, setLocations] = useState('');
   const [selectedPos, setSelectedPos] = useState<string | null>(null);
+  const [businessName, setBusinessName] = useState<string | null>(null);
+  const [fullName, setFullName] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const displayBusinessName =
+    businessName !== null ? businessName : user?.business_name || '';
+  const displayFullName = fullName !== null ? fullName : user?.full_name || '';
 
   const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
-    if (locations && selectedPos) {
-      router.push('/onboarding/restaurant/step-2');
-    }
+    setError(null);
+    if (!locations || !selectedPos) return;
+
+    submitStep1(
+      {
+        business_type: 'restaurant',
+        business_name: displayBusinessName,
+        full_name: displayFullName,
+        tax_rate: 25.0,
+        currency: 'USD',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+        locations: parseInt(locations),
+        pos_system: selectedPos,
+      },
+      {
+        onSuccess: () => {
+          router.push('/onboarding/restaurant/step-2');
+        },
+        onError: (err) => {
+          setError(err instanceof Error ? err.message : 'An error occurred');
+        },
+      },
+    );
   };
 
   return (
@@ -101,30 +136,67 @@ export default function RestaurantStep1() {
         {/* Right Side: Input Card */}
         <div className="lg:col-span-7 bg-white/5 border border-white/10 p-8 md:p-12 shadow-[0_0_20px_rgba(212,175,55,0.05)]">
           <form onSubmit={handleContinue} className="space-y-12">
-            {/* Locations Input */}
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 p-4 text-red-400 text-sm">
+                {error}
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Business Name Input */}
+              <div className="space-y-4">
+                <label
+                  className="block flow-label text-white uppercase tracking-widest"
+                  htmlFor="business-name"
+                >
+                  Business Name
+                </label>
+                <input
+                  className="w-full bg-transparent border-b border-white/20 py-4 px-0 font-mono text-xl text-white outline-none transition-all focus:border-flow-gold"
+                  id="business-name"
+                  placeholder="e.g. Bistro Central"
+                  required
+                  value={displayBusinessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                />
+              </div>
+
+              {/* Full Name Input */}
+              <div className="space-y-4">
+                <label
+                  className="block flow-label text-white uppercase tracking-widest"
+                  htmlFor="full-name"
+                >
+                  Full Name
+                </label>
+                <input
+                  className="w-full bg-transparent border-b border-white/20 py-4 px-0 font-mono text-xl text-white outline-none transition-all focus:border-flow-gold"
+                  id="full-name"
+                  placeholder="Jane Doe"
+                  required
+                  value={displayFullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Total Locations Selection */}
             <div className="space-y-6">
               <label
                 className="block flow-label text-white uppercase tracking-widest"
                 htmlFor="locations"
               >
-                Number of Locations
+                Total Operational Locations
               </label>
-              <div className="relative group">
-                <input
-                  className="w-full bg-transparent border-b border-white/20 py-4 px-0 font-mono text-3xl text-white outline-none transition-all focus:border-flow-gold"
-                  id="locations"
-                  placeholder="00"
-                  type="number"
-                  value={locations}
-                  onChange={(e) => setLocations(e.target.value)}
-                />
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 text-white/20">
-                  <Store className="h-6 w-6" />
-                </div>
-              </div>
-              <p className="font-body text-sm text-white/40 italic">
-                Define the physical footprint of your portfolio.
-              </p>
+              <input
+                className="w-full bg-transparent border-b border-white/20 py-4 px-0 font-body text-xl text-white outline-none transition-all focus:border-flow-gold"
+                id="locations"
+                placeholder="1"
+                required
+                type="number"
+                value={locations}
+                onChange={(e) => setLocations(e.target.value)}
+              />
             </div>
 
             {/* POS Integration Selection */}
@@ -167,11 +239,23 @@ export default function RestaurantStep1() {
             <div className="pt-8 flex flex-col sm:flex-row items-center gap-6">
               <button
                 type="submit"
-                disabled={!locations || !selectedPos}
-                className="w-full sm:flex-1 flex items-center justify-center gap-3 bg-flow-gold text-flow-black py-6 px-10 font-bold uppercase tracking-[0.2em] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                disabled={
+                  !locations ||
+                  !selectedPos ||
+                  !displayBusinessName ||
+                  !displayFullName ||
+                  isSubmitting
+                }
+                className="w-full sm:flex-1 flex items-center justify-center gap-3 bg-flow-gold text-flow-black py-6 px-10 font-bold uppercase tracking-[0.2em] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 min-w-[240px]"
               >
-                CONTINUE SETUP
-                <ArrowRight className="h-5 w-5" />
+                {isSubmitting ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <>
+                    CONTINUE SETUP
+                    <ArrowRight className="h-5 w-5" />
+                  </>
+                )}
               </button>
               <button
                 type="button"

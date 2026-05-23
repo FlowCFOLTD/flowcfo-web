@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, BarChart3, CheckCircle2, Handshake, Mail, MessageSquare, PlugZap, ShieldCheck, Users } from "lucide-react";
+import { ArrowRight, BarChart3, CheckCircle2, Handshake, Mail, MessageSquare, PlugZap, ShieldCheck, Users, Loader2 } from "lucide-react";
+import { useSubmitContact } from "@/hooks/api/use-public";
 
 const subjects = [
   "General question",
@@ -15,6 +16,29 @@ const subjects = [
 
 export default function Contact() {
   const [status, setStatus] = useState<"idle" | "sent">("idle");
+  const [error, setError] = useState<string | null>(null);
+  const { mutate: submitContact, isPending } = useSubmitContact();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      subject: formData.get("subject") as string,
+      message: formData.get("message") as string,
+    };
+
+    submitContact(data, {
+      onSuccess: () => {
+        setStatus("sent");
+      },
+      onError: (err) => {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      }
+    });
+  };
 
   return (
     <main className="flow-container pb-16 pt-32">
@@ -30,92 +54,105 @@ export default function Contact() {
           </div>
 
           <div className="border border-flow-line bg-white p-8 md:p-12">
-            <div className="space-y-8">
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                <div className="flex flex-col gap-2">
-                  <label className="flow-label text-flow-obsidian" htmlFor="contact-name">
-                    Name
-                  </label>
-                  <input
-                    className="border-0 border-b border-flow-obsidian bg-transparent px-0 py-2 text-base focus:border-b-2 focus:ring-0"
-                    id="contact-name"
-                    name="name"
-                    placeholder="Your name"
-                    required
-                    type="text"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="flow-label text-flow-obsidian" htmlFor="contact-email">
-                    Email
-                  </label>
-                  <input
-                    className="border-0 border-b border-flow-obsidian bg-transparent px-0 py-2 text-base focus:border-b-2 focus:ring-0"
-                    id="contact-email"
-                    name="email"
-                    placeholder="you@company.com"
-                    required
-                    type="email"
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="flow-label text-flow-obsidian" htmlFor="contact-subject">
-                  Subject
-                </label>
-                <select
-                  className="border-0 border-b border-flow-obsidian bg-transparent px-0 py-2 text-base focus:border-b-2 focus:ring-0"
-                  id="contact-subject"
-                  name="subject"
-                  defaultValue="Early access"
-                >
-                  {subjects.map((subject) => (
-                    <option key={subject} value={subject}>
-                      {subject}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="flow-label text-flow-obsidian" htmlFor="contact-message">
-                  Message
-                </label>
-                <textarea
-                  className="resize-none border-0 border-b border-flow-obsidian bg-transparent px-0 py-2 text-base focus:border-b-2 focus:ring-0"
-                  id="contact-message"
-                  name="message"
-                  placeholder="Tell us what financial decision feels hardest to make right now."
-                  required
-                  rows={4}
-                />
-              </div>
-
-              <div className="pt-4">
+            {status === "sent" ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <CheckCircle2 className="mb-6 h-16 w-16 text-flow-forest" />
+                <h2 className="flow-headline-lg mb-4 text-flow-obsidian">Message sent!</h2>
+                <p className="max-w-xs text-base text-[#444748]">
+                  Thanks for reaching out. We&apos;ll get back to you within 24 hours.
+                </p>
                 <button
-                  className={`flow-label flex w-full items-center justify-center gap-2 px-12 py-4 transition-all md:w-auto ${
-                    status === "sent"
-                      ? "bg-flow-forest text-white"
-                      : "bg-flow-gold text-flow-obsidian hover:brightness-110"
-                  }`}
-                  type="button"
-                  onClick={() => setStatus("sent")}
+                  onClick={() => setStatus("idle")}
+                  className="mt-8 font-mono text-sm uppercase tracking-widest text-flow-gold hover:underline"
                 >
-                  {status === "sent" ? (
-                    <>
-                      <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
-                      Received
-                    </>
-                  ) : (
-                    <>
-                      Send Message
-                      <ArrowRight className="h-5 w-5" aria-hidden="true" />
-                    </>
-                  )}
+                  Send another message
                 </button>
               </div>
-            </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-8">
+                {error && (
+                  <div className="bg-red-500/10 border border-red-500/20 p-4 text-red-600 text-sm">
+                    {error}
+                  </div>
+                )}
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                  <div className="flex flex-col gap-2">
+                    <label className="flow-label text-flow-obsidian" htmlFor="contact-name">
+                      Name
+                    </label>
+                    <input
+                      className="border-0 border-b border-flow-obsidian bg-transparent px-0 py-2 text-base focus:border-b-2 focus:ring-0"
+                      id="contact-name"
+                      name="name"
+                      placeholder="Your name"
+                      required
+                      type="text"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="flow-label text-flow-obsidian" htmlFor="contact-email">
+                      Email
+                    </label>
+                    <input
+                      className="border-0 border-b border-flow-obsidian bg-transparent px-0 py-2 text-base focus:border-b-2 focus:ring-0"
+                      id="contact-email"
+                      name="email"
+                      placeholder="you@company.com"
+                      required
+                      type="email"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="flow-label text-flow-obsidian" htmlFor="contact-subject">
+                    Subject
+                  </label>
+                  <select
+                    className="border-0 border-b border-flow-obsidian bg-transparent px-0 py-2 text-base focus:border-b-2 focus:ring-0"
+                    id="contact-subject"
+                    name="subject"
+                    defaultValue="Early access"
+                  >
+                    {subjects.map((subject) => (
+                      <option key={subject} value={subject}>
+                        {subject}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="flow-label text-flow-obsidian" htmlFor="contact-message">
+                    Message
+                  </label>
+                  <textarea
+                    className="resize-none border-0 border-b border-flow-obsidian bg-transparent px-0 py-2 text-base focus:border-b-2 focus:ring-0"
+                    id="contact-message"
+                    name="message"
+                    placeholder="Tell us what financial decision feels hardest to make right now."
+                    required
+                    rows={4}
+                  />
+                </div>
+
+                <div className="pt-4">
+                  <button
+                    disabled={isPending}
+                    className="flow-label flex w-full items-center justify-center gap-2 px-12 py-4 transition-all md:w-auto bg-flow-gold text-flow-obsidian hover:brightness-110 disabled:opacity-50"
+                  >
+                    {isPending ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <>
+                        Send Message
+                        <ArrowRight className="h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </section>
 

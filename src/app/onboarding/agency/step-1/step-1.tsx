@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
@@ -10,7 +10,8 @@ import {
   CheckCircle2,
   Loader2,
 } from 'lucide-react';
-import { authClient } from '@/lib/auth-client';
+import { useUser } from '@/hooks/api/use-user';
+import { useSubmitOnboardingStep1 } from '@/hooks/api/use-onboarding';
 
 const billingTerms = [
   { id: 'net-15', label: 'Net 15', sub: 'Aggressive' },
@@ -20,67 +21,44 @@ const billingTerms = [
 
 export default function AgencyStep1() {
   const router = useRouter();
-  const [businessName, setBusinessName] = useState('');
-  const [fullName, setFullName] = useState('');
+  const { data: user } = useUser();
+  const { mutate: submitStep1, isPending: isSubmitting } =
+    useSubmitOnboardingStep1();
+
+  const [businessName, setBusinessName] = useState<string | null>(null);
+  const [fullName, setFullName] = useState<string | null>(null);
   const [headcount, setHeadcount] = useState('');
   const [selectedTerm, setSelectedTerm] = useState('net-30');
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    authClient.getSession().then(({ data }) => {
-      if (data?.user?.name) {
-        setFullName(data.user.name);
-      }
-    });
-  }, []);
+  const displayBusinessName =
+    businessName !== null ? businessName : user?.business_name || '';
+  const displayFullName = fullName !== null ? fullName : user?.full_name || '';
 
-  const handleContinue = async (e: React.FormEvent) => {
+  const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError(null);
 
-    try {
-      const { data: sessionData } = await authClient.getSession();
-      if (!sessionData?.session.token) {
-        router.push('/signin');
-        return;
-      }
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/users/onboarding/step-1`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionData.session.token}`,
-          },
-          body: JSON.stringify({
-            business_type: 'agency',
-            business_name: businessName,
-            full_name: fullName,
-            tax_rate: 25.0,
-            currency: 'USD',
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-            headcount: parseInt(headcount),
-            billing_terms: selectedTerm,
-          }),
+    submitStep1(
+      {
+        business_type: 'agency',
+        business_name: displayBusinessName,
+        full_name: displayFullName,
+        tax_rate: 25.0,
+        currency: 'USD',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+        headcount: parseInt(headcount),
+        billing_terms: selectedTerm,
+      },
+      {
+        onSuccess: () => {
+          router.push('/onboarding/agency/step-2');
         },
-      );
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(
-          errData.error?.message || 'Failed to save onboarding data',
-        );
-      }
-
-      router.push('/onboarding/agency/step-2');
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setIsLoading(false);
-    }
+        onError: (err) => {
+          setError(err instanceof Error ? err.message : 'An error occurred');
+        },
+      },
+    );
   };
 
   return (
@@ -137,7 +115,7 @@ export default function AgencyStep1() {
                   id="business-name"
                   placeholder="e.g. Creative Co."
                   required
-                  value={businessName}
+                  value={displayBusinessName}
                   onChange={(e) => setBusinessName(e.target.value)}
                 />
               </div>
@@ -155,7 +133,7 @@ export default function AgencyStep1() {
                   id="full-name"
                   placeholder="Jane Doe"
                   required
-                  value={fullName}
+                  value={displayFullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
               </div>
@@ -237,10 +215,15 @@ export default function AgencyStep1() {
             <div className="pt-8 flex flex-col sm:flex-row items-center gap-6">
               <button
                 type="submit"
-                disabled={!headcount || !businessName || !fullName || isLoading}
+                disabled={
+                  !headcount ||
+                  !displayBusinessName ||
+                  !displayFullName ||
+                  isSubmitting
+                }
                 className="w-full sm:flex-1 flex items-center justify-center gap-3 bg-flow-gold text-flow-black py-6 px-10 font-bold uppercase tracking-[0.2em] transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50 min-w-[240px]"
               >
-                {isLoading ? (
+                {isSubmitting ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
                   <>

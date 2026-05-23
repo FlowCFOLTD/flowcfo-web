@@ -12,6 +12,10 @@ import {
   Info,
 } from 'lucide-react';
 
+import { useUser } from '@/hooks/api/use-user';
+import { useSubmitOnboardingStep1 } from '@/hooks/api/use-onboarding';
+import { Loader2 } from 'lucide-react';
+
 const platforms = [
   { id: 'shopify', name: 'SHOPIFY', icon: Store },
   { id: 'amazon', name: 'AMAZON', icon: Package },
@@ -20,13 +24,44 @@ const platforms = [
 
 export default function EcommerceStep1() {
   const router = useRouter();
+  const { data: user } = useUser();
+  const { mutate: submitStep1, isPending: isSubmitting } =
+    useSubmitOnboardingStep1();
+
   const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
+  const [businessName, setBusinessName] = useState<string | null>(null);
+  const [fullName, setFullName] = useState<string | null>(null);
   const [valuation, setValuation] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const displayBusinessName =
+    businessName !== null ? businessName : user?.business_name || '';
+  const displayFullName = fullName !== null ? fullName : user?.full_name || '';
 
   const handleContinue = () => {
-    if (selectedPlatform && valuation) {
-      router.push('/onboarding/ecommerce/step-2');
-    }
+    setError(null);
+    if (!selectedPlatform || !valuation) return;
+
+    submitStep1(
+      {
+        business_type: 'ecommerce',
+        business_name: displayBusinessName,
+        full_name: displayFullName,
+        tax_rate: 25.0,
+        currency: 'USD',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+        platform: selectedPlatform,
+        inventory_value: parseFloat(valuation),
+      },
+      {
+        onSuccess: () => {
+          router.push('/onboarding/ecommerce/step-2');
+        },
+        onError: (err) => {
+          setError(err instanceof Error ? err.message : 'An error occurred');
+        },
+      },
+    );
   };
 
   return (
@@ -50,6 +85,38 @@ export default function EcommerceStep1() {
       {/* Configuration Card */}
       <div className="mx-auto w-full max-w-4xl border border-white/10 bg-white/5 p-10 md:p-16">
         <div className="flex flex-col gap-16">
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 p-4 text-red-400 text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Identity Fields */}
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
+            <div className="flex flex-col gap-4">
+              <label className="flow-label text-white/40 tracking-[0.2em]">
+                BUSINESS NAME
+              </label>
+              <input
+                className="w-full border-b border-white/20 bg-transparent py-4 font-mono text-xl text-white outline-none transition-all focus:border-flow-gold"
+                placeholder="ACME E-COMMERCE"
+                value={displayBusinessName}
+                onChange={(e) => setBusinessName(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-4">
+              <label className="flow-label text-white/40 tracking-[0.2em]">
+                YOUR FULL NAME
+              </label>
+              <input
+                className="w-full border-b border-white/20 bg-transparent py-4 font-mono text-xl text-white outline-none transition-all focus:border-flow-gold"
+                placeholder="JANE DOE"
+                value={displayFullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </div>
+          </div>
+
           {/* Platform Selection */}
           <div>
             <label className="flow-label mb-8 block text-white/40 tracking-[0.2em]">
@@ -134,16 +201,25 @@ export default function EcommerceStep1() {
           BACK
         </button>
         <div className="flex gap-6">
-          {/* <button className="px-10 py-5 flow-label border border-white/10 text-white/60 transition-all hover:border-white/30 hover:text-white">
-            SAVE DRAFT
-          </button> */}
           <button
             onClick={handleContinue}
-            disabled={!selectedPlatform || !valuation}
-            className="flex items-center gap-3 bg-flow-gold px-12 py-5 font-bold uppercase tracking-[0.15em] text-flow-black transition-all hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:active:scale-100"
+            disabled={
+              !selectedPlatform ||
+              !valuation ||
+              !displayBusinessName ||
+              !displayFullName ||
+              isSubmitting
+            }
+            className="flex min-w-[280px] items-center justify-center gap-3 bg-flow-gold px-12 py-5 font-bold uppercase tracking-[0.15em] text-flow-black transition-all hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:active:scale-100"
           >
-            CONTINUE SETUP
-            <ArrowRight className="h-5 w-5" />
+            {isSubmitting ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <>
+                CONTINUE SETUP
+                <ArrowRight className="h-5 w-5" />
+              </>
+            )}
           </button>
         </div>
       </div>

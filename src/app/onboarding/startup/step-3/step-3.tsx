@@ -13,61 +13,36 @@ import {
   CheckCircle2,
   TrendingUp,
 } from 'lucide-react';
-import { authClient } from '@/lib/auth-client';
+import { useSubmitOnboardingStep3 } from '@/hooks/api/use-onboarding';
 
 export default function StartupStep3() {
   const router = useRouter();
   const [taxRate, setTaxRate] = useState(25);
-  const [isFinishing, setIsFinishing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { mutate: submitStep3, isPending: isFinishing } = useSubmitOnboardingStep3();
 
   const baseMonthlyBurn = 42500;
   const estimatedReserve = baseMonthlyBurn * (taxRate / 100);
   const runwayMonths = 14.2;
   const runwayImpact = (taxRate / 25) * 0.8; // Simulating impact logic
 
-  const handleFinish = async (e: React.FormEvent) => {
+  const handleFinish = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsFinishing(true);
     setError(null);
 
-    try {
-      const { data: sessionData } = await authClient.getSession();
-      if (!sessionData?.session.token) {
-        router.push('/signin');
-        return;
+    submitStep3({ tax_rate: taxRate }, {
+      onSuccess: () => {
+        setShowSuccess(true);
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 2000);
+      },
+      onError: (err) => {
+        setError(err instanceof Error ? err.message : 'An error occurred');
       }
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/users/onboarding/step-3`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionData.session.token}`,
-          },
-          body: JSON.stringify({
-            tax_rate: taxRate,
-          }),
-        },
-      );
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(
-          errData.error?.message || 'Failed to complete onboarding',
-        );
-      }
-
-      setShowSuccess(true);
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 2000);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-      setIsFinishing(false);
-    }
+    });
   };
 
   return (

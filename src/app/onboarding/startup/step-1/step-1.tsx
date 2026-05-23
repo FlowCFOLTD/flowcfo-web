@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
@@ -10,7 +10,8 @@ import {
   TrendingUp,
   Loader2,
 } from 'lucide-react';
-import { authClient } from '@/lib/auth-client';
+import { useUser } from '@/hooks/api/use-user';
+import { useSubmitOnboardingStep1 } from '@/hooks/api/use-onboarding';
 
 const fundingRounds = [
   { value: 'pre-seed', label: 'PRE-SEED' },
@@ -23,68 +24,44 @@ const fundingRounds = [
 
 export default function StartupStep1() {
   const router = useRouter();
-  const [businessName, setBusinessName] = useState('');
-  const [fullName, setFullName] = useState('');
+  const { data: user } = useUser();
+  const { mutate: submitStep1, isPending: isSubmitting } =
+    useSubmitOnboardingStep1();
+
+  const [businessName, setBusinessName] = useState<string | null>(null);
+  const [fullName, setFullName] = useState<string | null>(null);
   const [fundingRound, setFundingRound] = useState('');
   const [operatingBurn, setOperatingBurn] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Pre-fill full name from session
-    authClient.getSession().then(({ data }) => {
-      if (data?.user?.name) {
-        setFullName(data.user.name);
-      }
-    });
-  }, []);
+  const displayBusinessName =
+    businessName !== null ? businessName : user?.business_name || '';
+  const displayFullName = fullName !== null ? fullName : user?.full_name || '';
 
-  const handleContinue = async (e: React.FormEvent) => {
+  const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError(null);
 
-    try {
-      const { data: sessionData } = await authClient.getSession();
-      if (!sessionData?.session.token) {
-        router.push('/signin');
-        return;
-      }
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/users/onboarding/step-1`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionData.session.token}`,
-          },
-          body: JSON.stringify({
-            business_type: 'startup',
-            business_name: businessName,
-            full_name: fullName,
-            tax_rate: 25.0,
-            currency: 'USD',
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-            funding_round: fundingRound,
-            monthly_burn: parseFloat(operatingBurn),
-          }),
+    submitStep1(
+      {
+        business_type: 'startup',
+        business_name: displayBusinessName,
+        full_name: displayFullName,
+        tax_rate: 25.0,
+        currency: 'USD',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+        funding_round: fundingRound,
+        monthly_burn: parseFloat(operatingBurn),
+      },
+      {
+        onSuccess: () => {
+          router.push('/onboarding/startup/step-2');
         },
-      );
-
-      if (!response.ok) {
-        const errData = await response.json();
-        throw new Error(
-          errData.error?.message || 'Failed to save onboarding data',
-        );
-      }
-
-      router.push('/onboarding/startup/step-2');
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setIsLoading(false);
-    }
+        onError: (err) => {
+          setError(err instanceof Error ? err.message : 'An error occurred');
+        },
+      },
+    );
   };
 
   return (
@@ -139,12 +116,12 @@ export default function StartupStep1() {
                 required
                 className="w-full border-b border-white/20 bg-transparent py-6 font-mono text-xl text-white outline-none transition-all focus:border-flow-gold"
                 placeholder="ACME INC"
-                value={businessName}
+                value={displayBusinessName}
                 onChange={(e) => setBusinessName(e.target.value)}
               />
             </div>
 
-            {/* Full Name Input */}
+            {/* Your Full Name Input */}
             <div className="flex flex-col gap-6">
               <label
                 className="flow-label text-white/40 tracking-[0.2em]"
@@ -157,7 +134,7 @@ export default function StartupStep1() {
                 required
                 className="w-full border-b border-white/20 bg-transparent py-6 font-mono text-xl text-white outline-none transition-all focus:border-flow-gold"
                 placeholder="JANE DOE"
-                value={fullName}
+                value={displayFullName}
                 onChange={(e) => setFullName(e.target.value)}
               />
             </div>
@@ -258,13 +235,13 @@ export default function StartupStep1() {
             disabled={
               !fundingRound ||
               !operatingBurn ||
-              !businessName ||
-              !fullName ||
-              isLoading
+              !displayBusinessName ||
+              !displayFullName ||
+              isSubmitting
             }
             className="flex items-center justify-center gap-3 bg-flow-gold px-12 py-5 font-bold uppercase tracking-[0.15em] text-flow-black transition-all hover:brightness-110 active:scale-95 disabled:opacity-50 disabled:active:scale-100 min-w-[240px]"
           >
-            {isLoading ? (
+            {isSubmitting ? (
               <Loader2 className="h-5 w-5 animate-spin" />
             ) : (
               <>

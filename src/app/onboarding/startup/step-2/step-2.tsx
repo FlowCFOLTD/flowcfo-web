@@ -16,18 +16,23 @@ import {
 } from 'lucide-react';
 
 import BankConnectionCard from '@/components/onboarding/bank-connection-card';
-import { authClient } from '@/lib/auth-client';
+import {
+  useVerifyBankSync,
+  useSubmitOnboardingStep2,
+} from '@/hooks/api/use-onboarding';
 
 export default function StartupStep2() {
   const router = useRouter();
-  const [isSyncing, setIsSyncing] = useState(false);
   const [hasAccounts, setHasAccounts] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { mutate: verifyBankSync, isPending: isVerifying } =
+    useVerifyBankSync();
+  const { mutate: submitStep2, isPending: isSubmitting } =
+    useSubmitOnboardingStep2();
 
   const handlePlaidConnect = async () => {
     // Logic for Plaid connection
-    // For now, we'll just simulate a successful connection
     setHasAccounts(true);
   };
 
@@ -41,59 +46,38 @@ export default function StartupStep2() {
     setHasAccounts(true);
   };
 
-  const handleCompleteStep2 = async () => {
-    setIsLoading(true);
+  const handleCompleteStep2 = () => {
     setError(null);
 
-    try {
-      const { data: sessionData } = await authClient.getSession();
-      if (!sessionData?.session.token) {
-        router.push('/signin');
-        return;
-      }
-
-      // First check if at least one account is linked
-      const checkResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/users/onboarding/step-2/bank-synced`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${sessionData.session.token}`,
+    verifyBankSync(undefined, {
+      onSuccess: () => {
+        submitStep2(undefined, {
+          onSuccess: () => {
+            router.push('/onboarding/startup/step-3');
           },
-        },
-      );
-
-      if (!checkResponse.ok) {
-        const errData = await checkResponse.json();
-        if (errData.error?.code === 'NO_ACCOUNTS') {
-          throw new Error(
+          onError: (err) => {
+            setError(
+              err instanceof Error
+                ? err.message
+                : 'Failed to complete onboarding step 2',
+            );
+          },
+        });
+      },
+      onError: (err: unknown) => {
+        const apiError = err as {
+          data?: { error?: { code?: string } };
+          message?: string;
+        };
+        if (apiError.data?.error?.code === 'NO_ACCOUNTS') {
+          setError(
             'Please connect at least one bank account before proceeding.',
           );
+        } else {
+          setError(apiError.message || 'Failed to verify bank sync');
         }
-        throw new Error(errData.error?.message || 'Failed to verify bank sync');
-      }
-
-      // Then complete the step
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/users/onboarding/step-2`,
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${sessionData.session.token}`,
-          },
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to complete onboarding step 2');
-      }
-
-      router.push('/onboarding/startup/step-3');
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setIsLoading(false);
-    }
+      },
+    });
   };
 
   useEffect(() => {
@@ -243,10 +227,10 @@ export default function StartupStep2() {
         </button>
         <button
           onClick={handleCompleteStep2}
-          disabled={isLoading}
+          disabled={isVerifying || isSubmitting}
           className="flex-1 flex items-center justify-center gap-3 bg-flow-gold py-6 font-bold uppercase tracking-[0.2em] text-flow-black transition-all hover:brightness-110 active:scale-[0.98] group disabled:opacity-50 min-w-[300px]"
         >
-          {isLoading ? (
+          {isVerifying || isSubmitting ? (
             <Loader2 className="h-5 w-5 animate-spin" />
           ) : (
             <>
