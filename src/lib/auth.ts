@@ -3,14 +3,12 @@ import { Pool } from '@neondatabase/serverless';
 import { emailOTP } from 'better-auth/plugins';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export const auth = betterAuth({
   database: {
     pool: new Pool({
       connectionString: process.env.DATABASE_URL,
     }),
-    prefix: "ba",
+    prefix: 'ba',
   },
   emailAndPassword: {
     enabled: true,
@@ -18,6 +16,7 @@ export const auth = betterAuth({
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
+        const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({
           from: process.env.FROM_EMAIL || 'FlowCFO <hello@flowcfo.net>',
           to: email,
