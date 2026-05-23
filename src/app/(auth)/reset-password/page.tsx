@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowRight, ShieldCheck, Loader2, ArrowLeft } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
-export default function ResetPassword() {
+function ResetPasswordContent() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -57,6 +57,112 @@ export default function ResetPassword() {
   };
 
   return (
+    <div className="w-full bg-white p-10 shadow-2xl transition-all duration-500 md:p-12">
+      {isSuccess ? (
+        <div className="text-center py-8">
+          <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <ShieldCheck className="h-8 w-8 text-green-500" />
+          </div>
+          <h2 className="font-display text-3xl font-bold text-flow-black mb-4">
+            Password Reset
+          </h2>
+          <p className="font-body text-sm text-on-surface-variant mb-8">
+            Your password has been successfully reset. Redirecting you to
+            sign in...
+          </p>
+          <Link
+            href="/signin"
+            className="group relative flex w-full items-center justify-center gap-2 bg-flow-gold py-5 flow-label tracking-[0.2em] text-flow-black transition-all duration-300 hover:bg-flow-gold-soft active:scale-[0.98]"
+          >
+            Sign In Now
+            <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </div>
+      ) : (
+        <>
+          <header className="mb-10 text-center">
+            <h2 className="font-display text-3xl font-bold text-flow-black mb-2">
+              New Password
+            </h2>
+            <p className="font-body text-sm text-on-surface-variant">
+              Please enter and confirm your new password.
+            </p>
+          </header>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {displayError && (
+              <div className="bg-red-500/10 border border-red-500/20 p-4 text-red-600 text-sm font-body">
+                {displayError}
+              </div>
+            )}
+
+            <div className="group">
+              <label
+                className="mb-2 block flow-label tracking-widest text-flow-black"
+                htmlFor="password"
+              >
+                New Password
+              </label>
+              <div className="relative border border-flow-black transition-all duration-200 focus-within:border-b-2 focus-within:border-flow-gold">
+                <input
+                  className="w-full border-none bg-transparent px-4 py-4 font-mono text-sm text-flow-black focus:ring-0 placeholder:text-flow-muted"
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="••••••••••••"
+                  required
+                  disabled={!token}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="group">
+              <label
+                className="mb-2 block flow-label tracking-widest text-flow-black"
+                htmlFor="confirmPassword"
+              >
+                Confirm Password
+              </label>
+              <div className="relative border border-flow-black transition-all duration-200 focus-within:border-b-2 focus-within:border-flow-gold">
+                <input
+                  className="w-full border-none bg-transparent px-4 py-4 font-mono text-sm text-flow-black focus:ring-0 placeholder:text-flow-muted"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="••••••••••••"
+                  required
+                  disabled={!token}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <button
+              className="group relative flex w-full items-center justify-center gap-2 bg-flow-gold py-5 flow-label tracking-[0.2em] text-flow-black transition-all duration-300 hover:bg-flow-gold-soft active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              type="submit"
+              disabled={isLoading || !token}
+            >
+              {isLoading ? (
+                <Loader2 className="h-5 w-5 animate-spin" />
+              ) : (
+                <>
+                  Update Password
+                  <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
+                </>
+              )}
+            </button>
+          </form>
+        </>
+      )}
+    </div>
+  );
+}
+
+export default function ResetPassword() {
+  return (
     <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-flow-obsidian px-4 md:px-0">
       <div className="relative z-10 flex w-full max-w-[480px] flex-col items-center">
         {/* Brand Identity */}
@@ -75,107 +181,14 @@ export default function ResetPassword() {
         </div>
 
         {/* Auth Card */}
-        <div className="w-full bg-white p-10 shadow-2xl transition-all duration-500 md:p-12">
-          {isSuccess ? (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <ShieldCheck className="h-8 w-8 text-green-500" />
-              </div>
-              <h2 className="font-display text-3xl font-bold text-flow-black mb-4">
-                Password Reset
-              </h2>
-              <p className="font-body text-sm text-on-surface-variant mb-8">
-                Your password has been successfully reset. Redirecting you to
-                sign in...
-              </p>
-              <Link
-                href="/signin"
-                className="group relative flex w-full items-center justify-center gap-2 bg-flow-gold py-5 flow-label tracking-[0.2em] text-flow-black transition-all duration-300 hover:bg-flow-gold-soft active:scale-[0.98]"
-              >
-                Sign In Now
-                <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-            </div>
-          ) : (
-            <>
-              <header className="mb-10 text-center">
-                <h2 className="font-display text-3xl font-bold text-flow-black mb-2">
-                  New Password
-                </h2>
-                <p className="font-body text-sm text-on-surface-variant">
-                  Please enter and confirm your new password.
-                </p>
-              </header>
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {displayError && (
-                  <div className="bg-red-500/10 border border-red-500/20 p-4 text-red-600 text-sm font-body">
-                    {displayError}
-                  </div>
-                )}
-
-                <div className="group">
-                  <label
-                    className="mb-2 block flow-label tracking-widest text-flow-black"
-                    htmlFor="password"
-                  >
-                    New Password
-                  </label>
-                  <div className="relative border border-flow-black transition-all duration-200 focus-within:border-b-2 focus-within:border-flow-gold">
-                    <input
-                      className="w-full border-none bg-transparent px-4 py-4 font-mono text-sm text-flow-black focus:ring-0 placeholder:text-flow-muted"
-                      id="password"
-                      name="password"
-                      type="password"
-                      placeholder="••••••••••••"
-                      required
-                      disabled={!token}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="group">
-                  <label
-                    className="mb-2 block flow-label tracking-widest text-flow-black"
-                    htmlFor="confirmPassword"
-                  >
-                    Confirm Password
-                  </label>
-                  <div className="relative border border-flow-black transition-all duration-200 focus-within:border-b-2 focus-within:border-flow-gold">
-                    <input
-                      className="w-full border-none bg-transparent px-4 py-4 font-mono text-sm text-flow-black focus:ring-0 placeholder:text-flow-muted"
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type="password"
-                      placeholder="••••••••••••"
-                      required
-                      disabled={!token}
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <button
-                  className="group relative flex w-full items-center justify-center gap-2 bg-flow-gold py-5 flow-label tracking-[0.2em] text-flow-black transition-all duration-300 hover:bg-flow-gold-soft active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-                  type="submit"
-                  disabled={isLoading || !token}
-                >
-                  {isLoading ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                  ) : (
-                    <>
-                      Update Password
-                      <ArrowRight className="h-[18px] w-[18px] transition-transform duration-300 group-hover:translate-x-1" />
-                    </>
-                  )}
-                </button>
-              </form>
-            </>
-          )}
-        </div>
+        <Suspense fallback={
+          <div className="w-full bg-white p-10 shadow-2xl flex flex-col items-center justify-center min-h-[400px]">
+            <Loader2 className="h-8 w-8 text-flow-gold animate-spin" />
+            <p className="mt-4 font-mono text-xs text-flow-black/40 uppercase tracking-widest">Initialising Secure Reset...</p>
+          </div>
+        }>
+          <ResetPasswordContent />
+        </Suspense>
 
         <footer className="mt-8">
           <Link

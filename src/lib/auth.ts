@@ -6,7 +6,8 @@ import { Resend } from 'resend';
 export const auth = betterAuth({
   database: {
     pool: new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString:
+        process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
     }),
     prefix: 'ba',
   },
