@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown } from "lucide-react";
 
@@ -27,8 +28,9 @@ export default function Navbar() {
     return (
       <header className="fixed top-0 z-50 w-full border-b border-flow-line bg-flow-paper">
         <nav className="flow-container flex h-20 items-center justify-between">
-          <Link href="/" className="font-display text-2xl font-bold leading-8 text-flow-black">
-            FlowCFO
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/logo.svg" alt="FlowCFO" width={36} height={36} className="h-9 w-9" />
+            <span className="font-display text-2xl font-bold leading-8 text-flow-black">FlowCFO</span>
           </Link>
 
           <div className="hidden items-center space-x-12 md:flex">
@@ -90,11 +92,9 @@ export default function Navbar() {
     <header className="fixed left-0 top-0 z-50 flex h-20 w-full items-center border-b border-flow-line-dark bg-black">
       <nav className="flow-container flex items-center justify-between">
         <div className="flex items-center gap-8 lg:gap-12">
-          <Link
-            href="/"
-            className="font-display text-2xl font-bold tracking-[-0.04em] text-flow-gold-soft md:text-[40px] md:leading-[48px]"
-          >
-            FlowCFO
+          <Link href="/" className="flex items-center gap-3">
+            <Image src="/logo-dark.svg" alt="FlowCFO" width={44} height={44} className="h-11 w-11" />
+            <span className="font-display text-2xl font-bold tracking-[-0.04em] text-flow-gold-soft md:text-[40px] md:leading-[48px]">FlowCFO</span>
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">

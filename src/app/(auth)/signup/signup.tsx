@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
+import { useSetupUser } from '@/hooks/api/use-user';
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ export default function Signup() {
   const [error, setError] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const setupUser = useSetupUser();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -49,32 +51,16 @@ export default function Signup() {
         throw new Error(authError?.message || 'Signup failed');
       }
 
-      // 2. Accept Terms & Conditions on the backend
-      const token =
-        'session' in data ? (data.session as { token: string }).token : null;
-      if (!token) {
-        // If no token, maybe email verification is required
-        router.push('/signin?verify=email');
+      // 2. Check if email verification is required
+      if (!(data as { user?: { emailVerified?: boolean } }).user?.emailVerified) {
+        router.push(
+          `/signin?verify=email&email=${encodeURIComponent(formData.email)}`,
+        );
         return;
       }
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/users/me`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ terms_accepted: true }),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to update terms acceptance');
-      }
-
-      // 3. Redirect to onboarding
+      // 3. Accept Terms & Conditions on the backend
+      await setupUser.mutateAsync({ terms_accepted: formData.terms });
       router.push('/onboarding');
     } catch (err: unknown) {
       setError(
@@ -124,7 +110,7 @@ export default function Signup() {
       >
         <header className="mb-10">
           <h1 className="font-display text-3xl font-bold text-flow-black mb-2">
-            Claim your financial command center
+            Be in control of your business finances
           </h1>
           <p className="font-body text-on-surface-variant">
             Let&apos;s get your dashboard ready.

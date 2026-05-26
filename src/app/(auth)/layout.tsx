@@ -1,3 +1,13 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | FlowCFO',
+    default: 'FlowCFO — Specialized Financial Agent for your business',
+  },
+  robots: { index: false },
+};
+
 export default function AuthLayout({
   children,
 }: {

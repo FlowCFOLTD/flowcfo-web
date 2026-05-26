@@ -32,18 +32,17 @@ export const metadata: Metadata = {
 
 export default function ForFreelancersPage() {
   return (
-    <div className="bg-flow-paper selection:bg-secondary-design selection:text-white">
+    <div className="bg-flow-paper selection:bg-primary-design selection:text-white">
       {/* Hero Section */}
       <section className="relative flex min-h-[819px] items-center overflow-hidden bg-flow-paper pt-20">
         <div className="flow-container grid w-full grid-cols-1 items-center gap-12 py-20 md:grid-cols-2">
           <div className="z-10">
-            <span className="flow-label mb-4 block text-secondary-design">
+            <span className="flow-label mb-4 block text-primary-design">
               INSTITUTIONAL WEALTH FOR INDIVIDUALS
             </span>
             <h1 className="flow-headline-xl mb-8 text-flow-black">
               Freelancing is freedom. Your finances should{' '}
-              <span className="italic text-secondary-design">feel</span> like
-              it.
+              <span className="italic text-primary-design">feel</span> like it.
             </h1>
             <p className="mb-12 max-w-lg font-body text-base leading-6 text-on-surface-variant">
               Stop treating your business like a hobby. FlowCFO brings
@@ -52,7 +51,7 @@ export default function ForFreelancersPage() {
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/waitlist"
-                className="flow-label bg-secondary-design px-10 py-4 text-center text-flow-black transition-all duration-300 hover:brightness-110"
+                className="flow-label bg-primary-design px-10 py-4 text-center text-flow-black transition-all duration-300 hover:brightness-110"
               >
                 Join the waitlist
               </Link>
@@ -75,7 +74,7 @@ export default function ForFreelancersPage() {
               />
             </div>
             {/* Accent element */}
-            <div className="absolute -bottom-8 -left-8 h-48 w-48 rounded-full bg-secondary-design opacity-10 blur-3xl"></div>
+            <div className="absolute -bottom-8 -left-8 h-48 w-48 rounded-full bg-primary-design opacity-10 blur-3xl"></div>
           </div>
         </div>
       </section>
@@ -93,7 +92,7 @@ export default function ForFreelancersPage() {
           </div>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {/* Pain Point 1 */}
-            <div className="flex flex-col justify-between border border-flow-line bg-surface-container-lowest p-10 transition-colors duration-500 hover:border-secondary-design">
+            <div className="flex flex-col justify-between border border-flow-line bg-surface-container-lowest p-10 transition-colors duration-500 hover:border-primary-design">
               <div>
                 <span className="material-symbols-outlined mb-6 text-4xl text-flow-black">
                   account_balance_wallet
@@ -118,10 +117,10 @@ export default function ForFreelancersPage() {
             {/* Pain Point 2 */}
             <div className="flex flex-col justify-between bg-flow-black p-10 text-white">
               <div>
-                <span className="material-symbols-outlined mb-6 text-4xl text-secondary-design">
+                <span className="material-symbols-outlined mb-6 text-4xl text-primary-design">
                   receipt_long
                 </span>
-                <h3 className="mb-4 font-display text-2xl font-semibold leading-8 text-secondary-design">
+                <h3 className="mb-4 font-display text-2xl font-semibold leading-8 text-primary-design">
                   Tax bill ambushes
                 </h3>
                 <p className="font-body text-base text-surface-variant">
@@ -131,7 +130,7 @@ export default function ForFreelancersPage() {
                 </p>
               </div>
               <div className="mt-8 border-t border-flow-line-dark pt-8">
-                <span className="flex items-center gap-2 font-mono text-sm text-secondary-design">
+                <span className="flex items-center gap-2 font-mono text-sm text-primary-design">
                   <span className="material-symbols-outlined text-base">
                     trending_down
                   </span>{' '}
@@ -140,7 +139,7 @@ export default function ForFreelancersPage() {
               </div>
             </div>
             {/* Pain Point 3 */}
-            <div className="flex flex-col justify-between border border-flow-line bg-surface-container-lowest p-10 transition-colors duration-500 hover:border-secondary-design">
+            <div className="flex flex-col justify-between border border-flow-line bg-surface-container-lowest p-10 transition-colors duration-500 hover:border-primary-design">
               <div>
                 <span className="material-symbols-outlined mb-6 text-4xl text-flow-black">
                   query_stats
@@ -172,7 +171,7 @@ export default function ForFreelancersPage() {
         <div className="flow-container">
           <div className="mb-20 flex flex-col items-end justify-between gap-8 md:flex-row">
             <div className="max-w-2xl">
-              <span className="flow-label mb-4 block text-secondary-design">
+              <span className="flow-label mb-4 block text-primary-design">
                 THE FLOWCFO DIFFERENCE
               </span>
               <h2 className="flow-headline-xl leading-tight text-flow-black">
@@ -198,13 +197,13 @@ export default function ForFreelancersPage() {
                 </p>
                 <ul className="space-y-4">
                   <li className="flow-label flex items-center gap-3 text-flow-black">
-                    <span className="material-symbols-outlined text-secondary-design">
+                    <span className="material-symbols-outlined text-primary-design">
                       check_circle
                     </span>{' '}
                     REAL-TIME RECONCILIATION
                   </li>
                   <li className="flow-label flex items-center gap-3 text-flow-black">
-                    <span className="material-symbols-outlined text-secondary-design">
+                    <span className="material-symbols-outlined text-primary-design">
                       check_circle
                     </span>{' '}
                     SMART EXPENSE PRIORITIZATION
@@ -243,13 +242,13 @@ export default function ForFreelancersPage() {
                 </p>
                 <ul className="space-y-4">
                   <li className="flow-label flex items-center gap-3 text-flow-black">
-                    <span className="material-symbols-outlined text-secondary-design">
+                    <span className="material-symbols-outlined text-primary-design">
                       check_circle
                     </span>{' '}
                     AUTOMATED SALARY TRANSFERS
                   </li>
                   <li className="flow-label flex items-center gap-3 text-flow-black">
-                    <span className="material-symbols-outlined text-secondary-design">
+                    <span className="material-symbols-outlined text-primary-design">
                       check_circle
                     </span>{' '}
                     RESERVE FUND OPTIMIZATION
@@ -270,13 +269,13 @@ export default function ForFreelancersPage() {
                 </p>
                 <ul className="space-y-4">
                   <li className="flow-label flex items-center gap-3 text-flow-black">
-                    <span className="material-symbols-outlined text-secondary-design">
+                    <span className="material-symbols-outlined text-primary-design">
                       check_circle
                     </span>{' '}
                     PIPELINE-INTEGRATED DATA
                   </li>
                   <li className="flow-label flex items-center gap-3 text-flow-black">
-                    <span className="material-symbols-outlined text-secondary-design">
+                    <span className="material-symbols-outlined text-primary-design">
                       check_circle
                     </span>{' '}
                     DYNAMIC TAX CALCULATOR
@@ -300,7 +299,7 @@ export default function ForFreelancersPage() {
       {/* CTA Section */}
       <section className="relative overflow-hidden bg-flow-black py-32">
         <div className="flow-container relative z-10 text-center">
-          <h2 className="flow-headline-xl mb-8 text-secondary-design">
+          <h2 className="flow-headline-xl mb-8 text-primary-design">
             Ready for financial freedom?
           </h2>
           <p className="mx-auto mb-12 max-w-xl font-body text-base text-surface-variant">
@@ -308,21 +307,24 @@ export default function ForFreelancersPage() {
             the waitlist for early access to the future of solo wealth
             management.
           </p>
-          <form className="mx-auto flex max-w-md flex-col gap-4">
-            <input
-              className="border border-flow-line-dark bg-transparent p-4 text-center font-mono text-xs uppercase tracking-[0.08em] text-white transition-all focus:border-secondary-design focus:ring-0"
+          <form className="mx-auto flex max-w-md flex-col gap-4 justify-center">
+            {/* <input
+              className="border border-flow-line-dark bg-transparent p-4 text-center font-mono text-xs uppercase tracking-[0.08em] text-white transition-all focus:border-primary-design focus:ring-0"
               placeholder="ENTER YOUR EMAIL"
               type="email"
               required
-            />
-            <button className="bg-secondary-design px-12 py-5 text-xs font-bold uppercase tracking-[0.08em] text-flow-black transition-all hover:brightness-110">
+            /> */}
+            <Link
+              href="/waitlist"
+              className="bg-primary-design px-12 py-5 text-xs font-bold uppercase tracking-[0.08em] text-flow-black transition-all hover:brightness-110"
+            >
               Join the waitlist
-            </button>
+            </Link>
           </form>
         </div>
         {/* Atmospheric effects */}
-        <div className="absolute right-0 top-0 h-96 w-96 bg-secondary-design opacity-5 blur-[120px]"></div>
-        <div className="absolute bottom-0 left-0 h-96 w-96 bg-secondary-design opacity-5 blur-[120px]"></div>
+        <div className="absolute right-0 top-0 h-96 w-96 bg-primary-design opacity-5 blur-[120px]"></div>
+        <div className="absolute bottom-0 left-0 h-96 w-96 bg-primary-design opacity-5 blur-[120px]"></div>
       </section>
     </div>
   );

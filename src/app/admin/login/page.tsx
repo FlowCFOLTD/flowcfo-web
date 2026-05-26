@@ -25,8 +25,9 @@ export default function AdminLoginPage() {
     setError(null);
 
     try {
-      const { error: authError } = await authClient.signIn.emailOtp({
+      const { error: authError } = await authClient.emailOtp.sendVerificationOtp({
         email,
+        type: "sign-in",
       });
 
       if (authError) {

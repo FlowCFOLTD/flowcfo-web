@@ -7,6 +7,7 @@ export const metadata: Metadata = {
     'Access your financial command center. CFO-level clarity for founders and business owners.',
 };
 
-export default function SigninPage() {
-  return <Signin />;
+export default async function SigninPage(props: { searchParams: Promise<{ verify?: string; email?: string }> }) {
+  const searchParams = await props.searchParams;
+  return <Signin verify={searchParams?.verify} verifyEmail={searchParams?.email} />;
 }

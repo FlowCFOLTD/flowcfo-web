@@ -74,7 +74,7 @@ export default function Pricing() {
   return (
     <div className="bg-flow-paper selection:bg-flow-gold selection:text-flow-black">
       {/* Section 1: Value-First Hero */}
-      <section className="relative flex min-h-[716px] flex-col items-center justify-center overflow-hidden bg-flow-obsidian px-4 text-center text-white md:px-16">
+      <section className="relative flex min-h-[800px] flex-col items-center justify-center overflow-hidden bg-flow-obsidian px-4 text-center text-white md:px-16">
         <div className="absolute inset-0 opacity-10">
           <div
             className="absolute inset-0"
@@ -89,7 +89,7 @@ export default function Pricing() {
           <span className="flow-label mb-6 block tracking-widest text-flow-gold">
             FINANCIAL INTELLIGENCE FOR BUILDERS
           </span>
-          <h1 className="flow-headline-xl mb-8 leading-tight">
+          <h1 className="font-display text-white text-[40px] font-bold leading-[48px] tracking-[-0.03em] md:text-[64px] md:leading-[72px] mb-8">
             The financial command center for founders who refuse to fly blind.
           </h1>
           <p className="mx-auto mb-12 max-w-2xl font-body text-base text-flow-muted">
@@ -156,7 +156,7 @@ export default function Pricing() {
       <section className="bg-flow-paper py-32">
         <div className="mx-auto max-w-[1440px] px-4 md:px-16">
           <div className="mb-24 text-center">
-            <span className="flow-label mb-4 block text-secondary-design">
+            <span className="flow-label mb-4 block text-primary-design">
               PRICING PLANS
             </span>
             <h2 className="flow-headline-xl text-flow-black">

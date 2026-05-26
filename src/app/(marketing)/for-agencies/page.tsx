@@ -309,15 +309,18 @@ export default function ForAgenciesPage() {
             cohort of high-net-worth agency partners.
           </p>
           <div className="relative z-10 flex flex-col justify-center gap-4 md:flex-row">
-            <input
+            {/* <input
               className="w-full border border-flow-line-dark bg-transparent px-6 py-4 font-mono text-xs uppercase tracking-[0.08em] text-white outline-none focus:border-flow-gold md:w-80"
               placeholder="ENTER EMAIL"
               type="email"
               required
-            />
-            <button className="flow-label bg-flow-gold px-10 py-4 font-bold text-flow-black transition-all hover:scale-105">
+            /> */}
+            <Link
+              href="/waitlist"
+              className="flow-label bg-flow-gold px-10 py-4 font-bold text-flow-black transition-all hover:scale-105"
+            >
               JOIN WAITLIST
-            </button>
+            </Link>
           </div>
           <p className="mt-6 font-mono text-[10px] uppercase tracking-widest text-flow-muted">
             Institutional Privacy Standards Guaranteed

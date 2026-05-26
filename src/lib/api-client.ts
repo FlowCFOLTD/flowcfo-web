@@ -7,9 +7,27 @@ export interface ApiError extends Error {
   data?: unknown;
 }
 
-async function getAuthToken() {
-  const { data: sessionData } = await authClient.getSession();
-  return sessionData?.session?.token;
+let cachedToken: string | null = null;
+let tokenPromise: Promise<string | null> | null = null;
+
+async function refreshToken(): Promise<string | null> {
+  try {
+    const { data: sessionData } = await authClient.getSession();
+    cachedToken = sessionData?.session?.token ?? null;
+    return cachedToken;
+  } catch {
+    cachedToken = null;
+    return null;
+  } finally {
+    tokenPromise = null;
+  }
+}
+
+function getAuthToken(): Promise<string | null> {
+  if (cachedToken) return Promise.resolve(cachedToken);
+  if (tokenPromise) return tokenPromise;
+  tokenPromise = refreshToken();
+  return tokenPromise;
 }
 
 export async function apiClient<T>(
@@ -20,9 +38,8 @@ export async function apiClient<T>(
   }: Omit<RequestInit, 'body'> & { body?: unknown } = {},
 ): Promise<T> {
   const token = await getAuthToken();
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  };
+  const isFormData = body instanceof FormData;
+  const headers: HeadersInit = isFormData ? {} : { 'Content-Type': 'application/json' };
 
   if (token) {
     headers.Authorization = `Bearer ${token}`;
@@ -38,20 +55,31 @@ export async function apiClient<T>(
   };
 
   if (body) {
-    config.body = JSON.stringify(body);
+    config.body = isFormData ? body : JSON.stringify(body);
   }
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
 
   if (response.ok) {
     return (await response.json()) as T;
-  } else {
-    const errorData = await response.json().catch(() => ({}));
-    const error: ApiError = new Error(
-      errorData.message || 'An error occurred while fetching the data.',
-    );
-    error.status = response.status;
-    error.data = errorData;
-    throw error;
   }
+
+  if (response.status === 401) {
+    cachedToken = null;
+    const freshToken = await refreshToken();
+    if (freshToken) {
+      headers.Authorization = `Bearer ${freshToken}`;
+      config.headers = headers;
+      const retry = await fetch(`${API_BASE_URL}${endpoint}`, config);
+      if (retry.ok) return (await retry.json()) as T;
+    }
+  }
+
+  const errorData = await response.json().catch(() => ({}));
+  const error: ApiError = new Error(
+    errorData.message || 'An error occurred while fetching the data.',
+  );
+  error.status = response.status;
+  error.data = errorData;
+  throw error;
 }

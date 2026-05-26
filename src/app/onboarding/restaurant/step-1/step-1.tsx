@@ -16,6 +16,7 @@ import {
 import { useUser } from '@/hooks/api/use-user';
 import { useSubmitOnboardingStep1 } from '@/hooks/api/use-onboarding';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 const posSystems = [
   {
@@ -113,9 +114,11 @@ export default function RestaurantStep1() {
           </p>
 
           <div className="mt-8 relative h-64 w-full bg-white/5 border border-white/10 rounded-lg overflow-hidden group">
-            <img
+            <Image
+              fill
+              priority
               alt="Institutional Kitchen"
-              className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 transition-all duration-1000"
+              className="object-cover grayscale brightness-50 group-hover:grayscale-0 transition-all duration-1000"
               src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?q=80&w=2070&auto=format&fit=crop"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-flow-obsidian/80 to-transparent"></div>

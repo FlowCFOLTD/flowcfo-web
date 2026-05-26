@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import HomePage from "./home";
+import JsonLd from "@/components/json-ld";
 
 export const metadata: Metadata = {
   title: "FlowCFO — Know Exactly What You Can Spend Today",
@@ -16,5 +17,10 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <HomePage />;
+  return (
+    <>
+      <JsonLd />
+      <HomePage />
+    </>
+  );
 }

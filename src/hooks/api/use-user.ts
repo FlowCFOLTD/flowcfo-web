@@ -21,3 +21,14 @@ export function useUpdateUser() {
     },
   });
 }
+
+export function useSetupUser() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: { terms_accepted: boolean }) => usersApi.setupUser(data),
+    onSuccess: (user) => {
+      queryClient.setQueryData(['user', 'me'], user);
+    },
+  });
+}

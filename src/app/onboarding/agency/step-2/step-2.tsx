@@ -1,27 +1,46 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Landmark, ShieldCheck, ArrowLeft } from 'lucide-react';
+import {
+  Landmark,
+  ShieldCheck,
+  ArrowLeft,
+  ArrowRight,
+  Loader2,
+} from 'lucide-react';
 
 import BankConnectionCard from '@/components/onboarding/bank-connection-card';
+import { useSubmitOnboardingStep2 } from '@/hooks/api/use-onboarding';
 
 export default function AgencyStep2() {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const { mutate: submitStep2, isPending } = useSubmitOnboardingStep2();
 
-  const handlePlaidConnect = () => {
-    // Logic for Plaid connection
-    router.push('/onboarding/agency/step-3');
+  const goToStep3 = () => {
+    submitStep2(undefined, {
+      onSuccess: () => router.push('/onboarding/agency/step-3'),
+      onError: (err) =>
+        setError(
+          err instanceof Error ? err.message : 'Failed to save progress',
+        ),
+    });
   };
 
-  const handleTellerConnect = () => {
-    // Logic for Teller connection
-  };
+  const handlePlaidConnect = () => goToStep3();
 
-  const handleCsvUploadSuccess = (accountId: string) => {
-    // Logic for successful CSV upload
-    console.log('CSV Upload Success:', accountId);
-    router.push('/onboarding/agency/step-3');
+  const handleTellerConnect = () => {};
+
+  const handleCsvUploadSuccess = (
+    accountId: string,
+    transactionCount: number,
+  ) => {
+    setError(null);
+    setSuccessMsg(
+      `${transactionCount} transactions imported successfully from CSV. You can connect more accounts or continue to the next step.`,
+    );
   };
 
   useEffect(() => {
@@ -107,6 +126,17 @@ export default function AgencyStep2() {
         </div>
       </div>
 
+      {successMsg && (
+        <div className="mx-auto mt-8 max-w-[1200px] bg-flow-gold/10 border border-flow-gold/30 p-4 text-flow-gold text-sm">
+          {successMsg}
+        </div>
+      )}
+      {error && (
+        <div className="mx-auto mt-8 max-w-[1200px] bg-red-500/10 border border-red-500/20 p-4 text-red-400 text-sm">
+          {error}
+        </div>
+      )}
+
       {/* Action Bar */}
       <div className="mx-auto mt-16 flex w-full max-w-[1200px] items-center justify-between border-t border-white/10 pt-10">
         <button
@@ -117,9 +147,29 @@ export default function AgencyStep2() {
           BACK TO BUSINESS OPTIONS
         </button>
 
-        {/* <button className="px-10 py-5 flow-label border border-white/10 text-white/40 transition-all hover:border-white/30 hover:text-white">
-          SAVE PROGRESS
-        </button> */}
+        <div className="flex flex-col items-end gap-3">
+          <button
+            onClick={goToStep3}
+            disabled={isPending}
+            className="flex items-center gap-3 bg-flow-gold px-10 py-5 flow-label text-flow-black font-bold uppercase tracking-[0.2em] transition-all hover:brightness-110 active:scale-95 disabled:opacity-50"
+          >
+            {isPending ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <>
+                CONTINUE TO FINAL STEP
+                <ArrowRight className="h-5 w-5" />
+              </>
+            )}
+          </button>
+          <button
+            onClick={goToStep3}
+            disabled={isPending}
+            className="flow-label text-white/30 transition-all hover:text-white/60"
+          >
+            Skip for now — I&apos;ll connect my accounts later
+          </button>
+        </div>
       </div>
     </div>
   );

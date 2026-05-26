@@ -9,30 +9,42 @@ import {
   TrendingUp,
   ArrowLeft,
   ArrowRight,
-  Upload,
-  Zap,
+  Loader2,
   ShoppingCart,
 } from 'lucide-react';
 import Link from 'next/link';
 
 import BankConnectionCard from '@/components/onboarding/bank-connection-card';
+import { useSubmitOnboardingStep2 } from '@/hooks/api/use-onboarding';
 
 export default function EcommerceStep2() {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const { mutate: submitStep2, isPending } = useSubmitOnboardingStep2();
 
-  const handlePlaidConnect = () => {
-    // Logic for Plaid connection
-    router.push('/onboarding/ecommerce/step-3');
+  const goToStep3 = () => {
+    submitStep2(undefined, {
+      onSuccess: () => router.push('/onboarding/ecommerce/step-3'),
+      onError: (err) =>
+        setError(
+          err instanceof Error ? err.message : 'Failed to save progress',
+        ),
+    });
   };
 
-  const handleTellerConnect = () => {
-    // Logic for Teller connection
-  };
+  const handlePlaidConnect = () => goToStep3();
 
-  const handleCsvUploadSuccess = (accountId: string) => {
-    // Logic for successful CSV upload
-    console.log('CSV Upload Success:', accountId);
-    router.push('/onboarding/ecommerce/step-3');
+  const handleTellerConnect = () => {};
+
+  const handleCsvUploadSuccess = (
+    accountId: string,
+    transactionCount: number,
+  ) => {
+    setError(null);
+    setSuccessMsg(
+      `${transactionCount} transactions imported successfully from CSV. You can connect more accounts or continue to the next step.`,
+    );
   };
 
   useEffect(() => {
@@ -183,6 +195,17 @@ export default function EcommerceStep2() {
         </div>
       </div>
 
+      {successMsg && (
+        <div className="mx-auto mt-8 max-w-6xl bg-flow-gold/10 border border-flow-gold/30 p-4 text-flow-gold text-sm">
+          {successMsg}
+        </div>
+      )}
+      {error && (
+        <div className="mx-auto mt-8 max-w-6xl bg-red-500/10 border border-red-500/20 p-4 text-red-400 text-sm">
+          {error}
+        </div>
+      )}
+
       {/* Footer Actions */}
       <div className="mx-auto mt-24 flex w-full max-w-6xl gap-6">
         <button
@@ -192,13 +215,29 @@ export default function EcommerceStep2() {
           <ArrowLeft className="h-5 w-5 mr-3" />
           BACK
         </button>
-        <button
-          onClick={() => router.push('/onboarding/ecommerce/step-3')}
-          className="flex-1 flex items-center justify-center gap-3 bg-flow-gold py-6 font-bold uppercase tracking-[0.2em] text-flow-black transition-all hover:brightness-110 active:scale-[0.98]"
-        >
-          CONTINUE TO FINAL STEP
-          <ArrowRight className="h-5 w-5" />
-        </button>
+        <div className="flex flex-1 flex-col items-center gap-3">
+          <button
+            onClick={goToStep3}
+            disabled={isPending}
+            className="flex w-full items-center justify-center gap-3 bg-flow-gold py-6 font-bold uppercase tracking-[0.2em] text-flow-black transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+          >
+            {isPending ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <>
+                CONTINUE TO FINAL STEP
+                <ArrowRight className="h-5 w-5" />
+              </>
+            )}
+          </button>
+          <button
+            onClick={goToStep3}
+            disabled={isPending}
+            className="flow-label text-white/30 transition-all hover:text-white/60"
+          >
+            Skip for now — I&apos;ll connect my accounts later
+          </button>
+        </div>
       </div>
 
       {/* Institutional Footer (Minimal) */}

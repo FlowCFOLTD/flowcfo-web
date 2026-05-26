@@ -1,0 +1,4 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M55 45H155V80H90V100H140V135H90V170" stroke="#D4AF37" stroke-width="22" stroke-linecap="square" stroke-linejoin="bevel"/>
+  <path d="M155 155C135 168 110 175 85 175C35 175 15 145 15 100C15 55 35 25 85 25C110 25 135 32 155 45" stroke="#ffffff" stroke-width="22" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,42 @@
+# FlowCFO
+> AI-powered virtual CFO for founders, freelancers, e-commerce brands, agencies, and restaurants.
+
+FlowCFO is a financial intelligence platform that connects to your bank accounts, predicts cash flow, calculates tax reserves, and tells you exactly how much you can safely spend.
+
+## Key Features
+- **Safe-to-Spend**: Know your available liquidity in real-time
+- **Cash Flow Forecasting**: 90-day AI-powered cash flow predictions
+- **Tax Reserve Engine**: Automatically calculate and set aside tax reserves
+- **Vertical CFO Agents**: Industry-specific analysis for e-commerce, freelancers, agencies, restaurants, and startups
+- **AI Advisor**: Context-aware financial guidance powered by AI
+- **Plaid Integration**: Secure bank account connections
+- **Payout Analysis**: Platform fee and payout optimization for e-commerce sellers
+
+## Supported Verticals
+- **E-commerce**: Gross margin tracking, platform fee analysis, inventory health, seasonal patterns, payout reconciliation
+- **Freelancers**: Income smoothing, tax readiness, quarterly tax reserve calculation
+- **Agencies**: Client profitability, revenue diversification, project-based cash flow
+- **Restaurants**: Food cost analysis, labor cost optimization, daily revenue tracking
+- **Startups**: Burn rate monitoring, runway forecasting, fundraising readiness
+
+## Pricing
+- **Starter**: $19/mo — 2 bank connections, basic cash forecasting
+- **Growth**: $49/mo — 5 bank connections, tax reserve engine, AI advisor
+- **Scale**: $99/mo — Unlimited connections, multi-entity, API access, priority support
+
+## Technical Stack
+- **Frontend**: Next.js (React), Tailwind CSS, BetterAuth
+- **Backend**: Python FastAPI, PostgreSQL (asyncpg), SQLAlchemy, Alembic
+- **Infrastructure**: Docker, Leapcell (hosting), Neon (PostgreSQL), Redis
+- **AI**: Llama (NVIDIA NIM), Anthropic Claude, Google Gemini
+- **Banking**: Plaid API
+- **Email**: Resend
+
+## Links
+- Website: https://flowcfo.net
+- Sign In: https://flowcfo.net/signin
+- Waitlist: https://flowcfo.net/waitlist
+- Contact: https://flowcfo.net/contact
+- Blog: https://flowcfo.net/blog
+- Privacy: https://flowcfo.net/privacy
+- Terms: https://flowcfo.net/terms

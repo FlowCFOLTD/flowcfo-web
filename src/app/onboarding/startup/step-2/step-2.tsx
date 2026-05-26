@@ -25,6 +25,7 @@ export default function StartupStep2() {
   const router = useRouter();
   const [hasAccounts, setHasAccounts] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const { mutate: verifyBankSync, isPending: isVerifying } =
     useVerifyBankSync();
@@ -41,8 +42,9 @@ export default function StartupStep2() {
     setHasAccounts(true);
   };
 
-  const handleCsvUploadSuccess = (accountId: string) => {
-    console.log('CSV Upload Success:', accountId);
+  const handleCsvUploadSuccess = (accountId: string, transactionCount: number) => {
+    setError(null);
+    setSuccessMsg(`${transactionCount} transactions imported successfully from CSV.`);
     setHasAccounts(true);
   };
 
@@ -76,6 +78,23 @@ export default function StartupStep2() {
         } else {
           setError(apiError.message || 'Failed to verify bank sync');
         }
+      },
+    });
+  };
+
+  const handleSkipStep2 = () => {
+    setError(null);
+
+    submitStep2(undefined, {
+      onSuccess: () => {
+        router.push('/onboarding/startup/step-3');
+      },
+      onError: (err) => {
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Failed to save progress',
+        );
       },
     });
   };
@@ -133,6 +152,11 @@ export default function StartupStep2() {
               </h2>
             </div>
 
+            {successMsg && (
+              <div className="mb-6 bg-flow-gold/10 border border-flow-gold/30 p-4 text-flow-gold text-sm">
+                {successMsg}
+              </div>
+            )}
             {error && (
               <div className="mb-8 bg-red-500/10 border border-red-500/20 p-4 text-red-400 text-sm">
                 {error}
@@ -225,20 +249,29 @@ export default function StartupStep2() {
           <ArrowLeft className="h-5 w-5 mr-3 transition-transform group-hover:-translate-x-1" />
           BACK
         </button>
-        <button
-          onClick={handleCompleteStep2}
-          disabled={isVerifying || isSubmitting}
-          className="flex-1 flex items-center justify-center gap-3 bg-flow-gold py-6 font-bold uppercase tracking-[0.2em] text-flow-black transition-all hover:brightness-110 active:scale-[0.98] group disabled:opacity-50 min-w-[300px]"
-        >
-          {isVerifying || isSubmitting ? (
-            <Loader2 className="h-5 w-5 animate-spin" />
-          ) : (
-            <>
-              CONTINUE TO FINAL STEP
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </>
-          )}
-        </button>
+        <div className="flex flex-1 flex-col items-center gap-3">
+          <button
+            onClick={handleCompleteStep2}
+            disabled={isVerifying || isSubmitting}
+            className="flex w-full items-center justify-center gap-3 bg-flow-gold py-6 font-bold uppercase tracking-[0.2em] text-flow-black transition-all hover:brightness-110 active:scale-[0.98] group disabled:opacity-50 min-w-[300px]"
+          >
+            {isVerifying || isSubmitting ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <>
+                CONTINUE TO FINAL STEP
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </>
+            )}
+          </button>
+          <button
+            onClick={handleSkipStep2}
+            disabled={isSubmitting}
+            className="flow-label text-white/30 transition-all hover:text-white/60"
+          >
+            Skip for now — I'll connect my accounts later
+          </button>
+        </div>
       </div>
 
       {/* Compliance Footer */}

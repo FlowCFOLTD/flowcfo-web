@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Shield,
@@ -13,12 +13,15 @@ import {
   CheckCircle2,
   TrendingUp,
 } from 'lucide-react';
+import { useSubmitOnboardingStep3 } from '@/hooks/api/use-onboarding';
 
 export default function AgencyStep3() {
   const router = useRouter();
   const [taxRate, setTaxRate] = useState(25);
   const [isFinishing, setIsFinishing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  const { mutate: submitStep3 } = useSubmitOnboardingStep3();
 
   const baseMonthlyBurn = 42500;
   const estimatedReserve = baseMonthlyBurn * (taxRate / 100);
@@ -29,13 +32,17 @@ export default function AgencyStep3() {
     e.preventDefault();
     setIsFinishing(true);
 
-    setTimeout(() => {
-      setIsFinishing(false);
-      setShowSuccess(true);
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 2000);
-    }, 3000);
+    submitStep3(
+      { tax_rate: taxRate },
+      {
+        onSuccess: () => {
+          setIsFinishing(false);
+          setShowSuccess(true);
+          setTimeout(() => router.push('/dashboard'), 2000);
+        },
+        onError: () => setIsFinishing(false),
+      },
+    );
   };
 
   return (

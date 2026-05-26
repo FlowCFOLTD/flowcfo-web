@@ -10,12 +10,15 @@ import {
   Loader2,
   CheckCircle2,
 } from "lucide-react";
+import { useSubmitOnboardingStep3 } from "@/hooks/api/use-onboarding";
 
 export default function FreelancerStep3() {
   const router = useRouter();
   const [taxRate, setTaxRate] = useState(25);
   const [isFinishing, setIsFinishing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  const { mutate: submitStep3 } = useSubmitOnboardingStep3();
 
   const baseMonthlyRevenue = 8500;
   const estimatedReserve = baseMonthlyRevenue * (taxRate / 100);
@@ -24,13 +27,17 @@ export default function FreelancerStep3() {
     e.preventDefault();
     setIsFinishing(true);
 
-    setTimeout(() => {
-      setIsFinishing(false);
-      setShowSuccess(true);
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
-    }, 3000);
+    submitStep3(
+      { tax_rate: taxRate },
+      {
+        onSuccess: () => {
+          setIsFinishing(false);
+          setShowSuccess(true);
+          setTimeout(() => router.push("/dashboard"), 2000);
+        },
+        onError: () => setIsFinishing(false),
+      },
+    );
   };
 
   return (

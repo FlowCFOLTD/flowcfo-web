@@ -310,16 +310,19 @@ export default function ForStartupsPage() {
                 Join 200+ venture-backed teams waiting for the most precise
                 financial intelligence platform ever built.
               </p>
-              <div className="mx-auto flex max-w-md flex-col gap-2 sm:flex-row">
-                <input
+              <div className="mx-auto flex max-w-md flex-col gap-2 sm:flex-row justify-center">
+                {/* <input
                   className="flex-grow border border-white/20 bg-transparent px-6 py-4 text-white outline-none focus:border-flow-gold"
                   placeholder="Enter founder email"
                   type="email"
                   required
-                />
-                <button className="bg-flow-gold px-8 py-4 font-bold text-flow-black transition-colors hover:bg-flow-gold-soft">
+                /> */}
+                <Link
+                  href="/waitlist"
+                  className="bg-flow-gold px-8 py-4 font-bold text-flow-black transition-colors hover:bg-flow-gold-soft"
+                >
                   Join Waitlist
-                </button>
+                </Link>
               </div>
               <p className="mt-4 font-body text-sm text-flow-muted">
                 No credit card required. Startup beta opening soon.

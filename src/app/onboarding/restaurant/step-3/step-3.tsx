@@ -9,15 +9,17 @@ import {
   Loader2,
   CheckCircle2,
   BarChart3,
-  TrendingUp,
-  Shield,
 } from 'lucide-react';
+import Image from 'next/image';
+import { useSubmitOnboardingStep3 } from '@/hooks/api/use-onboarding';
 
 export default function RestaurantStep3() {
   const router = useRouter();
   const [taxRate, setTaxRate] = useState(25);
   const [isFinishing, setIsFinishing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+
+  const { mutate: submitStep3 } = useSubmitOnboardingStep3();
 
   const GROSS_PROFIT = 124500;
   const taxReserveAmount = GROSS_PROFIT * (taxRate / 100);
@@ -28,13 +30,17 @@ export default function RestaurantStep3() {
     e.preventDefault();
     setIsFinishing(true);
 
-    setTimeout(() => {
-      setIsFinishing(false);
-      setShowSuccess(true);
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 2000);
-    }, 3000);
+    submitStep3(
+      { tax_rate: taxRate },
+      {
+        onSuccess: () => {
+          setIsFinishing(false);
+          setShowSuccess(true);
+          setTimeout(() => router.push('/dashboard'), 2000);
+        },
+        onError: () => setIsFinishing(false),
+      },
+    );
   };
 
   return (
@@ -137,9 +143,11 @@ export default function RestaurantStep3() {
 
           {/* Visual Accent */}
           <div className="relative h-64 overflow-hidden rounded-lg group">
-            <img
+            <Image
+              fill
+              priority
               alt="Luxury Kitchen"
-              className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 transition-all duration-1000"
+              className="object-cover grayscale brightness-50 group-hover:grayscale-0 transition-all duration-1000"
               src="https://images.unsplash.com/photo-1550966841-396ad886f1e7?auto=format&fit=crop&q=80&w=1440"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-flow-obsidian/90 to-transparent"></div>

@@ -303,18 +303,21 @@ export default function ForEcommercePage() {
             are rolling out access to a limited number of high-volume brands
             each month.
           </p>
-          <div className="mx-auto flex max-w-lg flex-col items-stretch gap-4 md:flex-row">
-            <div className="flex-1 bg-white p-1 border border-flow-black focus-within:border-flow-gold">
+          <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-4 md:flex-row">
+            {/* <div className="flex-1 bg-white p-1 border border-flow-black focus-within:border-flow-gold">
               <input
                 className="w-full h-full px-4 py-3 font-body text-base text-flow-black outline-none focus:ring-0"
                 placeholder="Enter your business email"
                 type="email"
                 required
               />
-            </div>
-            <button className="flow-label bg-flow-black px-8 py-4 text-white transition-transform active:scale-95">
+            </div> */}
+            <Link
+              href="/waitlist"
+              className="flow-label bg-flow-black px-8 py-4 text-white transition-transform active:scale-95"
+            >
               Join the e-commerce waitlist
-            </button>
+            </Link>
           </div>
           <p className="mt-6 font-body text-sm italic opacity-50">
             Limited slots available for Q4 intake.

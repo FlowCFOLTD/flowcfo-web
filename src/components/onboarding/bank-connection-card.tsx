@@ -14,7 +14,7 @@ import CsvUploadZone from './csv-upload-zone';
 interface BankConnectionCardProps {
   onPlaidConnect: () => void;
   onTellerConnect: () => void;
-  onCsvUploadSuccess: (accountId: string) => void;
+  onCsvUploadSuccess: (accountId: string, transactionCount: number) => void;
   title?: string;
   description?: string;
 }

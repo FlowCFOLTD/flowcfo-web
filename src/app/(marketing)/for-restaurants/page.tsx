@@ -1,32 +1,32 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: "FlowCFO for Restaurants | Institutional-Grade Financial Clarity",
+  title: 'FlowCFO for Restaurants | Institutional-Grade Financial Clarity',
   description:
-    "Control inflation, optimize labor, and scale your hospitality business with absolute confidence. Institutional-grade financial command for modern restaurateurs.",
+    'Control inflation, optimize labor, and scale your hospitality business with absolute confidence. Institutional-grade financial command for modern restaurateurs.',
   openGraph: {
-    title: "FlowCFO for Restaurants | Financial Command for Hospitality",
+    title: 'FlowCFO for Restaurants | Financial Command for Hospitality',
     description:
-      "Translate the chaos of restaurant operations into institutional-grade financial clarity. Know your ingredients costs and your financial health.",
-    type: "website",
-    url: "https://flowcfo.net/for-restaurants",
+      'Translate the chaos of restaurant operations into institutional-grade financial clarity. Know your ingredients costs and your financial health.',
+    type: 'website',
+    url: 'https://flowcfo.net/for-restaurants',
     images: [
       {
-        url: "/og-restaurants.jpg",
+        url: '/og-restaurants.jpg',
         width: 1200,
         height: 630,
-        alt: "FlowCFO for Restaurants Dashboard",
+        alt: 'FlowCFO for Restaurants Dashboard',
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "FlowCFO for Restaurants | Scale with Confidence",
+    card: 'summary_large_image',
+    title: 'FlowCFO for Restaurants | Scale with Confidence',
     description:
-      "Control inflation, optimize labor, and scale your restaurant with absolute confidence using FlowCFO.",
-    images: ["/og-restaurants.jpg"],
+      'Control inflation, optimize labor, and scale your restaurant with absolute confidence using FlowCFO.',
+    images: ['/og-restaurants.jpg'],
   },
 };
 
@@ -36,7 +36,7 @@ export default function ForRestaurantsPage() {
       {/* Hero Section */}
       <section className="mx-auto grid max-w-[1440px] items-center gap-16 px-4 py-20 pt-40 md:grid-cols-2 md:px-16">
         <div className="space-y-8">
-          <span className="flow-label block tracking-[0.2em] text-secondary-design">
+          <span className="flow-label block tracking-[0.2em] text-on-surface-variant">
             Private Wealth Management for Restaurateurs
           </span>
           <h1 className="flow-headline-xl text-flow-obsidian">
@@ -85,9 +85,9 @@ export default function ForRestaurantsPage() {
             <h2 className="flow-headline-lg mb-4 text-white">
               Precision in an Unpredictable Market
             </h2>
-            <p className="max-w-xl font-body text-base text-on-primary-container">
-              Standard accounting isn&apos;t enough for the kitchen. We tackle the
-              three pillars that break restaurant margins.
+            <p className="max-w-xl font-body text-base text-on-surface-variant">
+              Standard accounting isn&apos;t enough for the kitchen. We tackle
+              the three pillars that break restaurant margins.
             </p>
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -103,7 +103,7 @@ export default function ForRestaurantsPage() {
                 <h3 className="mb-4 font-display text-2xl font-semibold text-white">
                   Ingredient Inflation
                 </h3>
-                <p className="font-body text-sm text-on-primary-container">
+                <p className="font-body text-sm text-on-surface-variant">
                   Real-time cost tracking against menu pricing. Detect margin
                   erosion before it impacts your bottom line.
                 </p>
@@ -121,9 +121,9 @@ export default function ForRestaurantsPage() {
                 <h3 className="mb-4 font-display text-2xl font-semibold text-white">
                   Labor Optimization
                 </h3>
-                <p className="font-body text-sm text-on-primary-container">
-                  Dynamic staff hour modeling based on historical traffic patterns
-                  and forecasted demand. Stop overstaffing the lulls.
+                <p className="font-body text-sm text-on-surface-variant">
+                  Dynamic staff hour modeling based on historical traffic
+                  patterns and forecasted demand. Stop overstaffing the lulls.
                 </p>
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function ForRestaurantsPage() {
                 <h3 className="mb-4 font-display text-2xl font-semibold text-white">
                   Expansion Safety
                 </h3>
-                <p className="font-body text-sm text-on-primary-container">
+                <p className="font-body text-sm text-on-surface-variant">
                   Sophisticated cash-flow projections for second and third
                   locations. Know exactly when you have the capital to grow.
                 </p>
@@ -182,8 +182,10 @@ export default function ForRestaurantsPage() {
                     COGS RATIO
                   </p>
                   <p className="font-mono text-sm">
-                    28.4%{" "}
-                    <span className="text-[10px] text-flow-forest">Optimal</span>
+                    28.4%{' '}
+                    <span className="text-[10px] text-flow-forest">
+                      Optimal
+                    </span>
                   </p>
                 </div>
                 <div>
@@ -246,16 +248,19 @@ export default function ForRestaurantsPage() {
             Join an exclusive circle of restaurateurs who prioritize financial
             mastery. Our early access list is limited to 500 partners.
           </p>
-          <div className="mx-auto flex max-w-lg flex-col border-2 border-flow-obsidian md:flex-row">
-            <input
+          <div className="mx-auto flex max-w-lg flex-col md:flex-row justify-center">
+            {/* <input
               className="flex-grow bg-transparent p-4 font-body text-sm text-flow-obsidian placeholder:text-flow-obsidian/50 focus:ring-0"
               placeholder="Enter your business email"
               type="email"
               required
-            />
-            <button className="bg-flow-obsidian px-8 py-4 font-bold text-white transition-all hover:bg-zinc-800">
+            /> */}
+            <Link
+              href="/waitlist"
+              className="bg-flow-obsidian px-8 py-4 font-bold text-white transition-all hover:bg-zinc-800"
+            >
               Join Waitlist
-            </button>
+            </Link>
           </div>
         </div>
       </section>

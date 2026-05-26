@@ -4,20 +4,27 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Landmark, Info, ArrowLeft, Check, Globe } from 'lucide-react';
+import { useSubmitOnboardingStep3 } from '@/hooks/api/use-onboarding';
 
 export default function EcommerceStep3() {
   const router = useRouter();
-  const [taxRate, setTaxRate] = useState('25');
+  const [taxRate, setTaxRate] = useState(25);
   const [region, setRegion] = useState('United States');
   const [isFinishing, setIsFinishing] = useState(false);
+
+  const { mutate: submitStep3 } = useSubmitOnboardingStep3();
 
   const handleFinish = (e: React.FormEvent) => {
     e.preventDefault();
     setIsFinishing(true);
-    // Simulate finalization
-    setTimeout(() => {
-      router.push('/dashboard');
-    }, 2000);
+
+    submitStep3(
+      { tax_rate: taxRate },
+      {
+        onSuccess: () => router.push('/dashboard'),
+        onError: () => setIsFinishing(false),
+      },
+    );
   };
 
   return (
@@ -68,7 +75,7 @@ export default function EcommerceStep3() {
                   <span className="font-mono text-xl text-flow-gold">
                     -$
                     {(
-                      (142500 * (parseFloat(taxRate) || 0)) /
+                      (142500 * taxRate) /
                       100
                     ).toLocaleString(undefined, {
                       minimumFractionDigits: 2,
@@ -84,7 +91,7 @@ export default function EcommerceStep3() {
                     $
                     {(
                       142500 *
-                      (1 - (parseFloat(taxRate) || 0) / 100)
+                      (1 - taxRate / 100)
                     ).toLocaleString(undefined, {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
@@ -131,7 +138,7 @@ export default function EcommerceStep3() {
                     id="tax-rate"
                     type="number"
                     value={taxRate}
-                    onChange={(e) => setTaxRate(e.target.value)}
+                    onChange={(e) => setTaxRate(parseInt(e.target.value) || 0)}
                     min="0"
                     max="100"
                   />

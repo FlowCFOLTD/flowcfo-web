@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
+import { adminApi, usersApi } from '@/lib/api/users';
 import {
   Users,
   Mail,
@@ -20,6 +21,14 @@ import {
 import { Button } from '@/components/ui/button';
 
 import { DataTable } from '@/components/admin/data-table';
+
+interface HealthData {
+  database: string;
+  timestamp: string;
+  user_count: number;
+  waitlist_count: number;
+  version: string;
+}
 
 interface DashboardStats {
   total_waitlist: number;
@@ -84,37 +93,14 @@ export default function AdminDashboard() {
   const [contacts, setContacts] = useState<ContactEntry[]>([]);
   const [users, setUsers] = useState<UserEntry[]>([]);
   const [events, setEvents] = useState<AnalyticsEvent[]>([]);
+  const [health, setHealth] = useState<HealthData | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'waitlist' | 'contacts' | 'users' | 'events'
+    'overview' | 'waitlist' | 'contacts' | 'users' | 'events' | 'health'
   >('overview');
   const router = useRouter();
-
-  const fetchWithAuth = async (endpoint: string) => {
-    const { data: sessionData } = await authClient.getSession();
-    if (!sessionData?.session.token) return null;
-
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1${endpoint}`,
-      {
-        headers: {
-          Authorization: `Bearer ${sessionData.session.token}`,
-        },
-      },
-    );
-
-    if (response.status === 403) {
-      router.push('/admin/login');
-      return null;
-    }
-
-    if (response.ok) {
-      return response.json();
-    }
-    return null;
-  };
 
   useEffect(() => {
     const init = async () => {
@@ -124,8 +110,23 @@ export default function AdminDashboard() {
         return;
       }
 
-      const data = await fetchWithAuth('/admin/dashboard');
-      if (data) setStats(data);
+      try {
+        const profile = await usersApi.getMe();
+        if (!profile.is_admin) {
+          router.push('/dashboard');
+          return;
+        }
+      } catch {
+        router.push('/admin/login');
+        return;
+      }
+
+      try {
+        const data = await adminApi.getDashboard();
+        setStats(data);
+      } catch {
+        router.push('/admin/login');
+      }
       setIsLoading(false);
     };
 
@@ -137,12 +138,22 @@ export default function AdminDashboard() {
 
     const loadTabData = async () => {
       setIsDataLoading(true);
-      const data = await fetchWithAuth(`/admin/${activeTab}`);
-      if (data) {
-        if (activeTab === 'waitlist') setWaitlist(data);
-        if (activeTab === 'contacts') setContacts(data);
-        if (activeTab === 'users') setUsers(data);
-        if (activeTab === 'events') setEvents(data);
+      try {
+        let data: unknown;
+        if (activeTab === 'waitlist') data = await adminApi.getWaitlist();
+        else if (activeTab === 'contacts') data = await adminApi.getContacts();
+        else if (activeTab === 'users') data = await adminApi.getUsers();
+        else if (activeTab === 'events') data = await adminApi.getEvents(100);
+        else if (activeTab === 'health') data = await adminApi.getHealth();
+        if (data) {
+          if (activeTab === 'waitlist') setWaitlist(data as WaitlistEntry[]);
+          else if (activeTab === 'contacts') setContacts(data as ContactEntry[]);
+          else if (activeTab === 'users') setUsers(data as UserEntry[]);
+          else if (activeTab === 'events') setEvents(data as AnalyticsEvent[]);
+          else if (activeTab === 'health') setHealth(data as HealthData);
+        }
+      } catch {
+        // silent — session check already handled
       }
       setIsDataLoading(false);
     };
@@ -205,6 +216,12 @@ export default function AdminDashboard() {
             icon={<Activity className="h-4 w-4" />}
             label="Events"
           />
+          <NavButton
+            active={activeTab === 'health'}
+            onClick={() => setActiveTab('health')}
+            icon={<BarChart3 className="h-4 w-4" />}
+            label="Health"
+          />
         </nav>
 
         <div className="p-4 border-t border-white/5">
@@ -225,6 +242,12 @@ export default function AdminDashboard() {
             {activeTab}
           </h2>
           <div className="flex items-center gap-4">
+            <a
+              href="/dashboard"
+              className="text-[10px] uppercase tracking-widest text-white/30 hover:text-[#FFD700] transition-colors"
+            >
+              Back to App
+            </a>
             <div className="text-right">
               <p className="text-xs font-bold text-white">Admin User</p>
               <p className="text-[10px] text-[#FFD700] uppercase tracking-tighter">
@@ -241,7 +264,7 @@ export default function AdminDashboard() {
           {activeTab === 'overview' && stats && (
             <div className="space-y-8">
               {/* Stats Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <StatCard
                   label="Total Users"
                   value={stats.total_users}
@@ -261,10 +284,16 @@ export default function AdminDashboard() {
                   icon={<MessageSquare className="text-[#FFD700]" />}
                 />
                 <StatCard
-                  label="Active Today"
+                  label="Signups (7d)"
+                  value={stats.signups_last_7_days}
+                  subLabel="New signups"
+                  icon={<TrendingUp className="text-[#FFD700]" />}
+                />
+                <StatCard
+                  label="Logins (7d)"
                   value={stats.logins_last_7_days}
                   subLabel="Past 7 days activity"
-                  icon={<TrendingUp className="text-[#FFD700]" />}
+                  icon={<Activity className="text-[#FFD700]" />}
                 />
               </div>
 
@@ -475,6 +504,36 @@ export default function AdminDashboard() {
                   },
                 ]}
               />
+            </div>
+          )}
+
+          {activeTab === 'health' && (
+            <div className="space-y-6">
+              {isDataLoading && !health && (
+                <div className="bg-[#141416] border border-white/5 p-12 text-center">
+                  <Loader2 className="h-6 w-6 text-[#FFD700] animate-spin mx-auto" />
+                </div>
+              )}
+              {health && (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <StatCard
+                      label="Database"
+                      value={health.database === 'healthy' ? 'Healthy' : 'Unhealthy'}
+                      subLabel="Connection status"
+                      icon={<Activity className={health.database === 'healthy' ? 'text-green-400' : 'text-red-400'} />}
+                    />
+                    <StatCard label="Users" value={health.user_count} subLabel="Total registered" icon={<Users className="text-[#FFD700]" />} />
+                    <StatCard label="Waitlist" value={health.waitlist_count} subLabel="Pre-launch signups" icon={<UserPlus className="text-[#FFD700]" />} />
+                    <StatCard label="Version" value={health.version} subLabel={new Date(health.timestamp).toLocaleString()} icon={<BarChart3 className="text-[#FFD700]" />} />
+                  </div>
+                  <div className="bg-[#141416] border border-white/5 p-6">
+                    <p className="text-xs text-white/40 font-mono">
+                      {JSON.stringify(health, null, 2)}
+                    </p>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
