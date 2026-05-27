@@ -57,5 +57,7 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
 });
 
-// Auto-run migrations on first load
-auth.$context.then(ctx => ctx.runMigrations().catch(() => {}));
+// Auto-run migrations on first load (dev only — backend handles this in prod)
+if (isLocal) {
+  auth.$context.then(ctx => ctx.runMigrations().catch(() => {}));
+}
