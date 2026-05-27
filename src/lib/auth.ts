@@ -1,11 +1,10 @@
 import { betterAuth } from 'better-auth';
 import { emailOTP } from 'better-auth/plugins';
 import { Resend } from 'resend';
-import type { Pool } from 'pg';
 
 const isLocal = process.env.NODE_ENV === 'development';
 
-let pool: Pool | { query: (text: string, params?: any[]) => Promise<{ rows: any[] }> };
+let pool: any;
 
 if (isLocal) {
   const { Pool: PgPool } = await import('pg');
@@ -13,14 +12,11 @@ if (isLocal) {
     connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
   });
 } else {
-  // Use HTTP-based neon() instead of Pool — Pool uses WebSocket which
-  // Cloudflare Pages doesn't support during module initialization.
-  const { neon } = await import('@neondatabase/serverless');
-  const sql = neon(process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder');
-  pool = {
-    query: <T extends Record<string, unknown>>(text: string, params?: any[]) =>
-      sql.query(text, params ?? []).then(rows => ({ rows: rows as unknown as T[] })),
-  };
+  const { neonConfig, Pool } = await import('@neondatabase/serverless');
+  neonConfig.poolQueryViaFetch = true;
+  pool = new Pool({
+    connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
+  });
 }
 
 export const auth = betterAuth({
