@@ -76,8 +76,14 @@ export async function apiClient<T>(
   }
 
   const errorData = await response.json().catch(() => ({}));
+  const errorMessage =
+    (errorData as Record<string, unknown>)?.error &&
+    typeof (errorData as Record<string, unknown>).error === 'object'
+      ? ((errorData as Record<string, unknown>).error as Record<string, unknown>)?.message as string
+      : (errorData as Record<string, unknown>)?.detail as string ||
+        (errorData as Record<string, unknown>)?.message as string;
   const error: ApiError = new Error(
-    errorData.message || 'An error occurred while fetching the data.',
+    errorMessage || 'An error occurred while fetching the data.',
   );
   error.status = response.status;
   error.data = errorData;

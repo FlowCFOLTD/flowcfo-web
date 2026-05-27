@@ -77,15 +77,20 @@ export default function CsvUploadZone({ onSuccess, onCancel }: CsvUploadZoneProp
       const apiErr = err as ApiError;
       if (apiErr?.data && typeof apiErr.data === "object" && "error" in apiErr.data) {
         const errData = apiErr.data as { error?: { code?: string; message?: string } };
-        if (errData.error?.code === "DUPLICATE_FILENAME") {
-          setDuplicateMsg(errData.error.message ?? null);
+        if (errData.error?.message) {
+          if (errData.error?.code === "DUPLICATE_FILENAME") {
+            setDuplicateMsg(errData.error.message);
+            setStage("idle");
+            return;
+          }
+          setError(errData.error.message);
           setStage("idle");
           return;
         }
       }
 
       setStage("idle");
-      setError(err instanceof Error ? err.message : "An unexpected error occurred.");
+      setError(apiErr?.message || "An unexpected error occurred.");
     }
   };
 
