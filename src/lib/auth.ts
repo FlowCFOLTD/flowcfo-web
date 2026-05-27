@@ -12,11 +12,20 @@ if (isLocal) {
     connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
   });
 } else {
-  const { neonConfig, Pool } = await import('@neondatabase/serverless');
-  neonConfig.poolQueryViaFetch = true;
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
-  });
+  // Use neon() HTTP function only (no Pool import — Pool would pull in ws→net
+  // which is unavailable in Cloudflare Pages Edge Runtime)
+  const { neon } = await import('@neondatabase/serverless');
+  const sql = neon(process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder');
+
+  const query = async (text: string, params?: any[]) => {
+    const rows = await sql.query(text, params ?? []);
+    return { rows: rows as any[] };
+  };
+
+  pool = {
+    query,
+    connect: async () => ({ query, release: () => {} }),
+  };
 }
 
 export const auth = betterAuth({
