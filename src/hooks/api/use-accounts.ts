@@ -1,7 +1,15 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { accountsApi } from '@/lib/api/users';
+
+export function useAccounts() {
+  return useQuery({
+    queryKey: ['accounts'],
+    queryFn: accountsApi.list,
+    retry: false,
+  });
+}
 
 export function useUploadCsv() {
   return useMutation({

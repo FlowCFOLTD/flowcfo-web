@@ -128,7 +128,7 @@ export default function EcommerceDashboardPage() {
               </div>
               <div className="col-span-12 md:col-span-3 border border-white/10 bg-white/5 p-6">
                 <p className="flow-label text-[10px] text-white/40 tracking-widest mb-2">30-DAY CASH FORECAST</p>
-                <p className="font-mono text-2xl font-bold text-white">${dash.cash_forecast_30d.toLocaleString()}</p>
+                <p className="font-mono text-2xl font-bold text-white">${(dash.cash_forecast_30d ?? 0).toLocaleString()}</p>
               </div>
               <div className="col-span-12 md:col-span-3 border border-white/10 bg-white/5 p-6">
                 <p className="flow-label text-[10px] text-white/40 tracking-widest mb-2">TAX RESERVE</p>

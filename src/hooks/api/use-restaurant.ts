@@ -3,10 +3,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { restaurantApi } from '@/lib/api/restaurant';
 
-export function useRestaurantDashboard() {
+export function useRestaurantDashboard(opts?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['restaurant', 'dashboard'],
     queryFn: restaurantApi.getDashboard,
+    enabled: opts?.enabled ?? true,
     retry: false,
   });
 }

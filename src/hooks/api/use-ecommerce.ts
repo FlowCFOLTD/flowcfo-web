@@ -3,10 +3,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { ecommerceApi } from '@/lib/api/ecommerce';
 
-export function useEcommerceDashboard() {
+export function useEcommerceDashboard(opts?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['ecommerce', 'dashboard'],
     queryFn: ecommerceApi.getDashboard,
+    enabled: opts?.enabled ?? true,
     retry: false,
   });
 }

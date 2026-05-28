@@ -16,7 +16,7 @@ interface SafeToSpendCardProps {
 }
 
 function formatCurrency(val: number): string {
-  const abs = Math.abs(val);
+  const abs = Math.abs(val ?? 0);
   const formatted = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',

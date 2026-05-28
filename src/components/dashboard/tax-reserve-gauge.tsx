@@ -10,7 +10,8 @@ interface TaxReserveGaugeProps {
 export default function TaxReserveGauge({ percentage, shortfall }: TaxReserveGaugeProps) {
   const router = useRouter();
   const circumference = 2 * Math.PI * 88;
-  const offset = circumference - (percentage / 100) * circumference;
+  const pct = percentage ?? 0;
+  const offset = circumference - (pct / 100) * circumference;
 
   const formatCurrency = (val: number) =>
     new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(val);

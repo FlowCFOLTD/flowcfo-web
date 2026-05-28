@@ -3,10 +3,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { freelancerApi } from '@/lib/api/freelancer';
 
-export function useFreelancerDashboard() {
+export function useFreelancerDashboard(opts?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['freelancer', 'dashboard'],
     queryFn: freelancerApi.getDashboard,
+    enabled: opts?.enabled ?? true,
     retry: false,
   });
 }

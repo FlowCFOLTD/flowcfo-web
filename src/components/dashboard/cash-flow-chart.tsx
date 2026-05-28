@@ -73,8 +73,8 @@ export default function CashFlowChart({ data }: CashFlowChartProps) {
                 />
               )}
               <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-flow-black border border-white/10 px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                <p className="font-mono text-[10px] text-flow-gold">${point.income.toFixed(0)}</p>
-                <p className="font-mono text-[10px] text-white/60">${point.balance.toFixed(0)}</p>
+                <p className="font-mono text-[10px] text-flow-gold">${(point.income ?? 0).toFixed(0)}</p>
+                <p className="font-mono text-[10px] text-white/60">${(point.balance ?? 0).toFixed(0)}</p>
               </div>
             </div>
           );

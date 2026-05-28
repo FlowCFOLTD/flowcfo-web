@@ -102,6 +102,19 @@ export interface CsvUploadData {
   warnings?: string[];
 }
 
+export interface AccountData {
+  id: string;
+  provider: string;
+  institution_name: string | null;
+  account_name: string | null;
+  account_type: string | null;
+  current_balance: number | null;
+  available_balance: number | null;
+  currency: string;
+  is_primary: boolean;
+  last_synced_at: string | null;
+}
+
 export const accountsApi = {
   uploadCsv: (formData: FormData, override?: boolean) =>
     apiClient<CsvUploadData>(
@@ -111,4 +124,5 @@ export const accountsApi = {
         body: formData,
       },
     ),
+  list: () => apiClient<AccountData[]>('/api/v1/accounts'),
 };

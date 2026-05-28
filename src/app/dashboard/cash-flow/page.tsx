@@ -91,12 +91,12 @@ export default function CashFlowPage() {
                 return (
                   <div key={m.date} className="grid grid-cols-[120px_repeat(4,1fr)] gap-3 text-sm font-body items-center py-2 border-b border-white/5 last:border-0">
                     <span className="text-white/60 font-medium">{m.date}</span>
-                    <span className="font-mono text-emerald-400">+${Math.round(m.income).toLocaleString()}</span>
-                    <span className="font-mono text-rose-400">-${Math.round(m.expenses).toLocaleString()}</span>
+                    <span className="font-mono text-emerald-400">+${Math.round(m.income || 0).toLocaleString()}</span>
+                    <span className="font-mono text-rose-400">-${Math.round(m.expenses || 0).toLocaleString()}</span>
                     <span className={`font-mono ${net >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      {net >= 0 ? '+' : ''}${Math.round(net).toLocaleString()}
+                      {net >= 0 ? '+' : ''}${Math.round(net || 0).toLocaleString()}
                     </span>
-                    <span className="font-mono text-white/80">${Math.round(m.balance).toLocaleString()}</span>
+                    <span className="font-mono text-white/80">${Math.round(m.balance || 0).toLocaleString()}</span>
                   </div>
                 );
               })}

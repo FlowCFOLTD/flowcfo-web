@@ -3,10 +3,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { agencyApi } from '@/lib/api/agency';
 
-export function useAgencyDashboard() {
+export function useAgencyDashboard(opts?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['agency', 'dashboard'],
     queryFn: agencyApi.getDashboard,
+    enabled: opts?.enabled ?? true,
     retry: false,
   });
 }

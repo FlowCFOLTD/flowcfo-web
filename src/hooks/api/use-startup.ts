@@ -3,10 +3,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { startupApi } from '@/lib/api/startup';
 
-export function useStartupDashboard() {
+export function useStartupDashboard(opts?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['startup', 'dashboard'],
     queryFn: startupApi.getDashboard,
+    enabled: opts?.enabled ?? true,
     retry: false,
   });
 }

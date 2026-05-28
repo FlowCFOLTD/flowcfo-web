@@ -11,11 +11,11 @@ export function useDashboard() {
   const { data: user, isLoading: userLoading } = useUser();
   const bt = user?.business_type;
 
-  const freelancer = useFreelancerDashboard();
-  const startup = useStartupDashboard();
-  const agency = useAgencyDashboard();
-  const restaurant = useRestaurantDashboard();
-  const ecommerce = useEcommerceDashboard();
+  const freelancer = useFreelancerDashboard({ enabled: bt === 'freelancer' });
+  const startup = useStartupDashboard({ enabled: bt === 'startup' });
+  const agency = useAgencyDashboard({ enabled: bt === 'agency' });
+  const restaurant = useRestaurantDashboard({ enabled: bt === 'restaurant' });
+  const ecommerce = useEcommerceDashboard({ enabled: bt === 'ecommerce' });
 
   if (userLoading) return { data: null, isLoading: true };
 
