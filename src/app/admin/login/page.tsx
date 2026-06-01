@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
 import { adminApi } from '@/lib/api/users';
 import { Button } from '@/components/ui/button';
-import { Landmark, Mail, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
+import { Mail, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -85,9 +86,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-12">
-          <div className="w-12 h-12 bg-[#FFD700] flex items-center justify-center">
-            <Landmark className="text-black h-7 w-7" />
-          </div>
+          <Image src="/logo-dark.svg" alt="FlowCFO" width={44} height={44} className="h-11 w-11" />
           <div className="text-left">
             <h1 className="text-white font-bold text-2xl tracking-tight">
               FlowCFO

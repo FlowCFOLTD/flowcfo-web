@@ -1,7 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Landmark, Clock, Mail, BarChart3, ShieldCheck, TrendingUp, FileText, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+import { Clock, Mail, BarChart3, ShieldCheck, TrendingUp, FileText, ChevronRight } from 'lucide-react';
 import { useUser } from '@/hooks/api/use-user';
 
 const BUSINESS_CONTENT: Record<string, { metrics: { label: string; icon: React.ReactNode; desc: string }[]; dashboard: string; csv: string; phase2: string }> = {
@@ -80,9 +81,7 @@ export default function ApprovalPage() {
       <div className="mx-auto max-w-[900px] px-4 md:px-8 py-16">
         {/* Header */}
         <div className="flex items-center gap-4 mb-12">
-          <div className="w-12 h-12 bg-flow-gold flex items-center justify-center">
-            <Landmark className="text-flow-black h-7 w-7" />
-          </div>
+          <Image src="/logo-dark.svg" alt="FlowCFO" width={44} height={44} className="h-11 w-11" />
           <div>
             <h1 className="text-white font-bold text-3xl tracking-tight">FlowCFO</h1>
             <p className="text-flow-gold text-[10px] uppercase tracking-[0.3em] font-medium">Beta Access</p>

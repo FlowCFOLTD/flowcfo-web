@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/api/use-user';
 import { authClient } from '@/lib/auth-client';
@@ -20,7 +21,11 @@ type AnalysisItem = {
 const mainNav: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: 'dashboard' },
   { label: 'Cash Flow', href: '/dashboard/cash-flow', icon: 'payments' },
-  { label: 'Transactions', href: '/dashboard/transactions', icon: 'receipt_long' },
+  {
+    label: 'Transactions',
+    href: '/dashboard/transactions',
+    icon: 'receipt_long',
+  },
   { label: 'Tax', href: '/dashboard/tax', icon: 'account_balance_wallet' },
   { label: 'Alerts', href: '/dashboard/alerts', icon: 'notifications' },
 ];
@@ -38,8 +43,14 @@ const startupAnalysis: AnalysisItem[] = [
 ];
 
 const agencyAnalysis: AnalysisItem[] = [
-  { label: 'Client Profitability', href: '/dashboard/analysis/client-profitability' },
-  { label: 'Revenue Diversification', href: '/dashboard/analysis/revenue-diversification' },
+  {
+    label: 'Client Profitability',
+    href: '/dashboard/analysis/client-profitability',
+  },
+  {
+    label: 'Revenue Diversification',
+    href: '/dashboard/analysis/revenue-diversification',
+  },
 ];
 
 const restaurantAnalysis: AnalysisItem[] = [
@@ -73,14 +84,24 @@ export default function Sidebar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const analysisItems = user?.business_type === 'startup' ? startupAnalysis
-    : user?.business_type === 'agency' ? agencyAnalysis
-    : user?.business_type === 'restaurant' ? restaurantAnalysis
-    : user?.business_type === 'ecommerce' ? ecommerceAnalysis
-    : freelancerAnalysis;
+  const analysisItems =
+    user?.business_type === 'startup'
+      ? startupAnalysis
+      : user?.business_type === 'agency'
+        ? agencyAnalysis
+        : user?.business_type === 'restaurant'
+          ? restaurantAnalysis
+          : user?.business_type === 'ecommerce'
+            ? ecommerceAnalysis
+            : freelancerAnalysis;
 
   const initials = user?.full_name
-    ? user.full_name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    ? user.full_name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
     : 'U';
 
   const isActive = (href: string) => {
@@ -97,9 +118,20 @@ export default function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-flow-black flex flex-col py-8 border-r border-flow-line-dark z-50">
       <div className="px-6 mb-10">
-        <h1 className="font-display text-2xl font-bold text-flow-gold">FlowCFO</h1>
+        <div className="flex items-center gap-3">
+          <Image
+            src="/logo-dark.svg"
+            alt="FlowCFO"
+            width={36}
+            height={36}
+            className="h-9 w-9"
+          />
+          <h1 className="font-display text-2xl font-bold text-flow-gold">
+            FlowCFO
+          </h1>
+        </div>
         <p className="flow-label text-[9px] text-flow-muted tracking-[0.2em] mt-1">
-          INSTITUTIONAL WEALTH
+          YOUR BUSINESS, YOUR NUMBERS
         </p>
       </div>
 
@@ -116,7 +148,9 @@ export default function Sidebar() {
                   : 'text-flow-muted hover:text-flow-gold hover:bg-white/5 border-l-4 border-transparent'
               }`}
             >
-              <span className="material-symbols-outlined text-xl">{item.icon}</span>
+              <span className="material-symbols-outlined text-xl">
+                {item.icon}
+              </span>
               <span>{item.label}</span>
             </Link>
           );
@@ -124,11 +158,15 @@ export default function Sidebar() {
 
         <div className="pt-8 pb-2 px-4">
           <h3 className="flow-label text-[10px] text-flow-muted uppercase tracking-[0.15em]">
-            {user?.business_type === 'startup' ? 'Startup Metrics'
-              : user?.business_type === 'agency' ? 'Agency Metrics'
-              : user?.business_type === 'restaurant' ? 'Restaurant Metrics'
-              : user?.business_type === 'ecommerce' ? 'E-commerce Metrics'
-              : 'Analysis'}
+            {user?.business_type === 'startup'
+              ? 'Startup Metrics'
+              : user?.business_type === 'agency'
+                ? 'Agency Metrics'
+                : user?.business_type === 'restaurant'
+                  ? 'Restaurant Metrics'
+                  : user?.business_type === 'ecommerce'
+                    ? 'E-commerce Metrics'
+                    : 'Analysis'}
           </h3>
         </div>
 
@@ -154,7 +192,9 @@ export default function Sidebar() {
         <Link
           href="/dashboard/settings/accounts"
           className={`flex items-center gap-3 px-2 py-3 transition-colors duration-200 ${
-            pathname.startsWith('/dashboard/settings') ? 'text-flow-gold' : 'text-flow-muted hover:text-flow-gold'
+            pathname.startsWith('/dashboard/settings')
+              ? 'text-flow-gold'
+              : 'text-flow-muted hover:text-flow-gold'
           }`}
         >
           <span className="material-symbols-outlined text-xl">settings</span>
@@ -185,7 +225,9 @@ export default function Sidebar() {
                 onClick={() => setMenuOpen(false)}
                 className="flex items-center gap-3 px-4 py-3 text-flow-muted hover:text-flow-gold hover:bg-white/5 transition-colors font-body text-sm"
               >
-                <span className="material-symbols-outlined text-lg">person</span>
+                <span className="material-symbols-outlined text-lg">
+                  person
+                </span>
                 Profile
               </Link>
               <Link
@@ -193,14 +235,18 @@ export default function Sidebar() {
                 onClick={() => setMenuOpen(false)}
                 className="flex items-center gap-3 px-4 py-3 text-flow-muted hover:text-flow-gold hover:bg-white/5 transition-colors font-body text-sm"
               >
-                <span className="material-symbols-outlined text-lg">security</span>
+                <span className="material-symbols-outlined text-lg">
+                  security
+                </span>
                 Security
               </Link>
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-3 px-4 py-3 text-rose-400 hover:bg-red-500/10 transition-colors font-body text-sm w-full text-left border-t border-flow-line-dark/20"
               >
-                <span className="material-symbols-outlined text-lg">logout</span>
+                <span className="material-symbols-outlined text-lg">
+                  logout
+                </span>
                 Sign out
               </button>
             </div>

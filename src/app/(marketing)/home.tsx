@@ -110,16 +110,16 @@ export default function HomePage() {
             </div>
 
             <h1 className="max-w-xl font-display text-[44px] font-extrabold leading-[1.08] tracking-[-0.03em] text-white sm:text-6xl lg:text-[64px] lg:leading-[72px]">
-              Stop guessing what you can{' '}
-              <span className="text-[#D4AF37]">spend.</span> FlowCFO knows.
+              Your business has an{' '}
+              <span className="text-[#D4AF37]">AI CFO. </span> It doesn&apos;t
+              just track - it acts.
             </h1>
 
             <p className="max-w-lg text-lg leading-7 text-[#858383]">
-              Vertical AI agents designed for your specific business model —
-              whether you&apos;re a freelancer, agency owner, a startup, or
-              e-commerce founder. FlowCFO syncs with your bank to predict cash
-              flow, automate taxes, and provide one clear number for your safe
-              spending.
+              Vertical AI agents for your P&L — one for every business model,
+              one clear number to spend. Your AI CFO already knows your margins,
+              runway, and tax gap. It acts - Margin protection, burn alerts, tax
+              automation.
             </p>
 
             <div className="flex flex-col gap-4 pt-4 sm:flex-row">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
 import { adminApi } from '@/lib/api/users';
 import {
@@ -11,7 +12,6 @@ import {
   BarChart3,
   Activity,
   LogOut,
-  Landmark,
   TrendingUp,
   UserPlus,
   MessageSquare,
@@ -177,9 +177,7 @@ export default function AdminDashboard() {
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 bottom-0 w-64 bg-[#141416] border-r border-white/5 flex flex-col">
         <div className="p-6 flex items-center gap-3 border-b border-white/5">
-          <div className="w-8 h-8 bg-[#FFD700] flex items-center justify-center">
-            <Landmark className="text-black h-5 w-5" />
-          </div>
+          <Image src="/logo-dark.svg" alt="FlowCFO" width={32} height={32} className="h-8 w-8" />
           <span className="font-bold tracking-tight">FlowCFO Admin</span>
         </div>
 
