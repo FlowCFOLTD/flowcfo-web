@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
-import { adminApi, usersApi } from '@/lib/api/users';
+import { adminApi } from '@/lib/api/users';
 import {
   Users,
   Mail,
@@ -69,7 +69,8 @@ interface UserEntry {
   plan: string;
   onboarding_completed: boolean;
   onboarding_step: string;
-  is_admin: boolean;
+  approved: boolean;
+  approval_requested: boolean;
   created_at: string;
 }
 
@@ -79,6 +80,7 @@ interface AnalyticsEvent {
   event_type: string;
   ip_address: string;
   user_agent: string;
+  country: string | null;
   metadata: {
     path: string;
     method: string;
@@ -111,11 +113,7 @@ export default function AdminDashboard() {
       }
 
       try {
-        const profile = await usersApi.getMe();
-        if (!profile.is_admin) {
-          router.push('/dashboard');
-          return;
-        }
+        await adminApi.getMe();
       } catch {
         router.push('/admin/login');
         return;
@@ -243,10 +241,10 @@ export default function AdminDashboard() {
           </h2>
           <div className="flex items-center gap-4">
             <a
-              href="/dashboard"
+              href="/admin/dashboard"
               className="text-[10px] uppercase tracking-widest text-white/30 hover:text-[#FFD700] transition-colors"
             >
-              Back to App
+              Dashboard
             </a>
             <div className="text-right">
               <p className="text-xs font-bold text-white">Admin User</p>
@@ -433,28 +431,51 @@ export default function AdminDashboard() {
                   },
                   { header: 'Email', accessor: 'email' },
                   {
-                    header: 'Plan',
-                    accessor: 'plan',
-                    className: 'uppercase text-[10px] font-bold text-[#FFD700]',
-                  },
-                  {
                     header: 'Business',
                     accessor: 'business_type',
                     className: 'capitalize',
                   },
-                  { header: 'Step', accessor: 'onboarding_step' },
                   {
-                    header: 'Status',
+                    header: 'Approved',
+                    accessor: (item) => (
+                      <span className={`text-[10px] uppercase font-bold ${item.approved ? 'text-green-400' : 'text-amber-400'}`}>
+                        {item.approved ? 'Yes' : 'No'}
+                      </span>
+                    ),
+                  },
+                  {
+                    header: 'Requested',
                     accessor: (item) =>
-                      item.onboarding_completed ? (
-                        <span className="text-green-400 text-[10px] uppercase font-bold">
-                          Completed
-                        </span>
+                      item.approval_requested ? (
+                        <span className="text-green-400 text-[10px] uppercase font-bold">Yes</span>
                       ) : (
-                        <span className="text-yellow-400 text-[10px] uppercase font-bold">
-                          In Progress
-                        </span>
+                        <span className="text-white/20 text-[10px]">—</span>
                       ),
+                  },
+                  {
+                    header: '',
+                    accessor: (item) => (
+                      <button
+                        onClick={async () => {
+                          try {
+                            const result = await adminApi.approveUser(item.id);
+                            const updated = users.map((u) =>
+                              u.id === item.id ? { ...u, approved: result.approved } : u,
+                            );
+                            setUsers(updated);
+                          } catch {
+                            // silent
+                          }
+                        }}
+                        className={`px-3 py-1.5 text-[10px] uppercase font-bold tracking-wider transition-all ${
+                          item.approved
+                            ? 'border border-red-500/30 text-red-400 hover:bg-red-500/10'
+                            : 'border border-green-500/30 text-green-400 hover:bg-green-500/10'
+                        }`}
+                      >
+                        {item.approved ? 'Revoke' : 'Approve'}
+                      </button>
+                    ),
                   },
                 ]}
               />
@@ -470,7 +491,7 @@ export default function AdminDashboard() {
                   {
                     header: 'Time',
                     accessor: (item) =>
-                      new Date(item.created_at).toLocaleTimeString(),
+                      new Date(item.created_at).toLocaleString(),
                   },
                   {
                     header: 'Event',
@@ -498,7 +519,12 @@ export default function AdminDashboard() {
                     ),
                   },
                   {
-                    header: 'IP Address',
+                    header: 'Country',
+                    accessor: 'country',
+                    className: 'text-[10px] uppercase',
+                  },
+                  {
+                    header: 'IP',
                     accessor: 'ip_address',
                     className: 'text-[10px] text-white/30',
                   },

@@ -11,9 +11,12 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
+export type ChatError = { type: 'limit' } | null;
+
 export function useAgentChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [error, setError] = useState<ChatError>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   const sendMessage = useCallback(async (text: string) => {
@@ -26,6 +29,7 @@ export function useAgentChat() {
 
     setMessages((prev) => [...prev, userMessage]);
     setIsStreaming(true);
+    setError(null);
 
     const assistantId = (Date.now() + 1).toString();
     const assistantMessage: ChatMessage = {
@@ -54,7 +58,15 @@ export function useAgentChat() {
         signal: controller.signal,
       });
 
-      if (!res.ok) throw new Error('Chat request failed');
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        if (body?.error?.code === 'AI_QUESTIONS_LIMIT') {
+          setError({ type: 'limit' });
+          setMessages((prev) => prev.filter((m) => m.id !== assistantId && m.id !== userMessage.id));
+          return;
+        }
+        throw new Error('Chat request failed');
+      }
 
       const reader = res.body?.getReader();
       if (!reader) throw new Error('No response body');
@@ -88,15 +100,18 @@ export function useAgentChat() {
     }
   }, []);
 
+  const dismissError = useCallback(() => setError(null), []);
+
   const stopStreaming = useCallback(() => {
     abortRef.current?.abort();
   }, []);
 
   const clearMessages = useCallback(() => {
     setMessages([]);
+    setError(null);
   }, []);
 
-  return { messages, isStreaming, sendMessage, stopStreaming, clearMessages };
+  return { messages, isStreaming, error, sendMessage, dismissError, stopStreaming, clearMessages };
 }
 
 export function useGenerateInsights() {

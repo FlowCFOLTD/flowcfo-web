@@ -23,7 +23,6 @@ const mainNav: NavItem[] = [
   { label: 'Transactions', href: '/dashboard/transactions', icon: 'receipt_long' },
   { label: 'Tax', href: '/dashboard/tax', icon: 'account_balance_wallet' },
   { label: 'Alerts', href: '/dashboard/alerts', icon: 'notifications' },
-  { label: 'AI Advisor', href: '/dashboard/ai-advisor', icon: 'smart_toy' },
 ];
 
 const freelancerAnalysis: AnalysisItem[] = [

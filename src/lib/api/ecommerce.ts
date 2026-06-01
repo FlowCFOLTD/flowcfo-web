@@ -14,7 +14,7 @@ export interface EcommerceDashboardData {
   cash_forecast_30d: number;
   gross_margin_pct: number;
   platform_fee_pct: number;
-  cash_flow: Array<{ date: string; income: number; balance: number }>;
+  cash_flow: Array<{ date: string; income: number; expenses: number; balance: number }>;
   recent_transactions: Array<{
     entity: string;
     description: string;

@@ -13,7 +13,7 @@ export interface DashboardData {
       buffer: number;
     };
   };
-  cash_flow: Array<{ date: string; income: number; balance: number }>;
+  cash_flow: Array<{ date: string; income: number; expenses: number; balance: number }>;
   recent_transactions: Array<{
     entity: string;
     description: string;

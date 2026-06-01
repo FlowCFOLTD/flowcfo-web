@@ -87,7 +87,7 @@ export default function AIInsightCards({ insights }: Props) {
       const color = li.priority === 'high' ? 'text-rose' : li.priority === 'medium' ? 'text-flow-gold' : 'text-white/40';
       cards.push({
         icon: <Percent className={`h-5 w-5 ${color}`} />,
-        title: `LLM Insight (${li.priority})`,
+        title: 'Strategic Insight',
         children: <p className="font-body text-sm text-white/80 leading-relaxed">{li.insight}</p>,
       });
     }

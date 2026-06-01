@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, CheckCircle2, Landmark, User, Shield, CreditCard, LogOut } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Landmark, User, Shield, CreditCard, LogOut, Tags } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser, useUpdateUser } from '@/hooks/api/use-user';
 import { authClient } from '@/lib/auth-client';
 import BankConnectionCard from '@/components/onboarding/bank-connection-card';
+import CategoryMappingsPanel from '@/components/settings/category-mappings';
 
 export default function AccountSettingsPage() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function AccountSettingsPage() {
 
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'billing' | 'accounts'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'billing' | 'accounts' | 'categories'>('profile');
 
   const refreshUser = () => {
     queryClient.invalidateQueries({ queryKey: ['user', 'me'] });
@@ -62,6 +63,7 @@ export default function AccountSettingsPage() {
     { key: 'security', label: 'Security', icon: Shield },
     { key: 'billing', label: 'Billing', icon: CreditCard },
     { key: 'accounts', label: 'Accounts', icon: Landmark },
+    { key: 'categories', label: 'Categories', icon: Tags },
   ] as const;
 
   return (
@@ -190,6 +192,12 @@ export default function AccountSettingsPage() {
                 </p>
               </div>
             </div>
+          </div>
+        )}
+
+        {activeTab === 'categories' && (
+          <div className="max-w-2xl">
+            <CategoryMappingsPanel />
           </div>
         )}
       </div>

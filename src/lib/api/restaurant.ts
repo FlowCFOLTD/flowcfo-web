@@ -14,7 +14,7 @@ export interface RestaurantDashboardData {
   cash_forecast_30d: number;
   food_cost_pct: number;
   labor_cost_pct: number;
-  cash_flow: Array<{ date: string; income: number; balance: number }>;
+  cash_flow: Array<{ date: string; income: number; expenses: number; balance: number }>;
   recent_transactions: Array<{
     entity: string;
     description: string;

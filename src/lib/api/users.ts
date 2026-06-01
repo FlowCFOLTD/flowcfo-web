@@ -43,7 +43,8 @@ export interface UserProfile {
   onboarding_step: string;
   bank_synced: boolean;
   terms_accepted: boolean;
-  is_admin: boolean;
+  approved: boolean;
+  approval_requested: boolean;
   plan: string;
   ai_insights: AIInsights;
   created_at: string;
@@ -81,7 +82,14 @@ export interface AdminHealthData {
   version: string;
 }
 
+export interface AdminProfile {
+  id: string;
+  email: string;
+  role: string;
+}
+
 export const adminApi = {
+  getMe: () => apiClient<AdminProfile>('/api/v1/admin/me'),
   getDashboard: () => apiClient<AdminDashboardData>('/api/v1/admin/dashboard'),
   getWaitlist: () => apiClient<unknown[]>('/api/v1/admin/waitlist'),
   getContacts: () => apiClient<unknown[]>('/api/v1/admin/contacts'),
@@ -93,6 +101,10 @@ export const adminApi = {
     return apiClient<unknown[]>(`/api/v1/admin/events?${params}`);
   },
   getHealth: () => apiClient<AdminHealthData>('/api/v1/admin/health'),
+  approveUser: (userId: string) =>
+    apiClient<{ status: string; approved: boolean }>(`/api/v1/admin/users/${userId}/approve`, {
+      method: 'POST',
+    }),
 };
 
 export interface CsvUploadData {

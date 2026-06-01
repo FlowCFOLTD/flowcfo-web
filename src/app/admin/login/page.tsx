@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
+import { adminApi } from '@/lib/api/users';
 import { Button } from '@/components/ui/button';
 import { Landmark, Mail, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
 
@@ -61,15 +62,12 @@ export default function AdminLoginPage() {
         throw new Error(authError.message || 'Invalid OTP');
       }
 
-      // Check if user is actually admin
-      const { data: userMe, error: meError } = await authClient.getSession();
-
-      if (meError || !userMe?.user) {
-        throw new Error('Failed to verify session');
+      // Verify admin access by calling admin/me
+      try {
+        await adminApi.getMe();
+      } catch {
+        throw new Error('Admin access not granted. Contact support@flowcfo.net.');
       }
-
-      // In a real app, we'd check is_admin here, but BetterAuth might not have it in session immediately
-      // The admin.md says the backend checks email ends with @flowcfo.net
       router.push('/admin/dashboard');
     } catch (err: unknown) {
       setError(

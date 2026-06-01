@@ -14,7 +14,7 @@ export interface AgencyDashboardData {
   cash_forecast_30d: number;
   overall_margin_pct: number;
   top_client_pct: number;
-  cash_flow: Array<{ date: string; income: number; balance: number }>;
+  cash_flow: Array<{ date: string; income: number; expenses: number; balance: number }>;
   recent_transactions: Array<{
     entity: string;
     description: string;
