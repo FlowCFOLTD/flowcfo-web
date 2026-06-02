@@ -1,9 +1,9 @@
 'use client';
 
 import { Sparkles, MapPin, BarChart3 } from 'lucide-react';
-import Link from 'next/link';
 import { useUser } from '@/hooks/api/use-user';
 import { useFreelancerRateAnalysis } from '@/hooks/api/use-freelancer';
+import FreelancerMetricsTabs from '@/components/dashboard/freelancer-metrics-tabs';
 
 function LoadingSpinner() {
   return (
@@ -43,6 +43,11 @@ export default function RateAnalysisPage() {
           <p className="font-body text-base text-white/50 max-w-2xl">
             Visualizing your hourly efficiency and market positioning based on the last 12 months of contract performance.
           </p>
+        </div>
+
+        {/* Tabs */}
+        <div className="mb-10 border-b border-white/10">
+          <FreelancerMetricsTabs />
         </div>
 
         {!rate ? (

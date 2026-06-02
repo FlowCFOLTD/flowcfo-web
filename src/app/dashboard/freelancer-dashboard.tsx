@@ -121,6 +121,32 @@ export default function FreelancerDashboardPage() {
                 confidence={dash.safe_to_spend.confidence}
                 breakdown={dash.safe_to_spend.breakdown}
               />
+
+              {/* Freelancer KPI Cards */}
+              <div className="grid grid-cols-3 gap-6">
+                <div className="border border-white/10 bg-white/5 p-6">
+                  <p className="flow-label text-white/50 mb-2 uppercase">VOLATILITY</p>
+                  <p className="font-mono text-2xl text-white tracking-tight">
+                    {dash.income_volatility_level === 'low' ? 'Stable' : dash.income_volatility_level === 'medium' ? 'Moderate' : 'Volatile'}
+                  </p>
+                  <p className="text-[10px] text-white/30 mt-1 uppercase tracking-wider">30-Day Income Pattern</p>
+                </div>
+                <div className="border border-white/10 bg-white/5 p-6">
+                  <p className="flow-label text-white/50 mb-2 uppercase">TAX READINESS</p>
+                  <p className="font-mono text-2xl text-flow-gold tracking-tight">
+                    {dash.tax_readiness_pct}%
+                  </p>
+                  <p className="text-[10px] text-white/30 mt-1 uppercase tracking-wider">Reserve Funded</p>
+                </div>
+                <div className="border border-white/10 bg-white/5 p-6">
+                  <p className="flow-label text-white/50 mb-2 uppercase">CONCENTRATION</p>
+                  <p className="font-mono text-2xl text-white tracking-tight">
+                    {dash.client_concentration_pct}%
+                  </p>
+                  <p className="text-[10px] text-white/30 mt-1 uppercase tracking-wider">Top Client Share</p>
+                </div>
+              </div>
+
               <CashFlowChart data={dash.cash_flow} />
               <RecentTransactions data={dash.recent_transactions} />
             </div>

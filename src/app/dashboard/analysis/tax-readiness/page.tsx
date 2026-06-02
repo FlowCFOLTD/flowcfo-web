@@ -1,9 +1,9 @@
 'use client';
 
 import { AlertTriangle, Download, Calendar, Lock, ChevronRight } from 'lucide-react';
-import Link from 'next/link';
 import { useUser } from '@/hooks/api/use-user';
 import { useFreelancerTaxReadiness } from '@/hooks/api/use-freelancer';
+import FreelancerMetricsTabs from '@/components/dashboard/freelancer-metrics-tabs';
 
 function LoadingSpinner() {
   return (
@@ -45,17 +45,7 @@ export default function TaxReadinessPage() {
 
       {/* Sub-nav tabs */}
       <div className="px-6 md:px-16 mb-10 border-b border-white/10">
-        <div className="flex gap-8">
-          <Link href="/dashboard/analysis/income-volatility" className="flow-label text-white/40 pb-4 hover:text-white transition-colors">
-            Income Volatility
-          </Link>
-          <Link href="/dashboard/analysis/tax-readiness" className="flow-label text-white border-b-2 border-flow-gold pb-4">
-            Tax Readiness
-          </Link>
-          <Link href="/dashboard/analysis/rate-analysis" className="flow-label text-white/40 pb-4 hover:text-white transition-colors">
-            Rate Analysis
-          </Link>
-        </div>
+        <FreelancerMetricsTabs />
       </div>
 
       <div className="px-6 md:px-16">

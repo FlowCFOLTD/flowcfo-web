@@ -62,9 +62,7 @@ export default function Signin({ verify, verifyEmail }: { verify?: string; verif
         return;
       }
 
-      if (user.is_admin && user.email.endsWith('@flowcfo.net')) {
-        router.push('/admin/dashboard');
-      } else if (user.onboarding_completed) {
+      if (user.onboarding_completed) {
         router.push('/dashboard');
       } else {
         router.push('/onboarding');

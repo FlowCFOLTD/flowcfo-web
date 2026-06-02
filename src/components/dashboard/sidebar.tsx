@@ -32,6 +32,7 @@ const mainNav: NavItem[] = [
 
 const freelancerAnalysis: AnalysisItem[] = [
   { label: 'Income Volatility', href: '/dashboard/analysis/income-volatility' },
+  { label: 'Client Concentration', href: '/dashboard/analysis/client-concentration' },
   { label: 'Tax Readiness', href: '/dashboard/analysis/tax-readiness' },
   { label: 'Rate Analysis', href: '/dashboard/analysis/rate-analysis' },
 ];

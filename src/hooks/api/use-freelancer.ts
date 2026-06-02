@@ -20,6 +20,14 @@ export function useFreelancerIncomeVolatility(months?: number) {
   });
 }
 
+export function useFreelancerClientConcentration() {
+  return useQuery({
+    queryKey: ['freelancer', 'client-concentration'],
+    queryFn: freelancerApi.getClientConcentration,
+    retry: false,
+  });
+}
+
 export function useFreelancerTaxReadiness() {
   return useQuery({
     queryKey: ['freelancer', 'tax-readiness'],

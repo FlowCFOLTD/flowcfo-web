@@ -1,9 +1,9 @@
 'use client';
 
 import { TrendingUp, TrendingDown, Verified, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 import { useUser } from '@/hooks/api/use-user';
 import { useFreelancerIncomeVolatility } from '@/hooks/api/use-freelancer';
+import FreelancerMetricsTabs from '@/components/dashboard/freelancer-metrics-tabs';
 
 function LoadingSpinner() {
   return (
@@ -38,17 +38,7 @@ export default function IncomeVolatilityPage() {
             <span className="flow-label text-white/50 hidden md:block">{user?.business_name || 'Freelancer'}</span>
           </div>
         </div>
-        <div className="max-w-[1440px] mx-auto px-6 md:px-16 flex gap-6 md:gap-8">
-          <Link href="/dashboard/analysis/income-volatility" className="flow-label text-white border-b-2 border-flow-gold pb-4">
-            Income Volatility
-          </Link>
-          <Link href="/dashboard/analysis/tax-readiness" className="flow-label text-white/40 pb-4 hover:text-white transition-colors">
-            Tax Readiness
-          </Link>
-          <Link href="/dashboard/analysis/rate-analysis" className="flow-label text-white/40 pb-4 hover:text-white transition-colors">
-            Rate Analysis
-          </Link>
-        </div>
+        <FreelancerMetricsTabs />
       </header>
 
       <div className="max-w-[1440px] mx-auto px-6 md:px-16 pt-10">

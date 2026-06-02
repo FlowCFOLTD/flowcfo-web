@@ -13,6 +13,11 @@ export interface DashboardData {
       buffer: number;
     };
   };
+  cash_forecast_30d: number;
+  income_volatility_level: 'low' | 'medium' | 'high';
+  tax_readiness_pct: number;
+  avg_monthly_income: number;
+  client_concentration_pct: number;
   cash_flow: Array<{ date: string; income: number; expenses: number; balance: number }>;
   recent_transactions: Array<{
     entity: string;
@@ -56,6 +61,24 @@ export interface IncomeVolatilityData {
   trough_month: { month: string; label: string; income: number; vs_avg: string } | null;
   expense_buffer: { amount: number; label: string; basis: string };
   strategic_insight: { summary: string | null; detail: string };
+}
+
+// ─── Client Concentration ─────────────────────────────────────────────
+
+export interface ClientConcentrationData {
+  period_days: number;
+  total_revenue: number;
+  client_count: number;
+  top_client_share_pct: number;
+  concentration_level: 'low' | 'medium' | 'high';
+  clients: Array<{
+    name: string;
+    revenue: number;
+    share_pct: number;
+    transaction_count: number;
+    latest_date: string;
+  }>;
+  diversification_note: string;
 }
 
 // ─── Tax Readiness ────────────────────────────────────────────────────
@@ -129,6 +152,8 @@ export const freelancerApi = {
   getDashboard: () => apiClient<DashboardData>('/api/v1/verticals/freelancer/dashboard'),
   getIncomeVolatility: (months?: number) =>
     apiClient<IncomeVolatilityData>(`/api/v1/verticals/freelancer/income-volatility${months ? `?months=${months}` : ''}`),
+  getClientConcentration: () =>
+    apiClient<ClientConcentrationData>('/api/v1/verticals/freelancer/client-concentration'),
   getTaxReadiness: () => apiClient<TaxReadinessData>('/api/v1/verticals/freelancer/tax-readiness'),
   getRateAnalysis: (months?: number) =>
     apiClient<RateAnalysisData>(`/api/v1/verticals/freelancer/rate-analysis${months ? `?months=${months}` : ''}`),
