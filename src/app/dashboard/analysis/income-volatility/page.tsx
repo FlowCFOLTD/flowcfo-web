@@ -160,7 +160,17 @@ export default function IncomeVolatilityPage() {
                 <p className="flow-label text-flow-gold mb-4 uppercase">REVENUE OPPORTUNITY</p>
                 <div className="relative z-10 space-y-4">
                   <h5 className="font-display text-xl text-white leading-tight">Retainer Model Opportunity</h5>
-                  <p className="font-body text-sm text-white/50">Client X contributed 60% of peak income but 0% in other months. A fixed retainer stabilizes your floor.</p>
+                  {vol.peak_month && vol.trough_month ? (
+                    <p className="font-body text-sm text-white/50">
+                      Your peak month ({vol.peak_month.label}) was{' '}
+                      {formatCurrency(vol.peak_month.income - vol.trough_month.income)} above your
+                      trough ({vol.trough_month.label}). A retainer could close {Math.round((vol.trough_month.income / vol.peak_month.income) * 100)}% of that gap.
+                    </p>
+                  ) : (
+                    <p className="font-body text-sm text-white/50">
+                      Smooth your cash flow with retainer agreements that guarantee a baseline income each month.
+                    </p>
+                  )}
                   <button className="mt-4 flex items-center gap-2 text-flow-gold font-bold flow-label hover:underline group">
                     GENERATE PROPOSAL
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

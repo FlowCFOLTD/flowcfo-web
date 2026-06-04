@@ -81,6 +81,12 @@ export interface LaborCostData {
   labor_cost_pct: number;
   industry_benchmark_pct: number;
   status: string;
+  monthly_breakdown: Array<{
+    month: string;
+    monthly_revenue: number;
+    labor_cost: number;
+    labor_cost_pct: number;
+  }>;
 }
 
 export const restaurantApi = {
