@@ -9,6 +9,8 @@ const TARGET_OPTIONS = [
   { value: 'cogs', label: 'COGS (Cost of Goods Sold)' },
   { value: 'platform_fee', label: 'Platform Fees' },
   { value: 'revenue', label: 'Revenue' },
+  { value: 'overhead', label: 'Overhead / Business Expenses' },
+  { value: 'tax_savings', label: 'Tax Savings / Estimated Payments' },
   { value: '_ignore', label: 'Ignore (do not map)' },
 ] as const;
 

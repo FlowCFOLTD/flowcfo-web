@@ -1,6 +1,6 @@
 'use client';
 
-import { TrendingUp, TrendingDown, Verified, ArrowRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, Verified } from 'lucide-react';
 import { useUser } from '@/hooks/api/use-user';
 import { useFreelancerIncomeVolatility } from '@/hooks/api/use-freelancer';
 import FreelancerMetricsTabs from '@/components/dashboard/freelancer-metrics-tabs';
@@ -120,7 +120,7 @@ export default function IncomeVolatilityPage() {
               </div>
 
               {/* Expense Buffer */}
-              <section className="bg-flow-black text-white p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border border-white/10">
+              <section className="bg-flow-black text-white p-6 md:p-8 border border-white/10">
                 <div className="flex items-start gap-4 md:gap-6">
                   <div className="w-12 h-12 border border-flow-gold flex items-center justify-center shrink-0">
                     <Verified className="h-6 w-6 text-flow-gold" />
@@ -130,9 +130,6 @@ export default function IncomeVolatilityPage() {
                     <p className="font-body text-sm text-white/50 mt-1">{vol.expense_buffer.basis}</p>
                   </div>
                 </div>
-                <button className="shrink-0 px-6 py-3 bg-flow-gold text-flow-black font-bold flow-label hover:brightness-110 transition-all active:scale-95">
-                  ALLOCATE NOW
-                </button>
               </section>
             </div>
 
@@ -171,10 +168,6 @@ export default function IncomeVolatilityPage() {
                       Smooth your cash flow with retainer agreements that guarantee a baseline income each month.
                     </p>
                   )}
-                  <button className="mt-4 flex items-center gap-2 text-flow-gold font-bold flow-label hover:underline group">
-                    GENERATE PROPOSAL
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </button>
                 </div>
               </section>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { Sparkles, MapPin, BarChart3 } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useUser } from '@/hooks/api/use-user';
 import { useFreelancerRateAnalysis } from '@/hooks/api/use-freelancer';
 import FreelancerMetricsTabs from '@/components/dashboard/freelancer-metrics-tabs';
@@ -115,12 +115,12 @@ export default function RateAnalysisPage() {
                   <div className="space-y-3">
                     <div className="flex justify-between items-end">
                       <span className="font-body text-sm text-white/50">Billable Hours</span>
-                      <span className="font-mono text-base text-white">{rate.billable_hours}h</span>
+                      <span className="font-mono text-base text-white">{rate.billable_hours_estimate}h</span>
                     </div>
                     <div className="w-full h-6 bg-flow-gold/60" />
                     <div className="flex justify-between items-end pt-4">
                       <span className="font-body text-sm text-white/50">Admin Overhead</span>
-                      <span className="font-mono text-base text-white">{rate.admin_overhead_hours}h</span>
+                      <span className="font-mono text-base text-white">{rate.admin_overhead_hours_estimate}h</span>
                     </div>
                     <div className="w-full h-6 bg-white/10" />
                   </div>
@@ -135,45 +135,32 @@ export default function RateAnalysisPage() {
 
             {/* Right sidebar */}
             <div className="col-span-12 lg:col-span-4 space-y-6">
-              {/* Market Benchmark */}
+              {/* Efficiency Note */}
               <div className="bg-flow-black border border-flow-gold/20 p-6 md:p-8">
-                <span className="flow-label text-flow-gold/60 uppercase tracking-widest">Market Benchmark</span>
+                <span className="flow-label text-flow-gold/60 uppercase tracking-widest">Efficiency Note</span>
                 <p className="font-display text-xl text-white mt-4 leading-snug">
-                  Senior Designers in your region are charging{' '}
-                  <span className="text-flow-gold font-bold">{rate.market_benchmark.premium_pct}% more</span>.
+                  {rate.efficiency_note.value > 0
+                    ? `Your efficiency suggests room for a ${rate.efficiency_note.value}% rate increase.`
+                    : 'Your current rate aligns with your efficiency level.'}
                 </p>
                 <div className="mt-6 pt-6 border-t border-white/10">
-                  <div className="flex items-center gap-2 mb-2">
-                    <MapPin className="h-4 w-4 text-flow-gold" />
-                    <span className="font-body text-sm text-white">{rate.market_benchmark.region}</span>
-                  </div>
-                  <p className="font-body text-xs text-white/40 italic">{rate.market_benchmark.source}</p>
+                  <p className="font-body text-xs text-white/40 italic">{rate.efficiency_note.description}</p>
                 </div>
               </div>
 
-              {/* AI Suggestion */}
+              {/* Rate Suggestion */}
               <div className="border border-white/10 bg-white/5 p-6 md:p-8 relative overflow-hidden">
                 <span className="flow-label text-flow-gold flex items-center gap-2 uppercase tracking-widest">
                   <Sparkles className="h-4 w-4" />
-                  AI Suggestion
+                  Rate Suggestion
                 </span>
                 <p className="font-display text-xl text-white mt-6">
                   Increase daily rate to{' '}
-                  <span className="border-b-2 border-flow-gold text-flow-gold">${rate.ai_suggestion.rate}</span> for new contracts.
+                  <span className="border-b-2 border-flow-gold text-flow-gold">${rate.rate_suggestion.rate}</span> for new contracts.
                 </p>
-                <p className="font-body text-sm text-white/50 mt-4 leading-relaxed">{rate.ai_suggestion.reason}</p>
-                <button className="mt-6 w-full bg-flow-black text-flow-gold py-3 flow-label hover:brightness-110 transition-all active:scale-95 border border-white/10">
-                  GENERATE NEW RATE SHEET
-                </button>
+                <p className="font-body text-sm text-white/50 mt-4 leading-relaxed">{rate.rate_suggestion.reason}</p>
               </div>
 
-              {/* Project Velocity Heatmap */}
-              <div className="border border-white/10 bg-white/[0.02] h-32 flex items-center justify-center relative overflow-hidden">
-                <div className="text-center z-10">
-                  <BarChart3 className="h-6 w-6 text-flow-gold mx-auto mb-2" />
-                  <p className="flow-label text-white/40">PROJECT VELOCITY HEATMAP</p>
-                </div>
-              </div>
             </div>
           </div>
         )}

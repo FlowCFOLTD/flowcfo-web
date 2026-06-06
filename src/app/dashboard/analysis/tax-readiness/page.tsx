@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertTriangle, Download, Calendar, Lock, ChevronRight } from 'lucide-react';
+import { AlertTriangle, Lock, ChevronRight } from 'lucide-react';
 import { useUser } from '@/hooks/api/use-user';
 import { useFreelancerTaxReadiness } from '@/hooks/api/use-freelancer';
 import FreelancerMetricsTabs from '@/components/dashboard/freelancer-metrics-tabs';
@@ -108,11 +108,8 @@ export default function TaxReadinessPage() {
 
               {/* Allocation Ledger */}
               <section className="border border-white/10 bg-white/5">
-                <div className="p-6 md:p-8 border-b border-white/10 flex justify-between items-center">
+                <div className="p-6 md:p-8 border-b border-white/10">
                   <h4 className="font-display text-xl text-white">Allocation Ledger</h4>
-                  <button className="flex items-center text-flow-gold flow-label group">
-                    Export CSV <Download className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
@@ -157,22 +154,17 @@ export default function TaxReadinessPage() {
               </section>
 
               {/* Next Deadline */}
-              <section className="border border-white/10 bg-white/5 p-6 md:p-8 relative overflow-hidden">
-                <div className="relative z-10">
+              <section className="border border-white/10 bg-white/5 p-6 md:p-8">
+                <div>
                   <p className="flow-label text-white/50 mb-2">Next Deadline</p>
                   <h6 className="font-display text-xl text-white mb-1">{tax.next_deadline.label}</h6>
-                  <p className="font-mono text-lg text-flow-gold font-bold mb-4">{tax.next_deadline.date}</p>
-                  <button className="bg-white/5 p-4 border border-white/10 inline-flex items-center hover:bg-white/10 transition-colors">
-                    <Calendar className="h-5 w-5 mr-2 text-white" />
-                    <span className="flow-label text-white uppercase">Add to Calendar</span>
-                  </button>
+                  <p className="font-mono text-lg text-flow-gold font-bold">{tax.next_deadline.date}</p>
                 </div>
-                <span className="absolute -bottom-4 -right-4 text-[100px] text-white/[0.04] rotate-12 font-bold pointer-events-none">Schedule</span>
               </section>
 
               {/* Vault Balance */}
               <section className="border border-white/10 bg-white/5 p-6 md:p-8">
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center justify-between">
                   <div>
                     <p className="flow-label text-white/50">Current Vault Balance</p>
                     <p className="font-mono text-2xl text-white">{formatCurrency(tax.vault_balance)}</p>
@@ -181,9 +173,6 @@ export default function TaxReadinessPage() {
                     <Lock className="h-6 w-6 text-flow-gold" />
                   </div>
                 </div>
-                <button className="w-full border border-white/20 text-white flow-label py-4 hover:bg-white hover:text-flow-black transition-all">
-                  View Vault Activity
-                </button>
               </section>
             </div>
           </div>

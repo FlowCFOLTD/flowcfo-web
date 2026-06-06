@@ -83,11 +83,8 @@ export default function RunwayPage() {
         </div>
 
         {/* Quick Action */}
-        <div className="border border-flow-gold/30 bg-flow-gold/5 p-6 flex items-center justify-between">
+        <div className="border border-flow-gold/30 bg-flow-gold/5 p-6">
           <p className="font-body text-sm text-white/70 leading-relaxed">{data.quick_action.message}</p>
-          <button className="shrink-0 border border-flow-gold/30 text-flow-gold px-5 py-3 flow-label text-[10px] hover:bg-flow-gold/10 transition-all">
-            {data.quick_action.action_label}
-          </button>
         </div>
 
         {/* Scenario Planning */}

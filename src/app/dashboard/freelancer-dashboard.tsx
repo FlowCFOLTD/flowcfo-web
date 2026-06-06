@@ -105,13 +105,6 @@ export default function FreelancerDashboardPage() {
           </div>
         )}
 
-        {/* AI Insights */}
-        {user?.ai_insights && Object.keys(user.ai_insights).length > 0 && (
-          <div className="mb-10">
-            <AIInsightCards insights={user.ai_insights} />
-          </div>
-        )}
-
         {dash ? (
           <div className="grid grid-cols-12 gap-6">
             {/* Left: 8 columns */}
@@ -165,6 +158,11 @@ export default function FreelancerDashboardPage() {
                 context={dash.market_insight.context}
                 recommendation={dash.market_insight.recommendation}
               />
+
+              {/* AI Insights */}
+              {user?.ai_insights && Object.keys(user.ai_insights).length > 0 && (
+                <AIInsightCards insights={user.ai_insights} />
+              )}
             </div>
           </div>
         ) : (

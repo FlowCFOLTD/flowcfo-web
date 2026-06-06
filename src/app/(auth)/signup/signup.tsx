@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 import { useSetupUser } from '@/hooks/api/use-user';
 
@@ -16,6 +17,7 @@ export default function Signup() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const setupUser = useSetupUser();
@@ -83,17 +85,9 @@ export default function Signup() {
       <div className="relative z-10 mb-12 text-center">
         <Link
           href="/"
-          className="group flex items-center justify-center gap-2 mb-4"
+          className="group flex items-center justify-center gap-3 mb-4"
         >
-          <span
-            className="material-symbols-outlined text-4xl text-flow-gold"
-            style={{
-              fontVariationSettings:
-                "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24",
-            }}
-          >
-            account_balance
-          </span>
+          <Image src="/logo-dark.svg" alt="FlowCFO" width={36} height={36} className="h-9 w-9 transition-transform group-hover:scale-105" />
           <span className="font-display text-3xl font-bold tracking-tighter text-white">
             FlowCFO
           </span>
@@ -169,18 +163,28 @@ export default function Signup() {
             >
               Password
             </label>
-            <input
-              className="w-full border border-flow-black bg-transparent px-4 py-4 font-body text-flow-black placeholder:text-flow-muted focus:border-flow-gold focus:outline-none focus:ring-0 transition-all duration-200"
-              id="password"
-              name="password"
-              type="password"
-              placeholder="••••••••••••"
-              required
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-            />
+            <div className="relative">
+              <input
+                className="w-full border border-flow-black bg-transparent px-4 py-4 pr-12 font-body text-flow-black placeholder:text-flow-muted focus:border-flow-gold focus:outline-none focus:ring-0 transition-all duration-200"
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••••••"
+                required
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-flow-muted hover:text-flow-black transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
 
           {/* Terms */}

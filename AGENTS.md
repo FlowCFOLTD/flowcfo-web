@@ -45,4 +45,24 @@ The `/accept-terms` page is the fallback path (token-gated, scroll-to-bottom to 
 - OTP sent via Resend only (no dev console fallback)
 - Verify email UI: `/signin?verify=email` route with 6-digit OTP input
 
-<!-- END:flowcfo-project-rules -->
+<!-- BEGIN:vertical-work-rules -->
+
+# Vertical Work Rules
+
+Before adding, removing, or modifying any vertical (freelancer, agency, startup, ecommerce, restaurant):
+
+1. **Read the vertical status doc first** — `verticals/vertical-<name>.md` contains known issues, fixed bugs, and pending items specific to that vertical.
+
+2. **Understand the business type** — Answer in writing: what is this business? What financial metrics uniquely matter to them? What concepts would be meaningless?
+
+3. **Map every dashboard field** — For each field the dashboard returns, explain why it exists for THIS vertical. A field present in another vertical is NOT a reason to add it here.
+
+4. **Never "fix" to match** — Do not change a vertical just to make it look like another. Every difference between verticals should be explainable as an intentional business distinction, not an oversight.
+
+5. **Check the date range pattern** — Verify `thirty` and `ninety` are computed relative to `data_end`, not a hardcoded `today()`. Use `max(end - timedelta(...), data_start)` when the business has fewer days of data than the lookback window.
+
+6. **Wire mappings** — If the vertical has defined category keyword lists (`OVERHEAD_CATEGORIES`, `TAX_KEYWORDS`, etc.), ensure `_expand_from_mappings()` is called so user custom mappings are respected. Don't leave keyword lists as dead code.
+
+7. **Cash flow loop** — The cash flow loop should include the current day: use `range((end - thirty).days)` or clamp dates to `[thirty, end]`, not `range(30)` which drops the last day.
+
+<!-- END:vertical-work-rules -->

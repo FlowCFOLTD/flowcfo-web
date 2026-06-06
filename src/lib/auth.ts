@@ -7,13 +7,31 @@ const isLocal = process.env.NODE_ENV === 'development';
 let pool: any;
 
 if (isLocal) {
-  const { Pool: PgPool } = await import('pg');
-  pool = new PgPool({
-    connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
-  });
+  // Try pg first (full-featured Pool with transactions). On Edge Runtime
+  // (used in dev when the auth route has runtime = "edge"), pg won't load
+  // because it depends on node:util/types. Fall back to neon HTTP driver.
+  try {
+    const { Pool: PgPool } = await import('pg');
+    pool = new PgPool({
+      connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
+    });
+  } catch {
+    const { neon } = await import('@neondatabase/serverless');
+    const sql = neon(process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder');
+
+    const query = async (text: string, params?: any[]) => {
+      const rows = await sql.query(text, params ?? []);
+      return { rows: rows as any[] };
+    };
+
+    pool = {
+      query,
+      connect: async () => ({ query, release: () => {} }),
+    };
+  }
 } else {
-  // Use neon() HTTP function only (no Pool import — Pool would pull in ws→net
-  // which is unavailable in Cloudflare Pages Edge Runtime)
+  // Production (Cloudflare Pages Edge Runtime) — use neon HTTP driver.
+  // pg Pool would pull in ws→net which is unavailable on Edge Runtime.
   const { neon } = await import('@neondatabase/serverless');
   const sql = neon(process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder');
 

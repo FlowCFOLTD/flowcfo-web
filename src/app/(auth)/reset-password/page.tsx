@@ -3,7 +3,8 @@
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowRight, ShieldCheck, Loader2, ArrowLeft } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, ShieldCheck, Loader2, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
 function ResetPasswordContent() {
@@ -12,6 +13,8 @@ function ResetPasswordContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -105,16 +108,24 @@ function ResetPasswordContent() {
               </label>
               <div className="relative border border-flow-black transition-all duration-200 focus-within:border-b-2 focus-within:border-flow-gold">
                 <input
-                  className="w-full border-none bg-transparent px-4 py-4 font-mono text-sm text-flow-black focus:ring-0 placeholder:text-flow-muted"
+                  className="w-full border-none bg-transparent px-4 py-4 pr-12 font-mono text-sm text-flow-black focus:ring-0 placeholder:text-flow-muted"
                   id="password"
                   name="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••••••"
                   required
                   disabled={!token}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-flow-muted hover:text-flow-black transition-colors"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
             </div>
 
@@ -127,16 +138,24 @@ function ResetPasswordContent() {
               </label>
               <div className="relative border border-flow-black transition-all duration-200 focus-within:border-b-2 focus-within:border-flow-gold">
                 <input
-                  className="w-full border-none bg-transparent px-4 py-4 font-mono text-sm text-flow-black focus:ring-0 placeholder:text-flow-muted"
+                  className="w-full border-none bg-transparent px-4 py-4 pr-12 font-mono text-sm text-flow-black focus:ring-0 placeholder:text-flow-muted"
                   id="confirmPassword"
                   name="confirmPassword"
-                  type="password"
+                  type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="••••••••••••"
                   required
                   disabled={!token}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-flow-muted hover:text-flow-black transition-colors"
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
             </div>
 
@@ -167,13 +186,8 @@ export default function ResetPassword() {
       <div className="relative z-10 flex w-full max-w-[480px] flex-col items-center">
         {/* Brand Identity */}
         <div className="mb-12 flex flex-col items-center gap-4">
-          <Link href="/" className="flex items-center gap-2 group">
-            <span
-              className="material-symbols-outlined text-[40px] text-flow-gold-soft transition-transform group-hover:scale-105"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              account_balance
-            </span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <Image src="/logo-dark.svg" alt="FlowCFO" width={40} height={40} className="h-10 w-10 transition-transform group-hover:scale-105" />
             <h1 className="font-display text-4xl font-bold tracking-tighter text-white">
               FlowCFO
             </h1>
