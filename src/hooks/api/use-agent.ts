@@ -127,3 +127,58 @@ export function useInsights() {
     retry: false,
   });
 }
+
+export function useAgentSettings() {
+  return useQuery({
+    queryKey: ['agent', 'settings'],
+    queryFn: agentApi.getSettings,
+    retry: false,
+  });
+}
+
+export function useUpdateAgentSettings() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: agentApi.updateSettings,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['agent', 'settings'] }),
+  });
+}
+
+export function useAgentLogs(limit = 20, offset = 0, agent_name?: string) {
+  return useQuery({
+    queryKey: ['agent', 'logs', limit, offset, agent_name],
+    queryFn: () => agentApi.getLogs(limit, offset, agent_name),
+    retry: false,
+  });
+}
+
+export function usePendingApprovals() {
+  return useQuery({
+    queryKey: ['agent', 'pending-approvals'],
+    queryFn: agentApi.getPendingApprovals,
+    refetchInterval: 30000,
+    retry: false,
+  });
+}
+
+export function useApproveAction() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (logId: string) => agentApi.approveAction(logId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['agent', 'pending-approvals'] });
+      qc.invalidateQueries({ queryKey: ['agent', 'logs'] });
+    },
+  });
+}
+
+export function useRejectAction() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (logId: string) => agentApi.rejectAction(logId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['agent', 'pending-approvals'] });
+      qc.invalidateQueries({ queryKey: ['agent', 'logs'] });
+    },
+  });
+}
