@@ -178,6 +178,8 @@ function ApprovalsTab() {
 
 export default function AgentsPage() {
   const [tab, setTab] = useState<'logs' | 'approvals'>('logs');
+  const { data: approvalsData } = usePendingApprovals();
+  const approvalsCount = approvalsData?.approvals?.length || 0;
 
   return (
     <div className="px-6 md:px-16 py-12">
@@ -205,9 +207,9 @@ export default function AgentsPage() {
             }`}
           >
             Pending Approvals
-            {approvals.length > 0 && (
+            {approvalsCount > 0 && (
               <span className="ml-2 px-1.5 py-0.5 text-[9px] bg-blue-500/20 text-blue-400 rounded-full">
-                {approvals.length}
+                {approvalsCount}
               </span>
             )}
           </button>
