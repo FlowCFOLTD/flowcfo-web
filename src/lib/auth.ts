@@ -30,20 +30,32 @@ if (isLocal) {
     };
   }
 } else {
-  // Production (Cloudflare Pages Edge Runtime) — use neon HTTP driver.
-  // pg Pool would pull in ws→net which is unavailable on Edge Runtime.
-  const { neon } = await import('@neondatabase/serverless');
-  const sql = neon(process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder');
+  // Production (Cloudflare Pages Edge Runtime) — use pg + pg-cloudflare.
+  // pg-cloudflare uses cloudflare:sockets (Workers-native TCP API) to connect
+  // directly to any PostgreSQL over TLS, avoiding Neon's HTTP proxy dependency.
+  try {
+    const { Pool: PgPool } = await import('pg');
+    const { CloudflareSocket } = await import('pg-cloudflare') as any;
+    pool = new (PgPool as any)({
+      connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
+      Connection: CloudflareSocket,
+      ssl: { rejectUnauthorized: false },
+    });
+  } catch {
+    // Fallback: neon HTTP driver (only works with Neon-hosted databases)
+    const { neon } = await import('@neondatabase/serverless');
+    const sql = neon(process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder');
 
-  const query = async (text: string, params?: any[]) => {
-    const rows = await sql.query(text, params ?? []);
-    return { rows: rows as any[] };
-  };
+    const query = async (text: string, params?: any[]) => {
+      const rows = await sql.query(text, params ?? []);
+      return { rows: rows as any[] };
+    };
 
-  pool = {
-    query,
-    connect: async () => ({ query, release: () => {} }),
-  };
+    pool = {
+      query,
+      connect: async () => ({ query, release: () => {} }),
+    };
+  }
 }
 
 export const auth = betterAuth({
