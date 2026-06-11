@@ -4,78 +4,72 @@ import { Resend } from 'resend';
 
 const isLocal = process.env.NODE_ENV === 'development';
 
-console.log('[auth] init: NODE_ENV =', process.env.NODE_ENV, 'isLocal =', isLocal);
-console.log('[auth] init: DATABASE_URL set =', !!process.env.DATABASE_URL);
-
 let pool: any;
+let initError: string | null = null;
+
+function makeErrorPool(msg: string): any {
+  const errText = `[auth] ${msg}`;
+  console.error(errText);
+  return {
+    query: async () => { throw new Error(errText); },
+    connect: async () => { throw new Error(errText); },
+  };
+}
 
 if (isLocal) {
-  // Try pg first (full-featured Pool with transactions). On Edge Runtime
-  // (used in dev when the auth route has runtime = "edge"), pg won't load
-  // because it depends on node:util/types. Fall back to neon HTTP driver.
   try {
     const { Pool: PgPool } = await import('pg');
     pool = new PgPool({
       connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
     });
   } catch {
-    const { neon } = await import('@neondatabase/serverless');
-    const sql = neon(process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder');
-
-    const query = async (text: string, params?: any[]) => {
-      const rows = await sql.query(text, params ?? []);
-      return { rows: rows as any[] };
-    };
-
-    pool = {
-      query,
-      connect: async () => ({ query, release: () => {} }),
-    };
-  }
-} else {
-  // Production (Cloudflare Pages Edge Runtime) — use pg + pg-cloudflare.
-  // pg-cloudflare uses cloudflare:sockets (Workers-native TCP API) to connect
-  // directly to any PostgreSQL over TLS, avoiding Neon's HTTP proxy dependency.
-  try {
-    console.log('[auth] production: importing pg');
-    const { Pool: PgPool } = await import('pg');
-    console.log('[auth] production: pg imported successfully');
-
-    console.log('[auth] production: importing pg-cloudflare');
-    const cfMod = await import('pg-cloudflare') as any;
-    const CloudflareSocket = cfMod.CloudflareSocket;
-    console.log('[auth] production: CloudflareSocket =', typeof CloudflareSocket);
-
-    if (typeof CloudflareSocket !== 'function') {
-      console.log('[auth] production: CloudflareSocket not available (empty stub?), falling back to pg default Pool');
-    }
-
-    pool = new (PgPool as any)({
-      connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
-      ...(CloudflareSocket ? { Connection: CloudflareSocket } : {}),
-      ssl: { rejectUnauthorized: false },
-    });
-    console.log('[auth] production: pool created successfully');
-  } catch (err) {
-    console.error('[auth] production: pg+pg-cloudflare failed:', err);
-    console.log('[auth] production: falling back to neon HTTP driver');
     try {
       const { neon } = await import('@neondatabase/serverless');
       const sql = neon(process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder');
-
       const query = async (text: string, params?: any[]) => {
         const rows = await sql.query(text, params ?? []);
         return { rows: rows as any[] };
       };
+      pool = { query, connect: async () => ({ query, release: () => {} }) };
+    } catch (e) {
+      initError = `local neon fallback failed: ${e instanceof Error ? e.message : e}`;
+      pool = makeErrorPool(initError);
+    }
+  }
+} else {
+  try {
+    console.log('[auth] prod: importing pg');
+    const { Pool: PgPool } = await import('pg');
+    console.log('[auth] prod: pg ok');
 
-      pool = {
-        query,
-        connect: async () => ({ query, release: () => {} }),
+    console.log('[auth] prod: importing pg-cloudflare');
+    const cfMod = await import('pg-cloudflare') as any;
+    const CloudflareSocket = cfMod.CloudflareSocket;
+    console.log('[auth] prod: CloudflareSocket =', typeof CloudflareSocket);
+
+    pool = new (PgPool as any)({
+      connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder',
+      ...(typeof CloudflareSocket === 'function' ? { Connection: CloudflareSocket } : {}),
+      ssl: { rejectUnauthorized: false },
+    });
+    console.log('[auth] prod: pool ok');
+  } catch (err) {
+    initError = `pg+pg-cloudflare: ${err instanceof Error ? `${err.message}\n${err.stack}` : err}`;
+    console.error('[auth] prod:', initError);
+
+    try {
+      console.log('[auth] prod: trying neon fallback');
+      const { neon } = await import('@neondatabase/serverless');
+      const sql = neon(process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder');
+      const query = async (text: string, params?: any[]) => {
+        const rows = await sql.query(text, params ?? []);
+        return { rows: rows as any[] };
       };
-      console.log('[auth] production: neon fallback pool created');
-    } catch (fallbackErr) {
-      console.error('[auth] production: neon fallback also failed:', fallbackErr);
-      throw fallbackErr;
+      pool = { query, connect: async () => ({ query, release: () => {} }) };
+      console.log('[auth] prod: neon fallback ok');
+    } catch (e2) {
+      initError += ` | neon fallback: ${e2 instanceof Error ? e2.message : e2}`;
+      pool = makeErrorPool(initError);
     }
   }
 }
