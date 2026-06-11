@@ -99,6 +99,10 @@ export const agentApi = {
     apiClient<AgentLogsResponse>(`/api/v1/agents/logs?limit=${limit}&offset=${offset}${agent_name ? `&agent_name=${agent_name}` : ''}`),
   getPendingApprovals: () =>
     apiClient<PendingApprovalsResponse>('/api/v1/agents/pending-approvals'),
+  runAgent: (agentName: string) =>
+    apiClient<{ status: string; message: string }>(`/api/v1/agents/run/${agentName}`, {
+      method: 'POST',
+    }),
   approveAction: (logId: string) =>
     apiClient<{ status: string; message: string }>(`/api/v1/agents/pending/${logId}/approve`, {
       method: 'POST',

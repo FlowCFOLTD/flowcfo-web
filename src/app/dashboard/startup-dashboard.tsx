@@ -1,7 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Landmark, ArrowRight, Settings, ShieldCheck } from 'lucide-react';
+import { Landmark, ArrowRight, ShieldCheck } from 'lucide-react';
+import UserAvatarButton from '@/components/dashboard/user-avatar-button';
 import { useUser } from '@/hooks/api/use-user';
 import { useStartupDashboard } from '@/hooks/api/use-startup';
 import SafeToSpendCard from '@/components/dashboard/safe-to-spend-card';
@@ -41,13 +42,7 @@ export default function StartupDashboardPage() {
               {user?.business_name || 'Startup'} Dashboard
             </p>
           </div>
-          <button
-            onClick={() => router.push('/dashboard/settings/accounts')}
-            className="hidden md:flex items-center gap-2 border border-white/10 px-6 py-3 flow-label text-white/40 transition-all hover:border-white/30 hover:text-white"
-          >
-            <Settings className="h-4 w-4" />
-            SETTINGS
-          </button>
+          <UserAvatarButton />
         </div>
 
         {/* Bank Sync CTA */}
@@ -103,13 +98,6 @@ export default function StartupDashboardPage() {
           </div>
         )}
 
-        {/* AI Insights */}
-        {user?.ai_insights && Object.keys(user.ai_insights).length > 0 && (
-          <div className="mb-10">
-            <AIInsightCards insights={user.ai_insights} />
-          </div>
-        )}
-
         {dash ? (
           <div className="grid grid-cols-12 gap-6">
             {/* Left: 8 columns */}
@@ -137,6 +125,11 @@ export default function StartupDashboardPage() {
                 context={dash.market_insight.context}
                 recommendation={dash.market_insight.recommendation}
               />
+
+              {/* AI Insights */}
+              {user?.ai_insights && Object.keys(user.ai_insights).length > 0 && (
+                <AIInsightCards insights={user.ai_insights} />
+              )}
             </div>
           </div>
         ) : (

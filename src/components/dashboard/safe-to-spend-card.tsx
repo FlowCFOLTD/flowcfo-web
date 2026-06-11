@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Info, Verified } from 'lucide-react';
 
 interface SafeToSpendBreakdown {
-  available: number;
+  net_income: number;
   tax_reserve: number;
   fixed_bills: number;
   buffer: number;
@@ -27,7 +27,7 @@ function formatCurrency(val: number): string {
 }
 
 const breakdownExplanations: Record<string, string> = {
-  'Available': 'Total income minus total expenses over your entire transaction history.',
+  'Net Income': 'Total income minus total expenses over your entire transaction history. This is your all-time profit, not your current bank balance.',
   'Tax Reserve': 'Estimated taxes owed based on your income and tax rate. Automatically deducted from safe-to-spend.',
   'Fixed Bills': 'Projected recurring expenses for the next 14 days, averaged from your last 90 days of data.',
   'Buffer': 'A 2-week safety cushion based on your average daily spending. Protects against unexpected costs.',
@@ -37,7 +37,7 @@ export default function SafeToSpendCard({ amount, confidence, breakdown }: SafeT
   const [tooltip, setTooltip] = useState<string | null>(null);
 
   const items = [
-    { label: 'Available', value: breakdown.available, color: 'text-white' },
+    { label: 'Net Income', value: breakdown.net_income, color: 'text-white' },
     { label: 'Tax Reserve', value: breakdown.tax_reserve, color: 'text-flow-gold' },
     { label: 'Fixed Bills', value: breakdown.fixed_bills, color: 'text-white/70' },
     { label: 'Buffer', value: breakdown.buffer, color: 'text-white/70' },
@@ -77,10 +77,10 @@ export default function SafeToSpendCard({ amount, confidence, breakdown }: SafeT
             {tooltip === 'main' && (
               <div className="absolute right-0 top-8 w-72 bg-flow-black border border-white/10 p-4 z-20 shadow-xl">
                 <p className="font-body text-xs text-white/70 leading-relaxed">
-                  Safe-to-spend is your available balance minus reserves for taxes, upcoming bills, and a safety buffer.
+                  Safe-to-spend is your net income minus reserves for taxes, upcoming bills, and a safety buffer.
                   <br /><br />
-                  <strong className="text-white">Available: </strong>
-                  {formatCurrency(breakdown.available)} total income minus expenses.
+                  <strong className="text-white">Net Income: </strong>
+                  {formatCurrency(breakdown.net_income)} total income minus expenses over your entire history (not your bank balance).
                   <br />
                   <strong className="text-white">Deductions: </strong>
                   {formatCurrency(totalDeductions)} set aside for taxes, bills, and buffer.

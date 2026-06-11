@@ -1,7 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Landmark, ArrowRight, Settings, ShieldCheck } from 'lucide-react';
+import { Landmark, ArrowRight, ShieldCheck } from 'lucide-react';
+import UserAvatarButton from '@/components/dashboard/user-avatar-button';
 import { useUser } from '@/hooks/api/use-user';
 import { useRestaurantDashboard } from '@/hooks/api/use-restaurant';
 import SafeToSpendCard from '@/components/dashboard/safe-to-spend-card';
@@ -40,13 +41,7 @@ export default function RestaurantDashboardPage() {
               {user?.business_name || 'Restaurant'} Dashboard
             </p>
           </div>
-          <button
-            onClick={() => router.push('/dashboard/settings/accounts')}
-            className="hidden md:flex items-center gap-2 border border-white/10 px-6 py-3 flow-label text-white/40 transition-all hover:border-white/30 hover:text-white"
-          >
-            <Settings className="h-4 w-4" />
-            SETTINGS
-          </button>
+          <UserAvatarButton />
         </div>
 
         {/* Bank Sync CTA */}
@@ -99,13 +94,6 @@ export default function RestaurantDashboardPage() {
                 </p>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* AI Insights */}
-        {user?.ai_insights && Object.keys(user.ai_insights).length > 0 && (
-          <div className="mb-10">
-            <AIInsightCards insights={user.ai_insights} />
           </div>
         )}
 
@@ -162,6 +150,11 @@ export default function RestaurantDashboardPage() {
                   shortfall={dash.tax_reserve_status.shortfall}
                 />
                 <ActiveAlerts data={dash.active_alerts} />
+
+                {/* AI Insights */}
+                {user?.ai_insights && Object.keys(user.ai_insights).length > 0 && (
+                  <AIInsightCards insights={user.ai_insights} />
+                )}
               </div>
             </div>
           </>

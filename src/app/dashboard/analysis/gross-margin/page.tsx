@@ -60,10 +60,10 @@ export default function GrossMarginPage() {
         <div className="border border-white/10 bg-white/5 p-8">
           <h2 className="font-body text-xs font-semibold tracking-wider text-white/40 uppercase mb-6">Margin Over Time</h2>
           <div className="space-y-3">
-            {data.monthly_breakdown.map((m) => {
+            {data.monthly_breakdown.map((m, i) => {
               const maxRev = Math.max(...data.monthly_breakdown.map(x => x.revenue));
               return (
-                <div key={m.month} className="space-y-1">
+                <div key={`${m.month}-${i}`} className="space-y-1">
                   <div className="flex justify-between items-center">
                     <span className="font-mono text-xs text-white/40">{m.month}</span>
                     <span className="font-mono text-xs text-white/60">${m.revenue.toLocaleString()} rev</span>

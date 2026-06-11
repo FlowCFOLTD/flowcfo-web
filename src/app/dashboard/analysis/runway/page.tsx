@@ -54,7 +54,7 @@ export default function RunwayPage() {
         {/* Cash and Progress */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="border border-white/10 bg-white/5 p-6">
-            <p className="flow-label text-[10px] text-white/40 tracking-widest mb-2">CASH ON HAND</p>
+            <p className="flow-label text-[10px] text-white/40 tracking-widest mb-2">NET INCOME (ALL-TIME)</p>
             <p className="font-mono text-3xl font-bold text-white">${data.available_balance.toLocaleString()}</p>
             <p className="font-body text-xs text-white/40 mt-1">Zero cash date: {data.zero_cash_date}</p>
           </div>

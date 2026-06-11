@@ -5,7 +5,7 @@ export interface AgencyDashboardData {
     amount: number;
     confidence: string;
     breakdown: {
-      available: number;
+      net_income: number;
       tax_reserve: number;
       fixed_bills: number;
       buffer: number;

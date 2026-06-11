@@ -1,7 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Landmark, ArrowRight, Settings, ShieldCheck } from 'lucide-react';
+import { Landmark, ArrowRight, ShieldCheck } from 'lucide-react';
+import UserAvatarButton from '@/components/dashboard/user-avatar-button';
 import { useUser } from '@/hooks/api/use-user';
 import { useFreelancerDashboard } from '@/hooks/api/use-freelancer';
 import SafeToSpendCard from '@/components/dashboard/safe-to-spend-card';
@@ -41,13 +42,7 @@ export default function FreelancerDashboardPage() {
               {user?.business_name || 'Freelancer'} Dashboard
             </p>
           </div>
-          <button
-            onClick={() => router.push('/dashboard/settings/accounts')}
-            className="hidden md:flex items-center gap-2 border border-white/10 px-6 py-3 flow-label text-white/40 transition-all hover:border-white/30 hover:text-white"
-          >
-            <Settings className="h-4 w-4" />
-            SETTINGS
-          </button>
+          <UserAvatarButton />
         </div>
 
         {/* Bank Sync CTA */}

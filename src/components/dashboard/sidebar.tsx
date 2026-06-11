@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useUser } from '@/hooks/api/use-user';
-import { authClient } from '@/lib/auth-client';
 
 type NavItem = {
   label: string;
@@ -71,20 +69,7 @@ const ecommerceAnalysis: AnalysisItem[] = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const router = useRouter();
   const { data: user } = useUser();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setMenuOpen(false);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const analysisItems =
     user?.business_type === 'startup'
@@ -97,24 +82,9 @@ export default function Sidebar() {
             ? ecommerceAnalysis
             : freelancerAnalysis;
 
-  const initials = user?.full_name
-    ? user.full_name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2)
-    : 'U';
-
   const isActive = (href: string) => {
     if (href === '/dashboard') return pathname === '/dashboard';
     return pathname.startsWith(href);
-  };
-
-  const handleLogout = async () => {
-    setMenuOpen(false);
-    await authClient.signOut();
-    router.push('/signin');
   };
 
   return (
@@ -202,58 +172,6 @@ export default function Sidebar() {
           <span className="material-symbols-outlined text-xl">settings</span>
           <span className="font-body text-sm">Settings</span>
         </Link>
-        <div className="relative" ref={menuRef}>
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="flex items-center gap-3 px-2 py-4 mt-1 border-t border-flow-line-dark/20 w-full hover:bg-white/5 transition-colors"
-          >
-            <div className="w-9 h-9 bg-flow-gold/20 flex items-center justify-center text-flow-gold font-bold text-xs rounded-full">
-              {initials}
-            </div>
-            <div className="flex flex-col text-left">
-              <span className="font-body text-xs font-bold text-white truncate w-40">
-                {user?.full_name || 'User'}
-              </span>
-              <span className="font-body text-[9px] text-flow-muted uppercase tracking-wider">
-                {user?.plan === 'premium' ? 'PREMIUM' : 'FREE TRIAL'}
-              </span>
-            </div>
-          </button>
-
-          {menuOpen && (
-            <div className="absolute bottom-full left-0 w-full mb-1 bg-flow-black border border-flow-line-dark shadow-xl">
-              <Link
-                href="/dashboard/settings/accounts?tab=profile"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 text-flow-muted hover:text-flow-gold hover:bg-white/5 transition-colors font-body text-sm"
-              >
-                <span className="material-symbols-outlined text-lg">
-                  person
-                </span>
-                Profile
-              </Link>
-              <Link
-                href="/dashboard/settings/accounts?tab=security"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 text-flow-muted hover:text-flow-gold hover:bg-white/5 transition-colors font-body text-sm"
-              >
-                <span className="material-symbols-outlined text-lg">
-                  security
-                </span>
-                Security
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-3 px-4 py-3 text-rose-400 hover:bg-red-500/10 transition-colors font-body text-sm w-full text-left border-t border-flow-line-dark/20"
-              >
-                <span className="material-symbols-outlined text-lg">
-                  logout
-                </span>
-                Sign out
-              </button>
-            </div>
-          )}
-        </div>
       </div>
     </aside>
   );

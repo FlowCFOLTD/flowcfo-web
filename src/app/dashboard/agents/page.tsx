@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useAgentLogs, usePendingApprovals, useApproveAction, useRejectAction } from '@/hooks/api/use-agent';
-import { CheckCircle2, XCircle, Clock, AlertTriangle, Info, TrendingUp, Package, Search, Receipt, ShieldCheck } from 'lucide-react';
+import { useAgentLogs, usePendingApprovals, useApproveAction, useRejectAction, useRunAgent } from '@/hooks/api/use-agent';
+import { CheckCircle2, XCircle, Clock, AlertTriangle, Info, TrendingUp, Package, Search, Receipt, ShieldCheck, Play } from 'lucide-react';
 
 const agentIcons: Record<string, React.ReactNode> = {
   margin_guardian: <TrendingUp className="h-4 w-4" />,
@@ -180,6 +180,22 @@ export default function AgentsPage() {
   const [tab, setTab] = useState<'logs' | 'approvals'>('logs');
   const { data: approvalsData } = usePendingApprovals();
   const approvalsCount = approvalsData?.approvals?.length || 0;
+  const runAgent = useRunAgent();
+  const [runFeedback, setRunFeedback] = useState<{ agent: string; status: 'running' | 'ok' | 'error' } | null>(null);
+
+  const handleRunAgent = (agentName: string) => {
+    setRunFeedback({ agent: agentName, status: 'running' });
+    runAgent.mutate(agentName, {
+      onSuccess: () => {
+        setRunFeedback({ agent: agentName, status: 'ok' });
+        setTimeout(() => setRunFeedback(null), 3000);
+      },
+      onError: () => {
+        setRunFeedback({ agent: agentName, status: 'error' });
+        setTimeout(() => setRunFeedback(null), 3000);
+      },
+    });
+  };
 
   return (
     <div className="px-6 md:px-16 py-12">
@@ -220,34 +236,41 @@ export default function AgentsPage() {
         <div className="border border-white/10 bg-white/5 p-6">
           <h3 className="font-body text-xs font-bold text-white/60 uppercase tracking-wider mb-3">About Your Agents</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-start gap-3">
-              <TrendingUp className="h-4 w-4 text-flow-gold mt-0.5" />
-              <div>
-                <p className="font-body text-xs font-bold text-white">Margin Guardian</p>
-                <p className="font-body text-[10px] text-white/30">Runs daily at 9 AM. Monitors gross margin trends. Alerts when margin drops below threshold.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <Search className="h-4 w-4 text-flow-gold mt-0.5" />
-              <div>
-                <p className="font-body text-xs font-bold text-white">Category Suggester</p>
-                <p className="font-body text-[10px] text-white/30">Runs daily at 6 AM. Suggests category mappings for uncategorized transactions.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <Package className="h-4 w-4 text-flow-gold mt-0.5" />
-              <div>
-                <p className="font-body text-xs font-bold text-white">Inventory Replenishment</p>
-                <p className="font-body text-[10px] text-white/30">Runs weekly on Sundays at 8 AM. Analyzes inventory health and recommends reorders.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <Receipt className="h-4 w-4 text-flow-gold mt-0.5" />
-              <div>
-                <p className="font-body text-xs font-bold text-white">Fee Auditor</p>
-                <p className="font-body text-[10px] text-white/30">Runs monthly on the 1st. Audits platform fees against known rate benchmarks.</p>
-              </div>
-            </div>
+            {([
+              ['margin_guardian', 'Margin Guardian', TrendingUp, 'Runs daily at 9 AM. Monitors gross margin trends. Alerts when margin drops below threshold.'],
+              ['category_suggester', 'Category Suggester', Search, 'Runs daily at 6 AM. Suggests category mappings for uncategorized transactions.'],
+              ['inventory_replenishment', 'Inventory Replenishment', Package, 'Runs weekly on Sundays at 8 AM. Analyzes inventory health and recommends reorders.'],
+              ['fee_audit', 'Fee Auditor', Receipt, 'Runs monthly on the 1st. Audits platform fees against known rate benchmarks.'],
+            ] as const).map(([name, label, Icon, desc]) => {
+              const fb = runFeedback?.agent === name ? runFeedback.status : null;
+              return (
+                <div key={name} className="flex items-start gap-3">
+                  <Icon className="h-4 w-4 text-flow-gold mt-0.5 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="font-body text-xs font-bold text-white">{label}</p>
+                    <p className="font-body text-[10px] text-white/30">{desc}</p>
+                  </div>
+                  <button
+                    onClick={() => handleRunAgent(name)}
+                    disabled={fb === 'running'}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 font-body text-[10px] font-bold uppercase tracking-wider transition-colors shrink-0 disabled:opacity-50 ${
+                      fb === 'ok' ? 'bg-emerald-500/20 text-emerald-400' :
+                      fb === 'error' ? 'bg-rose-500/20 text-rose-400' :
+                      'bg-flow-gold/10 text-flow-gold hover:bg-flow-gold/20'
+                    }`}
+                  >
+                    {fb === 'running' ? (
+                      <div className="h-3 w-3 animate-spin rounded-full border-2 border-flow-gold border-t-transparent" />
+                    ) : fb === 'ok' ? (
+                      <CheckCircle2 className="h-3 w-3" />
+                    ) : (
+                      <Play className="h-3 w-3" />
+                    )}
+                    {fb === 'running' ? 'Running' : fb === 'ok' ? 'Done' : fb === 'error' ? 'Failed' : 'Run Now'}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

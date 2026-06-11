@@ -152,6 +152,16 @@ export function useAgentLogs(limit = 20, offset = 0, agent_name?: string) {
   });
 }
 
+export function useRunAgent() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (agentName: string) => agentApi.runAgent(agentName),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['agent', 'logs'] });
+    },
+  });
+}
+
 export function usePendingApprovals() {
   return useQuery({
     queryKey: ['agent', 'pending-approvals'],
