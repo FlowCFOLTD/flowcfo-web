@@ -1,26 +1,22 @@
-import { auth } from "@/lib/auth";
-import { toNextJsHandler } from "better-auth/next-js";
-
 export const runtime = "edge";
 
-const handler = toNextJsHandler(auth);
-
-async function handle(req: Request) {
+export async function POST(req: Request) {
   try {
-    const method = req.method.toUpperCase();
-    if (method === "POST") return await handler.POST(req);
-    return await handler.GET(req);
+    const { auth } = await import("@/lib/auth");
+    const { toNextJsHandler } = await import("better-auth/next-js");
+    const handler = toNextJsHandler(auth);
+    return await handler.POST(req);
   } catch (err) {
-    const body = JSON.stringify({
-      error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
-    });
-    return new Response(body, {
-      status: 500,
-      headers: { "content-type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({
+        error: err instanceof Error ? `${err.name}: ${err.message}` : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+      }),
+      { status: 500, headers: { "content-type": "application/json" } }
+    );
   }
 }
 
-export const POST = handle;
-export const GET = handle;
+export async function GET(req: Request) {
+  return POST(req);
+}
