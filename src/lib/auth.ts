@@ -1,22 +1,24 @@
+import { Pool } from 'pg';
 import { betterAuth } from 'better-auth';
-import { drizzleAdapter } from '@better-auth/drizzle-adapter';
 import { emailOTP } from 'better-auth/plugins';
 import { Resend } from 'resend';
-import postgres from 'postgres';
-import { drizzle } from 'drizzle-orm/postgres-js';
 
 const isLocal = process.env.NODE_ENV === 'development';
 
-const connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/placeholder';
-const sql = postgres(connectionString, {
-  max: 5,
-  fetch_types: false,
-  ...(isLocal ? {} : { ssl: { rejectUnauthorized: false } }),
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
 });
-const db = drizzle(sql);
+
+const db = {
+  query: (text: string, params?: any[]) => pool.query(text, params),
+  connect: () => pool.connect(),
+};
 
 export const auth = betterAuth({
-  database: drizzleAdapter(db, { provider: 'pg', usePlural: true }),
+  database: db,
   user: { modelName: 'ba_user' as const },
   session: { modelName: 'ba_session' as const },
   account: { modelName: 'ba_account' as const },
