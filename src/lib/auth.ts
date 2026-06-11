@@ -20,7 +20,7 @@ const db = {
   connect: () => pool.connect(),
 };
 
-let _auth: Awaited<ReturnType<typeof betterAuth>> | null = null;
+let _auth: any = null;
 let _initError: Error | null = null;
 
 try {
