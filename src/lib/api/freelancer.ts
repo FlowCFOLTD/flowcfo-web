@@ -128,23 +128,23 @@ export interface RateAnalysisData {
     optimal_range: { min: number; max: number };
     note: string;
   };
-  billable_hours: number;
-  admin_overhead_hours: number;
+  billable_hours_estimate: number;
+  admin_overhead_hours_estimate: number;
   admin_insight: {
     overhead_change_pct: number;
-    recoverable_hours: number;
+    recoverable_hours_estimate: number;
     message: string;
   };
-  market_benchmark: {
-    region: string;
-    premium_pct: number;
-    description: string;
-    source: string;
-  };
-  ai_suggestion: {
+  rate_suggestion: {
     rate: number;
     current_rate: number;
+    basis: string;
     reason: string;
+  };
+  efficiency_note: {
+    value: number;
+    description: string;
+    basis: string;
   };
 }
 
