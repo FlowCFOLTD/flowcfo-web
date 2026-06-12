@@ -41,13 +41,13 @@ async function respondError(status: number, extra: Record<string, unknown>) {
 
 export async function POST(req: Request) {
   try {
-    const { auth, pool: authPool } = await import("@/lib/auth");
-    if (!auth) {
-      const { initError: err } = await import("@/lib/auth");
+    const { getAuth } = await import("@/lib/auth");
+    const { auth, initError } = getAuth();
+    if (!auth || initError) {
       return respondError(500, {
         error: "auth module failed to initialize",
-        initError: err?.message,
-        stack: err?.stack,
+        initError: initError?.message,
+        stack: initError?.stack,
       });
     }
 

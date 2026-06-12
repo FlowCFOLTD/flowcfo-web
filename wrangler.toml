@@ -21,3 +21,7 @@ invocation_logs = true
 enabled = false
 persist = true
 head_sampling_rate = 1
+
+[vars]
+BETTER_AUTH_URL = "https://flowcfo.net"
+FROM_EMAIL = "FlowCFO <hello@flowcfo.net>"
