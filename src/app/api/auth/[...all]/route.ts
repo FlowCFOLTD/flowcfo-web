@@ -25,14 +25,25 @@ async function dbTest() {
   }
 }
 
+function maskUrl(url: string | undefined): string {
+  if (!url) return "missing";
+  try {
+    const u = new URL(url);
+    return `${u.protocol}//${u.username}:***@${u.hostname}:${u.port || '5432'}/${u.pathname.replace(/^\//, '')}`;
+  } catch {
+    return url;
+  }
+}
+
 async function respondError(status: number, extra: Record<string, unknown>) {
   const body = safeStringify({
     ...extra,
     env: {
-      DATABASE_URL: process.env.DATABASE_URL ? "set" : "missing",
+      DATABASE_URL: maskUrl(process.env.DATABASE_URL),
       BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET ? "set" : "missing",
-      BETTER_AUTH_URL: process.env.BETTER_AUTH_URL ? "set" : "missing",
+      BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || "missing",
       RESEND_API_KEY: process.env.RESEND_API_KEY ? "set" : "missing",
+      NODE_ENV: process.env.NODE_ENV || "not set",
     },
   });
   console.error("auth error:", body);
