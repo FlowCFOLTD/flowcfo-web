@@ -1,8 +1,6 @@
 import { Metadata } from 'next';
 import Signin from './signin';
 
-export const runtime = 'edge';
-
 export const metadata: Metadata = {
   title: 'Sign In | FlowCFO',
   description:

@@ -1,8 +1,6 @@
 import { Metadata } from 'next';
 import AcceptTerms from './accept-terms';
 
-export const runtime = 'edge';
-
 export const metadata: Metadata = {
   title: 'Accept Terms | FlowCFO',
 };
