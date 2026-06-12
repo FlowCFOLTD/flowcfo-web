@@ -75,5 +75,5 @@ export const auth = _auth;
 export const initError = _initError;
 
 if (isLocal && _auth) {
-  _auth.$context.then(ctx => ctx.runMigrations().catch(() => {}));
+  _auth.$context.then((ctx: any) => ctx.runMigrations().catch(() => {}));
 }
