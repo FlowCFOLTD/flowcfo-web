@@ -73,6 +73,7 @@ try {
 
 export const auth = _auth;
 export const initError = _initError;
+export { pool };
 
 if (isLocal && _auth) {
   _auth.$context.then((ctx: any) => ctx.runMigrations().catch(() => {}));
