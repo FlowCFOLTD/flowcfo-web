@@ -2,10 +2,15 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Clock, Mail, BarChart3, ShieldCheck, TrendingUp, FileText, ChevronRight } from 'lucide-react';
+import { Clock, Mail, BarChart3, ShieldCheck, TrendingUp, FileText, ChevronRight, Bot, Bell } from 'lucide-react';
 import { useUser } from '@/hooks/api/use-user';
 
-const BUSINESS_CONTENT: Record<string, { metrics: { label: string; icon: React.ReactNode; desc: string }[]; dashboard: string; csv: string; phase2: string }> = {
+const BUSINESS_CONTENT: Record<string, {
+  metrics: { label: string; icon: React.ReactNode; desc: string }[];
+  agents: { label: string; icon: React.ReactNode; desc: string }[];
+  dashboard: string;
+  csv: string;
+}> = {
   ecommerce: {
     dashboard: 'Your dashboard gives you a real-time view of your ecommerce finances: gross margin trending, platform fees by channel, inventory turns, cash flow runway, and tax readiness — all from your uploaded transaction data.',
     csv: 'Export transactions from Shopify, Stripe, Amazon, or your bank. Upload the CSV and we\'ll map them to the right metrics — COGS, platform fees, revenue by channel, and more.',
@@ -17,7 +22,12 @@ const BUSINESS_CONTENT: Record<string, { metrics: { label: string; icon: React.R
       { label: 'Safe to Spend', icon: <ShieldCheck className="h-4 w-4" />, desc: 'How much you can safely withdraw or reinvest after upcoming bills and a safety buffer.' },
       { label: 'Tax Readiness', icon: <FileText className="h-4 w-4" />, desc: ' Estimated tax liability vs what you\'ve saved. Avoid surprises at filing time.' },
     ],
-    phase2: 'We\'re building AI agents that watch your finances continuously. The Margin Guardian will alert you when gross margin drops and investigate the root cause. The Inventory Replenishment agent will draft purchase orders when stock runs low. The Fee Auditor will scan for overcharges monthly. All actions require your approval via in-app notification or Telegram.',
+    agents: [
+      { label: 'Margin Guardian', icon: <Bot className="h-4 w-4" />, desc: 'Watches gross margin continuously. Alerts you when margin drops and investigates the root cause automatically.' },
+      { label: 'Inventory Replenishment', icon: <Bot className="h-4 w-4" />, desc: 'Drafts purchase orders when stock runs low. Review and approve in one click.' },
+      { label: 'Fee Auditor', icon: <Bot className="h-4 w-4" />, desc: 'Scans platform and processor fees monthly. Flags overcharges, duplicate charges, and unexpected increases.' },
+      { label: 'AI Advisor', icon: <Bell className="h-4 w-4" />, desc: 'Ask questions about your finances in plain English. Get instant answers with supporting data from your dashboard.' },
+    ],
   },
   startup: {
     dashboard: 'Your dashboard shows your startup\'s financial health: burn rate, runway, revenue growth, and tax readiness — all calculated from your uploaded data.',
@@ -29,7 +39,12 @@ const BUSINESS_CONTENT: Record<string, { metrics: { label: string; icon: React.R
       { label: 'Safe to Spend', icon: <ShieldCheck className="h-4 w-4" />, desc: 'How much you can safely spend after upcoming commitments and a buffer.' },
       { label: 'Tax Readiness', icon: <FileText className="h-4 w-4" />, desc: 'Estimated tax liability vs what you\'ve saved. Avoid surprises at filing time.' },
     ],
-    phase2: 'We\'re building AI agents that watch your finances continuously. Agents will monitor burn rate trends, flag unusual spending patterns, and alert you when runway drops below your threshold. All actions require your approval via in-app notification or Telegram.',
+    agents: [
+      { label: 'Burn Rate Monitor', icon: <Bot className="h-4 w-4" />, desc: 'Tracks burn rate trends and flags unusual spending patterns automatically.' },
+      { label: 'Runway Guardian', icon: <Bot className="h-4 w-4" />, desc: 'Alerts you when runway drops below your threshold. Get notified before it\'s urgent.' },
+      { label: 'Spend Anomaly Detector', icon: <Bot className="h-4 w-4" />, desc: 'Flags unexpected charges and spending outliers against your normal patterns.' },
+      { label: 'AI Advisor', icon: <Bell className="h-4 w-4" />, desc: 'Ask questions about your finances in plain English. Get instant answers with supporting data from your dashboard.' },
+    ],
   },
   agency: {
     dashboard: 'Your dashboard gives you a real-time view of your agency\'s finances: client profitability, cash flow, revenue trends, and tax readiness.',
@@ -40,7 +55,12 @@ const BUSINESS_CONTENT: Record<string, { metrics: { label: string; icon: React.R
       { label: 'Safe to Spend', icon: <ShieldCheck className="h-4 w-4" />, desc: 'How much you can safely withdraw after upcoming bills and a buffer.' },
       { label: 'Tax Readiness', icon: <FileText className="h-4 w-4" />, desc: 'Estimated tax liability vs what you\'ve saved.' },
     ],
-    phase2: 'We\'re building AI agents that watch your finances continuously. Agents will monitor client profitability trends, flag underperforming accounts, and alert you to cash flow risks. All actions require your approval via in-app notification or Telegram.',
+    agents: [
+      { label: 'Client Profitability Monitor', icon: <Bot className="h-4 w-4" />, desc: 'Tracks profitability trends per client. Flags underperforming accounts before they become problems.' },
+      { label: 'Cash Flow Guardian', icon: <Bot className="h-4 w-4" />, desc: 'Alerts you to cash flow risks based on upcoming bills and client payment patterns.' },
+      { label: 'Fee Auditor', icon: <Bot className="h-4 w-4" />, desc: 'Scans platform and processor fees for overcharges and unexpected increases.' },
+      { label: 'AI Advisor', icon: <Bell className="h-4 w-4" />, desc: 'Ask questions about your finances in plain English. Get instant answers with supporting data from your dashboard.' },
+    ],
   },
   freelancer: {
     dashboard: 'Your dashboard shows your freelance finances: income volatility, cash flow, tax readiness, and safe-to-spend — all from your uploaded data.',
@@ -51,7 +71,11 @@ const BUSINESS_CONTENT: Record<string, { metrics: { label: string; icon: React.R
       { label: 'Safe to Spend', icon: <ShieldCheck className="h-4 w-4" />, desc: 'How much you can safely withdraw after taxes, bills, and a buffer.' },
       { label: 'Tax Readiness', icon: <FileText className="h-4 w-4" />, desc: 'Estimated tax liability vs what you\'ve saved. Avoid surprises at filing time.' },
     ],
-    phase2: 'We\'re building AI agents that watch your finances continuously. Agents will monitor income patterns, flag slow months early, and alert you when tax savings fall behind estimates. All actions require your approval via in-app notification or Telegram.',
+    agents: [
+      { label: 'Income Pattern Monitor', icon: <Bot className="h-4 w-4" />, desc: 'Tracks income stability and flags slow months early so you can adjust.' },
+      { label: 'Tax Readiness Agent', icon: <Bot className="h-4 w-4" />, desc: 'Alerts you when tax savings fall behind estimates. No surprises at tax time.' },
+      { label: 'AI Advisor', icon: <Bell className="h-4 w-4" />, desc: 'Ask questions about your finances in plain English. Get instant answers with supporting data from your dashboard.' },
+    ],
   },
   restaurant: {
     dashboard: 'Your dashboard gives you a real-time view of your restaurant\'s finances: food cost, labor cost, daily revenue, cash flow, and tax readiness.',
@@ -64,7 +88,11 @@ const BUSINESS_CONTENT: Record<string, { metrics: { label: string; icon: React.R
       { label: 'Safe to Spend', icon: <ShieldCheck className="h-4 w-4" />, desc: 'How much you can safely withdraw after upcoming commitments and a buffer.' },
       { label: 'Tax Readiness', icon: <FileText className="h-4 w-4" />, desc: 'Estimated tax liability vs what you\'ve saved.' },
     ],
-    phase2: 'We\'re building AI agents that watch your finances continuously. Agents will monitor food cost trends, flag unusual supplier charges, and alert you when cash flow drops. All actions require your approval via in-app notification or Telegram.',
+    agents: [
+      { label: 'Food Cost Guardian', icon: <Bot className="h-4 w-4" />, desc: 'Monitors food cost trends and flags unusual supplier charges automatically.' },
+      { label: 'Cash Flow Guardian', icon: <Bot className="h-4 w-4" />, desc: 'Alerts you when cash flow drops below safe levels based on upcoming commitments.' },
+      { label: 'AI Advisor', icon: <Bell className="h-4 w-4" />, desc: 'Ask questions about your finances in plain English. Get instant answers with supporting data from your dashboard.' },
+    ],
   },
 };
 
@@ -82,10 +110,7 @@ export default function ApprovalPage() {
         {/* Header */}
         <div className="flex items-center gap-4 mb-12">
           <Image src="/logo-dark.svg" alt="FlowCFO" width={44} height={44} className="h-11 w-11" />
-          <div>
-            <h1 className="text-white font-bold text-3xl tracking-tight">FlowCFO</h1>
-            <p className="text-flow-gold text-[10px] uppercase tracking-[0.3em] font-medium">Beta Access</p>
-          </div>
+          <h1 className="text-white font-bold text-3xl tracking-tight">FlowCFO</h1>
         </div>
 
         {/* Banner */}
@@ -93,15 +118,10 @@ export default function ApprovalPage() {
           <div className="flex items-start gap-4">
             <Clock className="h-6 w-6 shrink-0 text-flow-gold mt-0.5" />
             <div>
-              <h2 className="font-display text-xl font-bold text-white mb-2">Limited Beta Access</h2>
+              <h2 className="font-display text-xl font-bold text-white mb-2">Account Pending Review</h2>
               <p className="font-body text-base text-white/70 leading-relaxed">
-                FlowCFO is currently in a private beta phase. To ensure a focused, high-touch experience
-                for our early users, access is granted on a limited basis. Your access request has been
-                submitted automatically.
-              </p>
-              <p className="font-body text-base text-white/70 leading-relaxed mt-3">
-                We review requests within <strong className="text-white">24–48 hours</strong>. You&apos;ll
-                receive access as soon as your account is approved.
+                Your account is being reviewed. We&apos;ll notify you as soon as it&apos;s ready.
+                In the meantime, explore the features below to see what you&apos;ll have access to.
               </p>
               <div className="mt-4 flex items-center gap-2 text-sm text-white/50">
                 <Mail className="h-4 w-4" />
@@ -111,18 +131,16 @@ export default function ApprovalPage() {
           </div>
         </div>
 
-        {/* Thanks section */}
+        {/* Feature section */}
         <div className="border border-white/10 bg-white/[0.02] p-6 md:p-8 mb-10">
-          <h2 className="font-display text-2xl font-bold text-white mb-2">Thanks for Joining Our Beta</h2>
+          <h2 className="font-display text-2xl font-bold text-white mb-2">What You&apos;ll Get</h2>
           <p className="font-body text-base text-white/50 mb-8">
-            We&apos;re building FlowCFO to give business owners real-time financial intelligence —
-            no spreadsheets, no stale reports, no guessing.
+            FlowCFO gives you real-time financial intelligence — no spreadsheets, no stale reports, no guessing.
           </p>
 
-          <h3 className="font-display text-lg font-bold text-white mb-4">Your Dashboard</h3>
+          <h3 className="font-display text-lg font-bold text-white mb-4">Dashboard &amp; Metrics</h3>
           <p className="font-body text-sm text-white/60 mb-6">{content.dashboard}</p>
 
-          {/* Metrics grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-10">
             {content.metrics.map((m) => (
               <div key={m.label} className="border border-white/10 bg-white/[0.02] p-4">
@@ -135,21 +153,29 @@ export default function ApprovalPage() {
             ))}
           </div>
 
-          <h3 className="font-display text-lg font-bold text-white mb-4">How to Get Started</h3>
-          <p className="font-body text-sm text-white/60 mb-10">
+          <h3 className="font-display text-lg font-bold text-white mb-4">Autonomous Agents</h3>
+          <p className="font-body text-sm text-white/60 mb-6">
+            AI agents monitor your finances continuously — watching for changes, investigating anomalies,
+            and notifying you when action is needed. All actions require your approval via in-app notification or Telegram.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-10">
+            {content.agents.map((a) => (
+              <div key={a.label} className="border border-white/10 bg-white/[0.02] p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-flow-gold">{a.icon}</span>
+                  <h4 className="font-label-caps text-label-caps text-white">{a.label}</h4>
+                </div>
+                <p className="font-body text-xs text-white/50 leading-relaxed">{a.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="font-display text-lg font-bold text-white mb-4">Getting Started</h3>
+          <p className="font-body text-sm text-white/60">
             {content.csv} Once uploaded, your dashboard populates immediately. Upload fresh data whenever
             new transactions come in to keep everything up to date.
           </p>
-
-          <h3 className="font-display text-lg font-bold text-white mb-4">What&apos;s Coming: Phase 2 — Autonomous Agents</h3>
-          <p className="font-body text-sm text-white/60">{content.phase2}</p>
-
-          <div className="mt-8 border-t border-white/10 pt-6">
-            <p className="font-body text-xs text-white/30">
-              You have <strong className="text-white">5 AI Advisor questions</strong> available during the
-              beta. Use them wisely — each one taps into your financial data for personalized insights.
-            </p>
-          </div>
         </div>
 
         {/* Back button */}
@@ -158,7 +184,7 @@ export default function ApprovalPage() {
           className="flex items-center gap-2 text-sm text-white/30 hover:text-white/60 transition-colors"
         >
           <ChevronRight className="h-4 w-4 rotate-180" />
-          Try the dashboard (limited access)
+          Back to dashboard
         </button>
       </div>
     </div>
