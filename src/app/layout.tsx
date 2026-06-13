@@ -24,21 +24,44 @@ const dmMono = DM_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'FlowCFO — Know Exactly What You Can Spend Today',
+    default: 'FlowCFO — Vertical AI Agents for Ecommerce, Freelancers, Startups & More',
     template: '%s | FlowCFO',
   },
   description:
-    'FlowCFO is your AI-powered virtual CFO. It predicts your cash flow, calculates your tax reserves, and tells you exactly what you can safely spend — today and 90 days from now.',
+    'FlowCFO gives you vertical AI agents that monitor your margins, cash flow, tax reserves, and safe-to-spend — purpose-built for ecommerce brands, freelancers, agencies, restaurants, and startups. Autonomous financial monitoring with human approval.',
   metadataBase: new URL('https://flowcfo.net'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
     siteName: 'FlowCFO',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'FlowCFO' }],
+    title: 'FlowCFO — AI-Powered Financial Agents for Every Business Model',
+    description:
+      'Vertical AI agents that watch your finances continuously. Margin protection, burn alerts, inventory replenishment, fee auditing, and tax automation — built for how your business actually works.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'FlowCFO — Vertical AI Agents' }],
   },
   twitter: {
     card: 'summary_large_image',
+    title: 'FlowCFO — Vertical AI Agents for Your Business Finances',
+    description:
+      'AI agents for ecommerce margins, freelancer taxes, agency profitability, restaurant food cost, and startup burn rate. Autonomous monitoring. Human approval.',
   },
+  keywords: [
+    'AI CFO',
+    'vertical AI agents',
+    'ecommerce financial software',
+    'autonomous finance platform',
+    'cash flow forecasting AI',
+    'gross margin monitoring tool',
+    'freelancer tax planning AI',
+    'agency profitability tracking',
+    'restaurant food cost AI',
+    'startup burn rate monitoring',
+    'safe to spend calculator',
+    'AI bookkeeping for small business',
+    'platform fee tracking ecommerce',
+    'inventory replenishment AI',
+    'virtual CFO for entrepreneurs',
+  ],
   icons: {
     icon: [
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },

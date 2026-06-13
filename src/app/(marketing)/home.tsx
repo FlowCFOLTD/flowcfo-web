@@ -18,38 +18,52 @@ import {
   Users,
   UtensilsCrossed,
   WalletCards,
+  Bot,
+  Bell,
+  Search,
+  AlertTriangle,
 } from 'lucide-react';
 
 const agents = [
   {
-    icon: User,
-    title: 'Freelancer Agent',
-    subtitle: 'Income Smoothing & Tax Readiness',
-    stat: 'Est. Savings: $4.2k/yr',
-  },
-  {
     icon: ShoppingBag,
-    title: 'E-commerce Agent',
-    subtitle: 'Margin Analysis & Payout Reconciliation',
-    stat: 'ROAS Tracking: Enabled',
-  },
-  {
-    icon: Users,
-    title: 'Agency Agent',
-    subtitle: 'Project Profitability & Resource Allocation',
-    stat: 'Utilization: 88% Avg',
-  },
-  {
-    icon: UtensilsCrossed,
-    title: 'Restaurant Agent',
-    subtitle: 'COGS Tracking & Waste Management',
-    stat: 'Margin Delta: -2.1%',
+    title: 'Ecommerce Agent',
+    subtitle: 'Margin monitoring, fee auditing & inventory replenishment',
+    stat: 'Active agents: 4',
+    href: '/for-ecommerce',
+    features: ['Gross Margin Guardian', 'Fee Auditor', 'Inventory Replenishment', 'AI Advisor'],
   },
   {
     icon: Rocket,
     title: 'Startup Agent',
-    subtitle: 'Burn Rate & Runway Scenario Planning',
-    stat: 'Runway: 18.4 Mo',
+    subtitle: 'Burn rate, runway scenarios & spend anomaly detection',
+    stat: 'Active agents: 3',
+    href: '/for-startups',
+    features: ['Burn Rate Monitor', 'Runway Guardian', 'Spend Anomaly Detector'],
+  },
+  {
+    icon: Users,
+    title: 'Agency Agent',
+    subtitle: 'Client profitability, cash flow & resource allocation',
+    stat: 'Active agents: 3',
+    href: '/for-agencies',
+    features: ['Client Profitability Monitor', 'Cash Flow Guardian', 'Fee Auditor'],
+  },
+  {
+    icon: User,
+    title: 'Freelancer Agent',
+    subtitle: 'Income smoothing, tax readiness & spending safety',
+    stat: 'Active agents: 3',
+    href: '/for-freelancers',
+    features: ['Income Pattern Monitor', 'Tax Readiness Agent', 'AI Advisor'],
+  },
+  {
+    icon: UtensilsCrossed,
+    title: 'Restaurant Agent',
+    subtitle: 'Food cost, labor cost & daily revenue intelligence',
+    stat: 'Active agents: 3',
+    href: '/for-restaurants',
+    features: ['Food Cost Guardian', 'Cash Flow Guardian', 'AI Advisor'],
   },
 ];
 
@@ -69,33 +83,19 @@ const advisoryCards = [
   {
     icon: WalletCards,
     title: 'Safe spending decisions',
-    text: 'Ask whether now is the right time to buy inventory, hire help, attend a conference, or hold cash.',
+    text: 'Ask whether now is the right time to buy inventory, hire help, attend a conference, or hold cash. Your AI advisor knows your financial position in real time.',
   },
   {
     icon: LayoutDashboard,
     title: 'Weekly financial digest',
-    text: 'A short Monday brief with cash movement, tax status, upcoming bills, and the decisions that need attention.',
+    text: 'A short Monday brief with cash movement, tax status, upcoming bills, and the decisions that need attention. No spreadsheet required.',
   },
-];
-
-const documentTileOpacity = [
-  'opacity-25',
-  'opacity-40',
-  'opacity-55',
-  'opacity-70',
-  'opacity-30',
-  'opacity-45',
-  'opacity-60',
-  'opacity-75',
-  'opacity-35',
-  'opacity-50',
-  'opacity-65',
-  'opacity-80',
 ];
 
 export default function HomePage() {
   return (
     <div className="overflow-hidden bg-[#0A0A0A] text-white selection:bg-[#D4AF37] selection:text-[#0A0A0A]">
+      {/* Hero */}
       <section className="relative flex min-h-[921px] items-center px-4 py-24 pt-36 md:px-16">
         <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-8 lg:grid-cols-12">
           <div className="space-y-10 lg:col-span-6">
@@ -105,21 +105,21 @@ export default function HomePage() {
                 aria-hidden="true"
               />
               <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#ffe088]">
-                Institutional Grade Security
+                Vertical AI Agents for Your Business
               </span>
             </div>
 
             <h1 className="max-w-xl font-display text-[44px] font-extrabold leading-[1.08] tracking-[-0.03em] text-white sm:text-6xl lg:text-[64px] lg:leading-[72px]">
-              Your business has an{' '}
-              <span className="text-[#D4AF37]">AI CFO. </span> It doesn&apos;t
-              just track - it acts.
+              AI Agents That{' '}
+              <span className="text-[#D4AF37]">Know Your Business</span>
+              {' '}— Ecommerce, Freelancer, Agency, Restaurant &amp; Startup
             </h1>
 
             <p className="max-w-lg text-lg leading-7 text-[#858383]">
-              Vertical AI agents for your P&L — one for every business model,
-              one clear number to spend. Your AI CFO already knows your margins,
-              runway, and tax gap. It acts - Margin protection, burn alerts, tax
-              automation.
+              FlowCFO deploys specialized AI agents for your specific business model.
+              Margin Guardian, Fee Auditor, Inventory Replenishment, Burn Rate Monitor,
+              Tax Reserve Engine — each agent watches your finances continuously and
+              alerts you when action is needed. All actions require your approval.
             </p>
 
             <div className="flex flex-col gap-4 pt-4 sm:flex-row">
@@ -134,7 +134,7 @@ export default function HomePage() {
                 href="/features"
                 className="inline-flex items-center justify-center border border-white/20 px-10 py-5 text-xs font-bold uppercase tracking-[0.12em] text-white transition-all hover:bg-white/5"
               >
-                See how it works
+                See How It Works
                 <ArrowDown
                   className="ml-2 h-[18px] w-[18px]"
                   aria-hidden="true"
@@ -143,8 +143,7 @@ export default function HomePage() {
             </div>
 
             <p className="pt-12 text-xs font-bold uppercase tracking-[0.1em] text-[#858383]">
-              Bank-level 256-bit encryption · No credit card required · Cancel
-              anytime
+              Bank-level 256-bit encryption · No credit card required · Cancel anytime
             </p>
           </div>
 
@@ -167,9 +166,7 @@ export default function HomePage() {
                     </span>
                     <div className="flex w-fit items-center gap-1 rounded bg-[#1B4332]/10 px-2 py-0.5 text-[#1B4332]">
                       <TrendingUp className="h-4 w-4" aria-hidden="true" />
-                      <span className="font-mono text-xs font-bold">
-                        +12.4%
-                      </span>
+                      <span className="font-mono text-xs font-bold">+12.4%</span>
                     </div>
                   </div>
                 </div>
@@ -194,9 +191,7 @@ export default function HomePage() {
                     </p>
                     <p className="font-mono text-2xl font-bold leading-8 tracking-[0.02em] text-white">
                       18.4{' '}
-                      <span className="text-sm font-bold uppercase opacity-50">
-                        MONTHS
-                      </span>
+                      <span className="text-sm font-bold uppercase opacity-50">MONTHS</span>
                     </p>
                   </div>
                   <div>
@@ -205,9 +200,7 @@ export default function HomePage() {
                     </p>
                     <p className="font-mono text-2xl font-bold leading-8 tracking-[0.02em] text-white">
                       $142,500{' '}
-                      <span className="text-sm font-bold uppercase opacity-50">
-                        /MO
-                      </span>
+                      <span className="text-sm font-bold uppercase opacity-50">/MO</span>
                     </p>
                   </div>
                 </div>
@@ -240,25 +233,29 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Vertical Agents */}
       <section id="agents" className="bg-black px-4 py-32 md:px-16">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-16">
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
-              Specialized Solutions
+              AI Agents by Business Type
             </p>
             <h2 className="mt-4 font-display text-[32px] font-bold leading-10 tracking-[-0.01em] text-white md:text-[40px] md:leading-[48px]">
-              Vertical CFO Agents
+              Vertical Financial Agents — One for Every Business Model
             </h2>
             <p className="mt-4 max-w-2xl text-lg leading-7 text-[#858383]">
-              AI models trained on industry-specific data and tax codes to give
-              you deep financial intelligence.
+              Unlike generic financial tools, FlowCFO deploys AI agents purpose-built for your
+              industry. Ecommerce brands get margin and fee monitoring. Freelancers get income
+              smoothing and tax readiness. Startups get burn rate and runway tracking. Each agent
+              works autonomously and alerts you when action is needed.
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-5">
             {agents.map((agent) => (
-              <div
+              <Link
                 key={agent.title}
+                href={agent.href}
                 className="group border border-[#474646] bg-[#1c1b1b] p-8 transition-all hover:border-[#D4AF37]/50"
               >
                 <agent.icon
@@ -269,24 +266,36 @@ export default function HomePage() {
                 <p className="mt-2 text-sm leading-5 text-[#858383]">
                   {agent.subtitle}
                 </p>
-                <p className="mt-4 font-mono text-sm text-[#D4AF37]/80">
-                  {agent.stat}
-                </p>
-              </div>
+                <ul className="mt-4 space-y-1">
+                  {agent.features.map((f) => (
+                    <li key={f} className="flex items-center gap-2 text-xs text-[#D4AF37]/70">
+                      <Bot className="h-3 w-3 shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
+      {/* How It Works */}
       <section id="advisory" className="bg-[#0A0A0A] px-4 py-32 md:px-16">
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-20 space-y-4">
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
-              The Founder Portal
+              Autonomous Financial Monitoring
             </p>
             <h2 className="max-w-2xl font-display text-[32px] font-bold leading-10 tracking-[-0.01em] text-white md:text-[40px] md:leading-[48px]">
-              Everything a CFO would tell you. Automated.
+              AI Agents Watch Your Finances 24/7 — You Stay in Control
             </h2>
+            <p className="max-w-2xl text-lg leading-7 text-[#858383]">
+              FlowCFO agents monitor your connected accounts continuously. When they detect an
+              issue — margin compression, unusual fees, low inventory cash, tax reserve gaps —
+              they alert you with a recommended action. You review and approve before anything
+              happens. No surprises. No unauthorized changes.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
@@ -302,11 +311,25 @@ export default function HomePage() {
                   </h3>
                   <p className="max-w-sm text-lg leading-7 text-[#858383]">
                     See 30, 60, and 90 days ahead from your real transaction
-                    patterns, recurring bills, and income timing.
+                    patterns, recurring bills, and income timing. AI agents track
+                    every change and update your forecast automatically.
                   </p>
                 </div>
                 <div className="grid h-48 w-full max-w-48 grid-cols-4 gap-2 opacity-60 grayscale transition-all duration-500 group-hover:grayscale-0">
-                  {documentTileOpacity.map((opacityClass, index) => (
+                  {[
+                    'opacity-25',
+                    'opacity-40',
+                    'opacity-55',
+                    'opacity-70',
+                    'opacity-30',
+                    'opacity-45',
+                    'opacity-60',
+                    'opacity-75',
+                    'opacity-35',
+                    'opacity-50',
+                    'opacity-65',
+                    'opacity-80',
+                  ].map((opacityClass, index) => (
                     <div
                       key={index}
                       className={`border border-[#474646] bg-[#0A0A0A] ${opacityClass}`}
@@ -338,7 +361,9 @@ export default function HomePage() {
               </h3>
               <p className="text-lg leading-7 text-[#858383]">
                 FlowCFO separates what is actually yours from what belongs to
-                the IRS, HMRC, or your next quarterly payment.
+                the IRS, HMRC, or your next quarterly payment. The AI agent
+                tracks estimated liability against what you&apos;ve saved and
+                alerts you when you&apos;re falling behind.
               </p>
               <div className="mt-auto border-t border-[#474646] pt-8">
                 <div className="flex justify-between py-2">
@@ -351,9 +376,7 @@ export default function HomePage() {
                   <span className="text-xs font-bold uppercase tracking-[0.12em] text-[#858383]">
                     Reserved
                   </span>
-                  <span className="font-mono text-sm text-[#1B4332]">
-                    $3,120
-                  </span>
+                  <span className="font-mono text-sm text-[#1B4332]">$3,120</span>
                 </div>
               </div>
             </div>
@@ -375,15 +398,15 @@ export default function HomePage() {
             ))}
 
             <Link
-              href="/contact"
+              href="/waitlist"
               className="group flex cursor-pointer flex-col justify-between bg-[#D4AF37] p-10 text-[#0A0A0A] transition-all active:scale-95 md:col-span-4"
             >
               <h3 className="font-display text-xl font-bold">
-                Join the E-commerce Beta
+                Start with Ecommerce Beta
               </h3>
               <div className="mt-8 flex items-center justify-between">
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#0A0A0A]/80">
-                  Shape Safe-To-Spend
+                  AI Agents for Your Business
                 </p>
                 <PhoneCall
                   className="h-8 w-8 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"

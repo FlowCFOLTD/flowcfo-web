@@ -10,29 +10,29 @@ const posts = [
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
-    "",
-    "/about",
-    "/features",
-    "/pricing",
-    "/contact",
-    "/for-freelancers",
-    "/for-ecommerce",
-    "/for-agencies",
-    "/for-restaurants",
-    "/for-startups",
-    "/calculator/safe-to-spend",
-    "/calculator/tax-reserve",
-    "/blog",
-    "/privacy",
-    "/terms",
-    "/waitlist",
+    { path: "", priority: 1, freq: "weekly" as const },
+    { path: "/features", priority: 0.9, freq: "monthly" as const },
+    { path: "/pricing", priority: 0.9, freq: "monthly" as const },
+    { path: "/for-ecommerce", priority: 0.8, freq: "monthly" as const },
+    { path: "/for-freelancers", priority: 0.8, freq: "monthly" as const },
+    { path: "/for-agencies", priority: 0.8, freq: "monthly" as const },
+    { path: "/for-restaurants", priority: 0.8, freq: "monthly" as const },
+    { path: "/for-startups", priority: 0.8, freq: "monthly" as const },
+    { path: "/about", priority: 0.6, freq: "monthly" as const },
+    { path: "/contact", priority: 0.6, freq: "monthly" as const },
+    { path: "/blog", priority: 0.7, freq: "weekly" as const },
+    { path: "/privacy", priority: 0.3, freq: "yearly" as const },
+    { path: "/terms", priority: 0.3, freq: "yearly" as const },
+    { path: "/waitlist", priority: 0.7, freq: "monthly" as const },
+    { path: "/calculator/safe-to-spend", priority: 0.7, freq: "monthly" as const },
+    { path: "/calculator/tax-reserve", priority: 0.7, freq: "monthly" as const },
   ];
 
   const staticRoutes = routes.map((route) => ({
-    url: `${baseUrl}${route}`,
+    url: `${baseUrl}${route.path}`,
     lastModified: new Date(),
-    changeFrequency: (route === "" ? "weekly" : "monthly") as "weekly" | "monthly",
-    priority: route === "" ? 1 : route.startsWith("/calculator") ? 0.8 : 0.7,
+    changeFrequency: route.freq,
+    priority: route.priority,
   }));
 
   const blogRoutes = posts.map((post) => ({
