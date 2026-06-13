@@ -31,7 +31,12 @@ const agents = [
     subtitle: 'Margin monitoring, fee auditing & inventory replenishment',
     stat: 'Active agents: 4',
     href: '/for-ecommerce',
-    features: ['Gross Margin Guardian', 'Fee Auditor', 'Inventory Replenishment', 'AI Advisor'],
+    features: [
+      'Gross Margin Guardian',
+      'Fee Auditor',
+      'Inventory Replenishment',
+      'AI Advisor',
+    ],
   },
   {
     icon: Rocket,
@@ -39,7 +44,11 @@ const agents = [
     subtitle: 'Burn rate, runway scenarios & spend anomaly detection',
     stat: 'Active agents: 3',
     href: '/for-startups',
-    features: ['Burn Rate Monitor', 'Runway Guardian', 'Spend Anomaly Detector'],
+    features: [
+      'Burn Rate Monitor',
+      'Runway Guardian',
+      'Spend Anomaly Detector',
+    ],
   },
   {
     icon: Users,
@@ -47,7 +56,11 @@ const agents = [
     subtitle: 'Client profitability, cash flow & resource allocation',
     stat: 'Active agents: 3',
     href: '/for-agencies',
-    features: ['Client Profitability Monitor', 'Cash Flow Guardian', 'Fee Auditor'],
+    features: [
+      'Client Profitability Monitor',
+      'Cash Flow Guardian',
+      'Fee Auditor',
+    ],
   },
   {
     icon: User,
@@ -111,15 +124,60 @@ export default function HomePage() {
 
             <h1 className="max-w-xl font-display text-[44px] font-extrabold leading-[1.08] tracking-[-0.03em] text-white sm:text-6xl lg:text-[64px] lg:leading-[72px]">
               AI Agents That{' '}
-              <span className="text-[#D4AF37]">Know Your Business</span>
-              {' '}— Ecommerce, Freelancer, Agency, Restaurant &amp; Startup
+              <span className="text-[#D4AF37]">
+                Know Your Business Finance.
+              </span>
             </h1>
 
+            <div className="flex flex-wrap gap-6 pt-2">
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#474646] bg-[#1c1b1b]">
+                  <ShoppingBag className="h-4 w-4 text-[#D4AF37]" />
+                </div>
+                <span className="text-xs font-medium text-[#858383]">
+                  Ecommerce
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#474646] bg-[#1c1b1b]">
+                  <User className="h-4 w-4 text-[#D4AF37]" />
+                </div>
+                <span className="text-xs font-medium text-[#858383]">
+                  Freelancer
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#474646] bg-[#1c1b1b]">
+                  <Users className="h-4 w-4 text-[#D4AF37]" />
+                </div>
+                <span className="text-xs font-medium text-[#858383]">
+                  Agency
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#474646] bg-[#1c1b1b]">
+                  <UtensilsCrossed className="h-4 w-4 text-[#D4AF37]" />
+                </div>
+                <span className="text-xs font-medium text-[#858383]">
+                  Restaurant
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#474646] bg-[#1c1b1b]">
+                  <Rocket className="h-4 w-4 text-[#D4AF37]" />
+                </div>
+                <span className="text-xs font-medium text-[#858383]">
+                  Startup
+                </span>
+              </div>
+            </div>
+
             <p className="max-w-lg text-lg leading-7 text-[#858383]">
-              FlowCFO deploys specialized AI agents for your specific business model.
-              Margin Guardian, Fee Auditor, Inventory Replenishment, Burn Rate Monitor,
-              Tax Reserve Engine — each agent watches your finances continuously and
-              alerts you when action is needed. All actions require your approval.
+              FlowCFO deploys specialized AI agents for your specific business
+              model. Margin Guardian, Fee Auditor, Inventory Replenishment, Burn
+              Rate Monitor, Tax Reserve Engine - each agent watches your
+              finances continuously and alerts you when action is needed. All
+              actions require your approval.
             </p>
 
             <div className="flex flex-col gap-4 pt-4 sm:flex-row">
@@ -143,7 +201,8 @@ export default function HomePage() {
             </div>
 
             <p className="pt-12 text-xs font-bold uppercase tracking-[0.1em] text-[#858383]">
-              Bank-level 256-bit encryption · No credit card required · Cancel anytime
+              Bank-level 256-bit encryption · No credit card required · Cancel
+              anytime
             </p>
           </div>
 
@@ -166,7 +225,9 @@ export default function HomePage() {
                     </span>
                     <div className="flex w-fit items-center gap-1 rounded bg-[#1B4332]/10 px-2 py-0.5 text-[#1B4332]">
                       <TrendingUp className="h-4 w-4" aria-hidden="true" />
-                      <span className="font-mono text-xs font-bold">+12.4%</span>
+                      <span className="font-mono text-xs font-bold">
+                        +12.4%
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -191,7 +252,9 @@ export default function HomePage() {
                     </p>
                     <p className="font-mono text-2xl font-bold leading-8 tracking-[0.02em] text-white">
                       18.4{' '}
-                      <span className="text-sm font-bold uppercase opacity-50">MONTHS</span>
+                      <span className="text-sm font-bold uppercase opacity-50">
+                        MONTHS
+                      </span>
                     </p>
                   </div>
                   <div>
@@ -200,7 +263,9 @@ export default function HomePage() {
                     </p>
                     <p className="font-mono text-2xl font-bold leading-8 tracking-[0.02em] text-white">
                       $142,500{' '}
-                      <span className="text-sm font-bold uppercase opacity-50">/MO</span>
+                      <span className="text-sm font-bold uppercase opacity-50">
+                        /MO
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -241,12 +306,13 @@ export default function HomePage() {
               AI Agents by Business Type
             </p>
             <h2 className="mt-4 font-display text-[32px] font-bold leading-10 tracking-[-0.01em] text-white md:text-[40px] md:leading-[48px]">
-              Vertical Financial Agents — One for Every Business Model
+              Vertical Financial Agents - One for Every Business Model
             </h2>
             <p className="mt-4 max-w-2xl text-lg leading-7 text-[#858383]">
-              Unlike generic financial tools, FlowCFO deploys AI agents purpose-built for your
-              industry. Ecommerce brands get margin and fee monitoring. Freelancers get income
-              smoothing and tax readiness. Startups get burn rate and runway tracking. Each agent
+              Unlike generic financial tools, FlowCFO deploys AI agents
+              purpose-built for your industry. Ecommerce brands get margin and
+              fee monitoring. Freelancers get income smoothing and tax
+              readiness. Startups get burn rate and runway tracking. Each agent
               works autonomously and alerts you when action is needed.
             </p>
           </div>
@@ -268,7 +334,10 @@ export default function HomePage() {
                 </p>
                 <ul className="mt-4 space-y-1">
                   {agent.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-xs text-[#D4AF37]/70">
+                    <li
+                      key={f}
+                      className="flex items-center gap-2 text-xs text-[#D4AF37]/70"
+                    >
                       <Bot className="h-3 w-3 shrink-0" />
                       {f}
                     </li>
@@ -291,9 +360,10 @@ export default function HomePage() {
               AI Agents Watch Your Finances 24/7 — You Stay in Control
             </h2>
             <p className="max-w-2xl text-lg leading-7 text-[#858383]">
-              FlowCFO agents monitor your connected accounts continuously. When they detect an
-              issue — margin compression, unusual fees, low inventory cash, tax reserve gaps —
-              they alert you with a recommended action. You review and approve before anything
+              FlowCFO agents monitor your connected accounts continuously. When
+              they detect an issue — margin compression, unusual fees, low
+              inventory cash, tax reserve gaps — they alert you with a
+              recommended action. You review and approve before anything
               happens. No surprises. No unauthorized changes.
             </p>
           </div>
@@ -311,8 +381,8 @@ export default function HomePage() {
                   </h3>
                   <p className="max-w-sm text-lg leading-7 text-[#858383]">
                     See 30, 60, and 90 days ahead from your real transaction
-                    patterns, recurring bills, and income timing. AI agents track
-                    every change and update your forecast automatically.
+                    patterns, recurring bills, and income timing. AI agents
+                    track every change and update your forecast automatically.
                   </p>
                 </div>
                 <div className="grid h-48 w-full max-w-48 grid-cols-4 gap-2 opacity-60 grayscale transition-all duration-500 group-hover:grayscale-0">
@@ -376,7 +446,9 @@ export default function HomePage() {
                   <span className="text-xs font-bold uppercase tracking-[0.12em] text-[#858383]">
                     Reserved
                   </span>
-                  <span className="font-mono text-sm text-[#1B4332]">$3,120</span>
+                  <span className="font-mono text-sm text-[#1B4332]">
+                    $3,120
+                  </span>
                 </div>
               </div>
             </div>
