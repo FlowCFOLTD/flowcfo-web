@@ -127,6 +127,62 @@ export interface AccountData {
   last_synced_at: string | null;
 }
 
+export interface BlogSettingsData {
+  author_name: string;
+  brand_voice_notes: string | null;
+  target_keywords: string[];
+  auto_publish: boolean;
+  schedule_frequency: string;
+}
+
+export interface BlogPostSummary {
+  id: string;
+  title: string;
+  slug: string;
+  meta_description: string | null;
+  keywords: string[];
+  status: string;
+  author: string | null;
+  published_at: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface BlogPostDetail extends BlogPostSummary {
+  body_markdown: string;
+}
+
+export interface BlogGenerationLogEntry {
+  id: string;
+  topic: string;
+  status: string;
+  post_id: string | null;
+  error_text: string | null;
+  triggered_by: string | null;
+  created_at: string | null;
+}
+
+export const blogApi = {
+  getSettings: () => apiClient<BlogSettingsData>('/api/v1/admin/blog/settings'),
+  updateSettings: (data: Partial<BlogSettingsData>) =>
+    apiClient<BlogSettingsData>('/api/v1/admin/blog/settings', { method: 'PUT', body: data }),
+  getPosts: (status?: string) =>
+    apiClient<{ total: number; posts: BlogPostSummary[] }>(
+      `/api/v1/admin/blog/posts${status ? `?status=${status}` : ''}`,
+    ),
+  getPost: (id: string) => apiClient<BlogPostDetail>(`/api/v1/admin/blog/posts/${id}`),
+  publishPost: (id: string) =>
+    apiClient<{ status: string; id: string }>(`/api/v1/admin/blog/posts/${id}/publish`, { method: 'PUT' }),
+  archivePost: (id: string) =>
+    apiClient<{ status: string; id: string }>(`/api/v1/admin/blog/posts/${id}/archive`, { method: 'PUT' }),
+  generate: (topic: string, extra_context?: string) =>
+    apiClient<{ status: string; topic: string }>('/api/v1/admin/blog/generate', {
+      method: 'POST',
+      body: { topic, extra_context: extra_context || '' },
+    }),
+  getLogs: () => apiClient<BlogGenerationLogEntry[]>('/api/v1/admin/blog/logs'),
+};
+
 export const accountsApi = {
   uploadCsv: (formData: FormData, override?: boolean) =>
     apiClient<CsvUploadData>(

@@ -4,7 +4,12 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
-import { adminApi } from '@/lib/api/users';
+import { adminApi, blogApi } from '@/lib/api/users';
+import type {
+  BlogSettingsData,
+  BlogPostSummary,
+  BlogGenerationLogEntry,
+} from '@/lib/api/users';
 import {
   Users,
   Mail,
@@ -17,6 +22,13 @@ import {
   MessageSquare,
   ChevronRight,
   Loader2,
+  FileText,
+  Plus,
+  Send,
+  CheckCircle,
+  XCircle,
+  Archive,
+  Eye,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -99,8 +111,17 @@ export default function AdminDashboard() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isDataLoading, setIsDataLoading] = useState(false);
+  const [blogSubTab, setBlogSubTab] = useState<'posts' | 'settings' | 'generate'>('posts');
+  const [blogPosts, setBlogPosts] = useState<BlogPostSummary[]>([]);
+  const [blogTotal, setBlogTotal] = useState(0);
+  const [blogSettings, setBlogSettings] = useState<BlogSettingsData | null>(null);
+  const [blogLogs, setBlogLogs] = useState<BlogGenerationLogEntry[]>([]);
+  const [blogTopic, setBlogTopic] = useState('');
+  const [generateStatus, setGenerateStatus] = useState<string | null>(null);
+  const [settingsDirty, setSettingsDirty] = useState(false);
+
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'waitlist' | 'contacts' | 'users' | 'events' | 'health'
+    'overview' | 'waitlist' | 'contacts' | 'users' | 'events' | 'health' | 'blog'
   >('overview');
   const router = useRouter();
 
@@ -143,6 +164,18 @@ export default function AdminDashboard() {
         else if (activeTab === 'users') data = await adminApi.getUsers();
         else if (activeTab === 'events') data = await adminApi.getEvents(100);
         else if (activeTab === 'health') data = await adminApi.getHealth();
+        else if (activeTab === 'blog') {
+          const [postsRes, settings, logs] = await Promise.all([
+            blogApi.getPosts(),
+            blogApi.getSettings(),
+            blogApi.getLogs(),
+          ]);
+          setBlogPosts(postsRes.posts);
+          setBlogTotal(postsRes.total);
+          setBlogSettings(settings);
+          setBlogLogs(logs);
+          data = true;
+        }
         if (data) {
           if (activeTab === 'waitlist') setWaitlist(data as WaitlistEntry[]);
           else if (activeTab === 'contacts') setContacts(data as ContactEntry[]);
@@ -217,6 +250,12 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab('health')}
             icon={<BarChart3 className="h-4 w-4" />}
             label="Health"
+          />
+          <NavButton
+            active={activeTab === 'blog'}
+            onClick={() => setActiveTab('blog')}
+            icon={<FileText className="h-4 w-4" />}
+            label="Blog"
           />
         </nav>
 
@@ -557,6 +596,321 @@ export default function AdminDashboard() {
                     </p>
                   </div>
                 </>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'blog' && (
+            <div className="space-y-6">
+              {/* Blog sub-tabs */}
+              <div className="flex gap-2 border-b border-white/5 pb-4">
+                {(['posts', 'settings', 'generate'] as const).map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => setBlogSubTab(st)}
+                    className={`px-4 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
+                      blogSubTab === st
+                        ? 'bg-[#FFD700] text-black'
+                        : 'text-white/40 hover:text-white border border-white/10'
+                    }`}
+                  >
+                    {st === 'posts' ? 'Posts' : st === 'settings' ? 'Settings' : 'Generate'}
+                  </button>
+                ))}
+              </div>
+
+              {/* Posts list */}
+              {blogSubTab === 'posts' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm text-white/60">{blogTotal} post{blogTotal !== 1 ? 's' : ''}</p>
+                    <div className="flex gap-2">
+                      {['all', 'draft', 'published', 'archived'].map((s) => (
+                        <button
+                          key={s}
+                          onClick={async () => {
+                            const res = await blogApi.getPosts(s === 'all' ? undefined : s);
+                            setBlogPosts(res.posts);
+                            setBlogTotal(res.total);
+                          }}
+                          className="px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white/40 hover:text-white border border-white/10 hover:border-white/30 transition-all"
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {blogPosts.length === 0 ? (
+                    <div className="bg-[#141416] border border-white/5 p-12 text-center">
+                      <FileText className="h-8 w-8 text-white/20 mx-auto mb-3" />
+                      <p className="text-sm text-white/40">No posts yet. Generate your first post.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {blogPosts.map((post) => (
+                        <div
+                          key={post.id}
+                          className="bg-[#141416] border border-white/5 p-4 flex items-center justify-between hover:border-white/20 transition-all"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center gap-3 mb-1">
+                              <span
+                                className={`inline-block w-2 h-2 rounded-full ${
+                                  post.status === 'published'
+                                    ? 'bg-green-400'
+                                    : post.status === 'archived'
+                                      ? 'bg-white/20'
+                                      : 'bg-[#FFD700]'
+                                }`}
+                              />
+                              <p className="text-sm font-medium text-white truncate">{post.title}</p>
+                            </div>
+                            <p className="text-xs text-white/40 truncate ml-5">
+                              {post.meta_description || 'No description'}
+                            </p>
+                            <p className="text-[10px] text-white/20 ml-5 mt-1">
+                              {post.created_at ? new Date(post.created_at).toLocaleDateString() : ''}
+                              {post.author ? ` · ${post.author}` : ''}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2 ml-4 shrink-0">
+                            <button
+                              onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
+                              className="p-2 text-white/30 hover:text-white transition-all"
+                              title="Preview"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </button>
+                            {post.status === 'draft' && (
+                              <button
+                                onClick={async () => {
+                                  await blogApi.publishPost(post.id);
+                                  const res = await blogApi.getPosts();
+                                  setBlogPosts(res.posts);
+                                  setBlogTotal(res.total);
+                                }}
+                                className="p-2 text-green-400/50 hover:text-green-400 transition-all"
+                                title="Publish"
+                              >
+                                <CheckCircle className="h-4 w-4" />
+                              </button>
+                            )}
+                            {post.status === 'published' && (
+                              <button
+                                onClick={async () => {
+                                  await blogApi.archivePost(post.id);
+                                  const res = await blogApi.getPosts();
+                                  setBlogPosts(res.posts);
+                                  setBlogTotal(res.total);
+                                }}
+                                className="p-2 text-white/30 hover:text-white/60 transition-all"
+                                title="Archive"
+                              >
+                                <Archive className="h-4 w-4" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Settings */}
+              {blogSubTab === 'settings' && blogSettings && (
+                <div className="max-w-xl space-y-6">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-2">
+                      Author Name
+                    </label>
+                    <input
+                      type="text"
+                      value={blogSettings.author_name}
+                      onChange={(e) => {
+                        setBlogSettings({ ...blogSettings, author_name: e.target.value });
+                        setSettingsDirty(true);
+                      }}
+                      className="w-full bg-[#141416] border border-white/10 p-3 text-sm text-white focus:border-[#FFD700] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-2">
+                      Brand Voice Notes
+                    </label>
+                    <textarea
+                      value={blogSettings.brand_voice_notes || ''}
+                      onChange={(e) => {
+                        setBlogSettings({ ...blogSettings, brand_voice_notes: e.target.value });
+                        setSettingsDirty(true);
+                      }}
+                      rows={4}
+                      className="w-full bg-[#141416] border border-white/10 p-3 text-sm text-white focus:border-[#FFD700] focus:outline-none resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-2">
+                      Target Keywords
+                    </label>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {(blogSettings.target_keywords || []).map((kw, i) => (
+                        <span
+                          key={i}
+                          className="inline-flex items-center gap-1 bg-[#FFD700]/10 border border-[#FFD700]/20 px-2 py-1 text-xs text-[#FFD700]"
+                        >
+                          {kw}
+                          <button
+                            onClick={() => {
+                              const updated = blogSettings.target_keywords.filter((_, j) => j !== i);
+                              setBlogSettings({ ...blogSettings, target_keywords: updated });
+                              setSettingsDirty(true);
+                            }}
+                            className="text-white/40 hover:text-white ml-1"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Type a keyword and press Enter"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          const input = e.currentTarget;
+                          const val = input.value.trim();
+                          if (val && !blogSettings.target_keywords.includes(val)) {
+                            setBlogSettings({
+                              ...blogSettings,
+                              target_keywords: [...blogSettings.target_keywords, val],
+                            });
+                            setSettingsDirty(true);
+                          }
+                          input.value = '';
+                        }
+                      }}
+                      className="w-full bg-[#141416] border border-white/10 p-3 text-sm text-white focus:border-[#FFD700] focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <label className="text-xs font-bold uppercase tracking-wider text-white/60">
+                      Auto-publish
+                    </label>
+                    <button
+                      onClick={() => {
+                        setBlogSettings({ ...blogSettings, auto_publish: !blogSettings.auto_publish });
+                        setSettingsDirty(true);
+                      }}
+                      className={`relative w-10 h-5 rounded-full transition-all ${
+                        blogSettings.auto_publish ? 'bg-[#FFD700]' : 'bg-white/10'
+                      }`}
+                    >
+                      <span
+                        className={`absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all ${
+                          blogSettings.auto_publish ? 'left-5' : 'left-0.5'
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {settingsDirty && (
+                    <button
+                      onClick={async () => {
+                        await blogApi.updateSettings(blogSettings);
+                        setSettingsDirty(false);
+                      }}
+                      className="bg-[#FFD700] text-black px-6 py-3 text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all"
+                    >
+                      Save Settings
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Generate */}
+              {blogSubTab === 'generate' && (
+                <div className="max-w-xl space-y-6">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-white/60 mb-2">
+                      Topic
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={blogTopic}
+                        onChange={(e) => setBlogTopic(e.target.value)}
+                        placeholder="e.g. How much cash should a freelancer keep in reserve?"
+                        className="flex-1 bg-[#141416] border border-white/10 p-3 text-sm text-white focus:border-[#FFD700] focus:outline-none"
+                      />
+                      <button
+                        onClick={async () => {
+                          if (!blogTopic.trim()) return;
+                          setGenerateStatus('queued');
+                          try {
+                            await blogApi.generate(blogTopic.trim());
+                            setGenerateStatus('done');
+                            setBlogTopic('');
+                            const logs = await blogApi.getLogs();
+                            setBlogLogs(logs);
+                            setTimeout(() => setGenerateStatus(null), 3000);
+                          } catch {
+                            setGenerateStatus('error');
+                            setTimeout(() => setGenerateStatus(null), 3000);
+                          }
+                        }}
+                        disabled={!blogTopic.trim() || generateStatus === 'queued'}
+                        className="bg-[#FFD700] text-black px-6 py-3 text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        <Send className="h-3 w-3" />
+                        {generateStatus === 'queued' ? 'Generating...' : 'Generate'}
+                      </button>
+                    </div>
+                    {generateStatus === 'done' && (
+                      <p className="text-xs text-green-400 mt-2">Generation queued. Check logs for results.</p>
+                    )}
+                    {generateStatus === 'error' && (
+                      <p className="text-xs text-red-400 mt-2">Failed to queue generation. Try again.</p>
+                    )}
+                  </div>
+
+                  <div className="border-t border-white/5 pt-6">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-white/60 mb-4">Generation Logs</h3>
+                    {blogLogs.length === 0 ? (
+                      <p className="text-sm text-white/40">No generation logs yet.</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {blogLogs.map((log) => (
+                          <div key={log.id} className="bg-[#141416] border border-white/5 p-3 flex items-center justify-between">
+                            <div>
+                              <p className="text-sm text-white truncate max-w-md">{log.topic}</p>
+                              <p className="text-[10px] text-white/30 mt-1">
+                                {log.created_at ? new Date(log.created_at).toLocaleString() : ''}
+                                {log.triggered_by ? ` by ${log.triggered_by}` : ''}
+                              </p>
+                            </div>
+                            <span
+                              className={`text-[10px] font-bold uppercase px-2 py-1 ${
+                                log.status === 'done'
+                                  ? 'text-green-400 bg-green-400/10'
+                                  : log.status === 'failed'
+                                    ? 'text-red-400 bg-red-400/10'
+                                    : log.status === 'running'
+                                      ? 'text-[#FFD700] bg-[#FFD700]/10'
+                                      : 'text-white/40 bg-white/5'
+                              }`}
+                            >
+                              {log.status}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           )}
