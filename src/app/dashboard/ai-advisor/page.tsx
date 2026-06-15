@@ -430,23 +430,24 @@ function AiAdvisorContent() {
               </span>
             </div>
             <h3 className="font-display text-2xl font-bold text-white mb-2">
-              You&apos;ve used all 5 questions
+              Question limit reached
             </h3>
             <p className="text-white/50 text-sm mb-8 font-body leading-relaxed">
-              You&apos;ve reached your monthly limit of 5 AI advisor questions.
-              Upgrade to Pro for unlimited access to your AI CFO.
+              {error.waitMinutes
+                ? `You've used all your AI questions this hour. Try again in ${error.waitMinutes} minute${error.waitMinutes === 1 ? '' : 's'}.`
+                : `You've used all your AI questions this hour. Try again later.`}
             </p>
             <a
               href="/settings/accounts"
               className="block w-full py-3.5 bg-flow-gold text-flow-black text-center font-bold text-xs uppercase tracking-widest hover:brightness-110 transition-all mb-3"
             >
-              Upgrade to Pro
+              Upgrade to Pro for unlimited
             </a>
             <button
               onClick={dismissError}
               className="block w-full py-3 text-white/40 text-center text-xs uppercase tracking-widest hover:text-white/70 transition-all font-body"
             >
-              Maybe later
+              {error.waitMinutes ? `Wait ${error.waitMinutes} min` : 'Dismiss'}
             </button>
           </div>
         </div>

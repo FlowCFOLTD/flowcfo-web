@@ -1,12 +1,18 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, useRef, type ReactNode } from 'react';
-import type { ChatMessage, ChatError } from '@/hooks/api/use-agent';
+import type { ChatMessage } from '@/hooks/api/use-agent';
+
+export interface ChatErrorState {
+  type: 'limit';
+  retryAfter?: string;
+  waitMinutes?: number;
+}
 
 interface ChatContextValue {
   messages: ChatMessage[];
   isStreaming: boolean;
-  error: ChatError;
+  error: ChatErrorState | null;
   sendMessage: (text: string) => Promise<void>;
   dismissError: () => void;
   stopStreaming: () => void;
@@ -18,7 +24,7 @@ const ChatContext = createContext<ChatContextValue | null>(null);
 export function ChatProvider({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
-  const [error, setError] = useState<ChatError>(null);
+  const [error, setError] = useState<ChatErrorState | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   const sendMessage = useCallback(async (text: string) => {
@@ -63,7 +69,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       if (!res.ok) {
         const body = await res.json().catch(() => null);
         if (body?.error?.code === 'AI_QUESTIONS_LIMIT') {
-          setError({ type: 'limit' });
+          const details = body?.error?.details || {};
+          setError({ type: 'limit', retryAfter: details.retry_after, waitMinutes: details.wait_minutes });
           setMessages((prev) => prev.filter((m) => m.id !== assistantId && m.id !== userMessage.id));
           return;
         }
