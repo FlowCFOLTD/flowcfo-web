@@ -325,20 +325,20 @@ export default function HomePage() {
                 className="group border border-[#474646] bg-[#1c1b1b] p-8 transition-all hover:border-[#D4AF37]/50"
               >
                 <agent.icon
-                  className="mb-6 h-8 w-8 text-[#D4AF37]"
+                  className="mb-6 h-10 w-10 text-[#D4AF37]"
                   aria-hidden="true"
                 />
-                <h3 className="text-lg font-bold text-white">{agent.title}</h3>
-                <p className="mt-2 text-sm leading-5 text-[#858383]">
+                <h3 className="text-2xl font-bold text-white">{agent.title}</h3>
+                <p className="mt-2 text-lg leading-7 text-[#858383]">
                   {agent.subtitle}
                 </p>
-                <ul className="mt-4 space-y-1">
+                <ul className="mt-6 space-y-2">
                   {agent.features.map((f) => (
                     <li
                       key={f}
-                      className="flex items-center gap-2 text-xs text-[#D4AF37]/70"
+                      className="flex items-center gap-2 text-sm text-[#D4AF37]/70"
                     >
-                      <Bot className="h-3 w-3 shrink-0" />
+                      <Bot className="h-4 w-4 shrink-0" />
                       {f}
                     </li>
                   ))}

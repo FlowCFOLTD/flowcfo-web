@@ -295,4 +295,93 @@
   .section-anchor {
     @apply scroll-mt-32;
   }
+
+  .blog-content h2 {
+    @apply mt-12 mb-4 text-2xl font-bold text-ink;
+  }
+  .blog-content h3 {
+    @apply mt-10 mb-3 text-xl font-bold text-ink;
+  }
+  .blog-content p {
+    @apply mb-5 leading-relaxed text-charcoal;
+  }
+  .blog-content img {
+    @apply w-full rounded-lg mb-8 object-cover max-h-96;
+  }
+  .blog-content ul {
+    @apply mb-5 pl-6 list-disc space-y-2;
+  }
+  .blog-content ol {
+    @apply mb-5 pl-6 list-decimal space-y-2;
+  }
+  .blog-content li {
+    @apply leading-relaxed text-charcoal;
+  }
+  .blog-content strong {
+    @apply font-bold text-ink;
+  }
+  .blog-content a {
+    @apply text-indigo underline decoration-indigo/30 hover:decoration-indigo/60 transition-all;
+  }
+  .blog-content blockquote {
+    @apply border-l-4 border-gold pl-4 italic text-steel my-6;
+  }
+  .blog-content code {
+    @apply bg-stone/30 rounded px-1.5 py-0.5 text-sm font-mono text-ink;
+  }
+  .blog-content pre {
+    @apply bg-charcoal rounded-lg p-4 mb-5 overflow-x-auto;
+  }
+  .blog-content pre code {
+    @apply bg-transparent p-0 text-ivory;
+  }
+  .blog-content hr {
+    @apply border-stone my-10;
+  }
+  .blog-content p:empty {
+    @apply hidden;
+  }
+
+  .blog-content-dark h2 {
+    @apply mt-12 mb-4 text-2xl font-bold text-white;
+  }
+  .blog-content-dark h3 {
+    @apply mt-10 mb-3 text-xl font-bold text-white;
+  }
+  .blog-content-dark p {
+    @apply mb-5 leading-relaxed text-white/80;
+  }
+  .blog-content-dark img {
+    @apply w-full rounded-lg mb-8 object-cover max-h-96;
+  }
+  .blog-content-dark ul {
+    @apply mb-5 pl-6 list-disc space-y-2;
+  }
+  .blog-content-dark ol {
+    @apply mb-5 pl-6 list-decimal space-y-2;
+  }
+  .blog-content-dark li {
+    @apply leading-relaxed text-white/80;
+  }
+  .blog-content-dark strong {
+    @apply font-bold text-white;
+  }
+  .blog-content-dark a {
+    @apply text-flow-gold underline decoration-flow-gold/30 hover:decoration-flow-gold/60 transition-all;
+  }
+  .blog-content-dark blockquote {
+    @apply border-l-4 border-flow-gold pl-4 italic text-white/50 my-6;
+  }
+  .blog-content-dark code {
+    @apply bg-white/10 rounded px-1.5 py-0.5 text-sm font-mono text-flow-gold-soft;
+  }
+  .blog-content-dark pre {
+    @apply bg-black/40 rounded-lg p-4 mb-5 overflow-x-auto;
+  }
+  .blog-content-dark pre code {
+    @apply bg-transparent p-0 text-white;
+  }
+  .blog-content-dark hr {
+    @apply border-white/10 my-10;
+  }
 }

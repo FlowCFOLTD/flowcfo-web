@@ -8,6 +8,7 @@ import { adminApi, blogApi } from '@/lib/api/users';
 import type {
   BlogSettingsData,
   BlogPostSummary,
+  BlogPostDetail,
   BlogGenerationLogEntry,
 } from '@/lib/api/users';
 import {
@@ -29,7 +30,11 @@ import {
   XCircle,
   Archive,
   Eye,
+  Trash2,
+  X,
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Button } from '@/components/ui/button';
 
 import { DataTable } from '@/components/admin/data-table';
@@ -117,6 +122,9 @@ export default function AdminDashboard() {
   const [blogSettings, setBlogSettings] = useState<BlogSettingsData | null>(null);
   const [blogLogs, setBlogLogs] = useState<BlogGenerationLogEntry[]>([]);
   const [blogTopic, setBlogTopic] = useState('');
+  const [selectedPost, setSelectedPost] = useState<BlogPostDetail | null>(null);
+  const [editingPost, setEditingPost] = useState(false);
+  const [draftPost, setDraftPost] = useState<BlogPostDetail | null>(null);
   const [generateStatus, setGenerateStatus] = useState<string | null>(null);
   const [settingsDirty, setSettingsDirty] = useState(false);
 
@@ -649,68 +657,220 @@ export default function AdminDashboard() {
                   ) : (
                     <div className="space-y-2">
                       {blogPosts.map((post) => (
-                        <div
-                          key={post.id}
-                          className="bg-[#141416] border border-white/5 p-4 flex items-center justify-between hover:border-white/20 transition-all"
-                        >
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-3 mb-1">
-                              <span
-                                className={`inline-block w-2 h-2 rounded-full ${
-                                  post.status === 'published'
-                                    ? 'bg-green-400'
-                                    : post.status === 'archived'
-                                      ? 'bg-white/20'
-                                      : 'bg-[#FFD700]'
-                                }`}
-                              />
-                              <p className="text-sm font-medium text-white truncate">{post.title}</p>
+                        <div key={post.id}>
+                          <div className="bg-[#141416] border border-white/5 p-4 flex items-center justify-between hover:border-white/20 transition-all">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-3 mb-1">
+                                <span
+                                  className={`inline-block w-2 h-2 rounded-full ${
+                                    post.status === 'published'
+                                      ? 'bg-green-400'
+                                      : post.status === 'archived'
+                                        ? 'bg-white/20'
+                                        : 'bg-[#FFD700]'
+                                  }`}
+                                />
+                                <button
+                                  onClick={async () => {
+                                    if (selectedPost?.id === post.id) {
+                                      setSelectedPost(null);
+                                    } else {
+                                      const detail = await blogApi.getPost(post.id);
+                                      setSelectedPost(detail);
+                                    }
+                                  }}
+                                  className="text-sm font-medium text-white truncate hover:text-[#FFD700] transition-colors text-left"
+                                >
+                                  {post.title}
+                                </button>
+                              </div>
+                              <p className="text-xs text-white/40 truncate ml-5">
+                                {post.meta_description || 'No description'}
+                              </p>
+                              <p className="text-[10px] text-white/20 ml-5 mt-1">
+                                {post.created_at ? new Date(post.created_at).toLocaleDateString() : ''}
+                                {post.author ? ` · ${post.author}` : ''}
+                              </p>
                             </div>
-                            <p className="text-xs text-white/40 truncate ml-5">
-                              {post.meta_description || 'No description'}
-                            </p>
-                            <p className="text-[10px] text-white/20 ml-5 mt-1">
-                              {post.created_at ? new Date(post.created_at).toLocaleDateString() : ''}
-                              {post.author ? ` · ${post.author}` : ''}
-                            </p>
-                          </div>
-                          <div className="flex items-center gap-2 ml-4 shrink-0">
-                            <button
-                              onClick={() => window.open(`/blog/${post.slug}`, '_blank')}
-                              className="p-2 text-white/30 hover:text-white transition-all"
-                              title="Preview"
-                            >
-                              <Eye className="h-4 w-4" />
-                            </button>
-                            {post.status === 'draft' && (
+                            <div className="flex items-center gap-2 ml-4 shrink-0">
                               <button
                                 onClick={async () => {
-                                  await blogApi.publishPost(post.id);
+                                  const detail = await blogApi.getPost(post.id);
+                                  setSelectedPost(detail);
+                                }}
+                                className="p-2 text-white/30 hover:text-white transition-all"
+                                title="View"
+                              >
+                                <Eye className="h-4 w-4" />
+                              </button>
+                              {post.status === 'draft' && (
+                                <button
+                                  onClick={async () => {
+                                    await blogApi.publishPost(post.id);
+                                    const res = await blogApi.getPosts();
+                                    setBlogPosts(res.posts);
+                                    setBlogTotal(res.total);
+                                  }}
+                                  className="p-2 text-green-400/50 hover:text-green-400 transition-all"
+                                  title="Publish"
+                                >
+                                  <CheckCircle className="h-4 w-4" />
+                                </button>
+                              )}
+                              {post.status === 'published' && (
+                                <button
+                                  onClick={async () => {
+                                    await blogApi.archivePost(post.id);
+                                    const res = await blogApi.getPosts();
+                                    setBlogPosts(res.posts);
+                                    setBlogTotal(res.total);
+                                  }}
+                                  className="p-2 text-white/30 hover:text-white/60 transition-all"
+                                  title="Archive"
+                                >
+                                  <Archive className="h-4 w-4" />
+                                </button>
+                              )}
+                              <button
+                                onClick={async () => {
+                                  if (!confirm('Delete this post?')) return;
+                                  await blogApi.deletePost(post.id);
+                                  setSelectedPost(null);
                                   const res = await blogApi.getPosts();
                                   setBlogPosts(res.posts);
                                   setBlogTotal(res.total);
                                 }}
-                                className="p-2 text-green-400/50 hover:text-green-400 transition-all"
-                                title="Publish"
+                                className="p-2 text-rose/40 hover:text-rose transition-all"
+                                title="Delete"
                               >
-                                <CheckCircle className="h-4 w-4" />
+                                <Trash2 className="h-4 w-4" />
                               </button>
-                            )}
-                            {post.status === 'published' && (
-                              <button
-                                onClick={async () => {
-                                  await blogApi.archivePost(post.id);
-                                  const res = await blogApi.getPosts();
-                                  setBlogPosts(res.posts);
-                                  setBlogTotal(res.total);
-                                }}
-                                className="p-2 text-white/30 hover:text-white/60 transition-all"
-                                title="Archive"
-                              >
-                                <Archive className="h-4 w-4" />
-                              </button>
-                            )}
+                            </div>
                           </div>
+                          {selectedPost?.id === post.id && (
+                            <div className="bg-[#1c1b1b] border border-[#FFD700]/20 p-6 mt-1">
+                              <div className="flex items-center justify-between mb-4 gap-4">
+                                <h3 className="text-sm font-bold text-white truncate">{selectedPost.title}</h3>
+                                <div className="flex items-center gap-2 shrink-0">
+                                  {editingPost ? (
+                                    <>
+                                      <button
+                                        onClick={async () => {
+                                          if (!draftPost) return;
+                                          const updated = await blogApi.updatePost(post.id, {
+                                            title: draftPost.title,
+                                            slug: draftPost.slug,
+                                            meta_description: draftPost.meta_description || undefined,
+                                            keywords: draftPost.keywords,
+                                            body_markdown: draftPost.body_markdown,
+                                            author: draftPost.author || undefined,
+                                          });
+                                          setSelectedPost(updated);
+                                          setDraftPost(null);
+                                          setEditingPost(false);
+                                          const res = await blogApi.getPosts();
+                                          setBlogPosts(res.posts);
+                                          setBlogTotal(res.total);
+                                        }}
+                                        className="px-3 py-1 text-xs font-bold text-black bg-[#FFD700] hover:bg-[#FFD700]/80 transition-all"
+                                      >
+                                        Save
+                                      </button>
+                                      <button
+                                        onClick={() => { setEditingPost(false); setDraftPost(null); }}
+                                        className="px-3 py-1 text-xs font-bold text-white/60 hover:text-white border border-white/20 transition-all"
+                                      >
+                                        Cancel
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <button
+                                      onClick={() => { setDraftPost({ ...selectedPost }); setEditingPost(true); }}
+                                      className="px-3 py-1 text-xs font-bold text-white/60 hover:text-white border border-white/20 transition-all"
+                                    >
+                                      Edit
+                                    </button>
+                                  )}
+                                  <button
+                                    onClick={() => { setSelectedPost(null); setEditingPost(false); setDraftPost(null); }}
+                                    className="p-1 text-white/30 hover:text-white transition-colors"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              </div>
+
+                              {editingPost && draftPost ? (
+                                <div className="space-y-4">
+                                  <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Title</label>
+                                    <input
+                                      type="text"
+                                      value={draftPost.title}
+                                      onChange={(e) => setDraftPost({ ...draftPost, title: e.target.value })}
+                                      className="w-full bg-black/40 border border-white/10 p-2 text-sm text-white focus:border-[#FFD700] focus:outline-none"
+                                    />
+                                  </div>
+                                  <div className="flex gap-4">
+                                    <div className="flex-1">
+                                      <label className="block text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Slug</label>
+                                      <input
+                                        type="text"
+                                        value={draftPost.slug}
+                                        onChange={(e) => setDraftPost({ ...draftPost, slug: e.target.value })}
+                                        className="w-full bg-black/40 border border-white/10 p-2 text-sm text-white focus:border-[#FFD700] focus:outline-none"
+                                      />
+                                    </div>
+                                    <div className="flex-1">
+                                      <label className="block text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Author</label>
+                                      <input
+                                        type="text"
+                                        value={draftPost.author || ''}
+                                        onChange={(e) => setDraftPost({ ...draftPost, author: e.target.value })}
+                                        className="w-full bg-black/40 border border-white/10 p-2 text-sm text-white focus:border-[#FFD700] focus:outline-none"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Meta Description</label>
+                                    <input
+                                      type="text"
+                                      value={draftPost.meta_description || ''}
+                                      onChange={(e) => setDraftPost({ ...draftPost, meta_description: e.target.value })}
+                                      className="w-full bg-black/40 border border-white/10 p-2 text-sm text-white focus:border-[#FFD700] focus:outline-none"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Keywords (comma-separated)</label>
+                                    <input
+                                      type="text"
+                                      value={(draftPost.keywords || []).join(', ')}
+                                      onChange={(e) => setDraftPost({ ...draftPost, keywords: e.target.value.split(',').map(k => k.trim()).filter(Boolean) })}
+                                      className="w-full bg-black/40 border border-white/10 p-2 text-sm text-white focus:border-[#FFD700] focus:outline-none"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">Body (Markdown)</label>
+                                    <textarea
+                                      value={draftPost.body_markdown}
+                                      onChange={(e) => setDraftPost({ ...draftPost, body_markdown: e.target.value })}
+                                      rows={20}
+                                      className="w-full bg-black/40 border border-white/10 p-3 text-sm font-mono text-white/80 focus:border-[#FFD700] focus:outline-none resize-vertical"
+                                    />
+                                  </div>
+                                </div>
+                              ) : (
+                                <>
+                                  <p className="text-xs text-white/40 mb-4">{selectedPost.meta_description}</p>
+                                  <div className="blog-content-dark max-w-none">
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                      {selectedPost.body_markdown}
+                                    </ReactMarkdown>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>

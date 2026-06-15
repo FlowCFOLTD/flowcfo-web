@@ -7,34 +7,34 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://flowcfo.net/blog" },
 };
 
-const posts = [
-  {
-    slug: "safe-to-spend-explained",
-    title: "What Is Safe-to-Spend? And Why Your Bank Balance Is Lying to You",
-    excerpt:
-      "Your account shows $10,000. But after taxes, upcoming bills, and a safety buffer, you might only have $3,200 you can actually use. Here's how to find the real number.",
-    date: "May 15, 2026",
-    category: "Cash Flow",
-  },
-  {
-    slug: "quarterly-taxes-freelancers",
-    title: "The Freelancer's Guide to Quarterly Taxes (Without the Panic)",
-    excerpt:
-      "Quarterly taxes don't have to be a surprise. Here's how to calculate what you owe, when it's due, and how to never miss a payment again.",
-    date: "May 10, 2026",
-    category: "Taxes",
-  },
-  {
-    slug: "ecommerce-margin-mistakes",
-    title: "3 Margin Mistakes Every E-commerce Founder Makes",
-    excerpt:
-      "Forgetting platform fees. Ignoring inflation. Not accounting for returns. These three mistakes turn profitable products into money losers.",
-    date: "May 5, 2026",
-    category: "E-commerce",
-  },
-];
+interface BlogPostSummary {
+  id: string;
+  title: string;
+  slug: string;
+  meta_description: string | null;
+  keywords: string[];
+  author: string | null;
+  published_at: string | null;
+}
 
-export default function BlogPage() {
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
+async function getPosts(): Promise<BlogPostSummary[]> {
+  try {
+    const res = await fetch(`${API}/api/v1/blog/posts?limit=50`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.posts || [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function BlogPage() {
+  const posts = await getPosts();
+
   return (
     <div>
       <section className="py-24 md:py-32">
@@ -44,24 +44,39 @@ export default function BlogPage() {
             Insights, guides, and updates from FlowCFO.
           </p>
 
-          <div className="mt-12 space-y-6">
-            {posts.map((post) => (
-              <article key={post.slug} className="rounded-xl border border-border bg-white p-6 transition-shadow hover:shadow-md">
-                <div className="flex items-center gap-3 text-xs text-muted">
-                  <span className="rounded-full bg-surface px-2.5 py-1 font-medium text-primary">
-                    {post.category}
-                  </span>
-                  <span>{post.date}</span>
-                </div>
-                <h2 className="mt-3 text-xl font-semibold">
-                  <Link href={`/blog/${post.slug}`} className="hover:text-primary transition-colors">
-                    {post.title}
-                  </Link>
-                </h2>
-                <p className="mt-2 text-body leading-relaxed">{post.excerpt}</p>
-              </article>
-            ))}
-          </div>
+          {posts.length === 0 ? (
+            <p className="mt-12 text-body">No posts yet. Check back soon.</p>
+          ) : (
+            <div className="mt-12 space-y-6">
+              {posts.map((post) => (
+                <article key={post.id} className="rounded-xl border border-border bg-white p-6 transition-shadow hover:shadow-md">
+                  <div className="flex items-center gap-3 text-xs text-muted">
+                    {post.published_at && (
+                      <span>{new Date(post.published_at).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</span>
+                    )}
+                    {post.author && (
+                      <span>by {post.author}</span>
+                    )}
+                  </div>
+                  <h2 className="mt-3 text-xl font-semibold">
+                    <Link href={`/blog/${post.slug}`} className="hover:text-primary transition-colors">
+                      {post.title}
+                    </Link>
+                  </h2>
+                  <p className="mt-2 text-body leading-relaxed">{post.meta_description}</p>
+                  {post.keywords && post.keywords.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {post.keywords.map((kw) => (
+                        <span key={kw} className="rounded-full bg-primary/5 px-2.5 py-0.5 text-xs font-medium text-primary">
+                          {kw}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

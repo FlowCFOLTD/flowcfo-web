@@ -181,6 +181,10 @@ export const blogApi = {
       body: { topic, extra_context: extra_context || '' },
     }),
   getLogs: () => apiClient<BlogGenerationLogEntry[]>('/api/v1/admin/blog/logs'),
+  updatePost: (id: string, data: { title?: string; slug?: string; meta_description?: string; keywords?: string[]; body_markdown?: string; author?: string }) =>
+    apiClient<BlogPostDetail>(`/api/v1/admin/blog/posts/${id}`, { method: 'PUT', body: data }),
+  deletePost: (id: string) =>
+    apiClient<{ status: string; id: string }>(`/api/v1/admin/blog/posts/${id}`, { method: 'DELETE' }),
 };
 
 export const accountsApi = {
