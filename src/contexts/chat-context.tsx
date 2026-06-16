@@ -68,6 +68,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
       if (!res.ok) {
         const body = await res.json().catch(() => null);
+        console.error('Chat API error:', { status: res.status, body });
         if (body?.error?.code === 'AI_QUESTIONS_LIMIT') {
           const details = body?.error?.details || {};
           setError({ type: 'limit', retryAfter: details.retry_after, waitMinutes: details.wait_minutes });
@@ -96,6 +97,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       }
     } catch (err: unknown) {
       if (err instanceof Error && err.name === 'AbortError') return;
+      console.error('Chat stream error:', err);
       setMessages((prev) =>
         prev.map((m) =>
           m.id === assistantId
