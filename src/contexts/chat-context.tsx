@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useCallback, useRef, type ReactNode } from 'react';
 import type { ChatMessage } from '@/hooks/api/use-agent';
+import { API_BASE_URL } from '@/lib/api-client';
 
 export interface ChatErrorState {
   type: 'limit';
@@ -56,7 +57,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       const session = await authClient.getSession();
       const token = session?.data?.session?.token;
 
-      const res = await fetch('/api/v1/agent/chat', {
+      const res = await fetch(`${API_BASE_URL}/api/v1/agent/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
