@@ -76,6 +76,52 @@ export interface PendingApprovalsResponse {
   approvals: PendingApproval[];
 }
 
+export interface OrchestratorAgent {
+  agent_name: string;
+  last_run: string | null;
+  status: string;
+  run_count: number;
+  last_output: Record<string, unknown> | null;
+}
+
+export interface MorningBrief {
+  date: string;
+  cash_position: string;
+  alerts_summary: string;
+  agent_activity: string;
+  recommendations: string;
+  full_text: string;
+}
+
+export interface AutonomyTiersResponse {
+  tiers: Record<string, { name: string; description: string }>;
+  action_classifications: Record<string, number>;
+  default_tier: number;
+}
+
+export interface ActionTierResponse {
+  action_type: string;
+  tier: number;
+  description: string;
+}
+
+export interface ShouldAskResponse {
+  action_type: string;
+  tier: number;
+  should_ask: boolean;
+}
+
+export interface AgentPreference {
+  id: string;
+  action_type: string;
+  approved_count: number;
+  rejected_count: number;
+  threshold: number;
+  auto_approve: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export const agentApi = {
   chat: (message: string) =>
     apiClient<string>(`/api/v1/agent/chat`, {
@@ -111,4 +157,26 @@ export const agentApi = {
     apiClient<{ status: string; message: string }>(`/api/v1/agents/pending/${logId}/reject`, {
       method: 'POST',
     }),
+
+  // Orchestrator
+  getOrchestratorStatus: () =>
+    apiClient<{ agents: OrchestratorAgent[] }>('/api/v1/orchestrator/status'),
+
+  // Morning Brief
+  getMorningBriefPreview: () =>
+    apiClient<{ brief: MorningBrief }>('/api/v1/morning-brief/preview'),
+  sendMorningBrief: () =>
+    apiClient<{ status: string }>('/api/v1/morning-brief/send', { method: 'POST' }),
+
+  // Autonomy Tiers
+  getAutonomyTiers: () =>
+    apiClient<AutonomyTiersResponse>('/api/v1/autonomy/tiers'),
+  getActionTier: (actionType: string) =>
+    apiClient<ActionTierResponse>(`/api/v1/autonomy/tiers/${actionType}`),
+  shouldAskUser: (actionType: string) =>
+    apiClient<ShouldAskResponse>(`/api/v1/autonomy/should-ask/${actionType}`),
+
+  // Agent Memory
+  getAgentPreferences: () =>
+    apiClient<{ preferences: AgentPreference[] }>('/api/v1/agent-memory/preferences'),
 };

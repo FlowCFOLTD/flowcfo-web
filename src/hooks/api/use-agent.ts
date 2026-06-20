@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { agentApi } from '@/lib/api/agent';
+import { agentApi, OrchestratorAgent, MorningBrief, AutonomyTiersResponse, AgentPreference } from '@/lib/api/agent';
 
 export interface ChatMessage {
   id: string;
@@ -190,5 +190,46 @@ export function useRejectAction() {
       qc.invalidateQueries({ queryKey: ['agent', 'pending-approvals'] });
       qc.invalidateQueries({ queryKey: ['agent', 'logs'] });
     },
+  });
+}
+
+export function useOrchestratorStatus() {
+  return useQuery({
+    queryKey: ['agent', 'orchestrator-status'],
+    queryFn: agentApi.getOrchestratorStatus,
+    refetchInterval: 60000,
+    retry: false,
+  });
+}
+
+export function useMorningBriefPreview() {
+  return useQuery({
+    queryKey: ['agent', 'morning-brief-preview'],
+    queryFn: agentApi.getMorningBriefPreview,
+    retry: false,
+  });
+}
+
+export function useSendMorningBrief() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: agentApi.sendMorningBrief,
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['agent', 'morning-brief-preview'] }),
+  });
+}
+
+export function useAutonomyTiers() {
+  return useQuery({
+    queryKey: ['agent', 'autonomy-tiers'],
+    queryFn: agentApi.getAutonomyTiers,
+    retry: false,
+  });
+}
+
+export function useAgentPreferences() {
+  return useQuery({
+    queryKey: ['agent', 'preferences'],
+    queryFn: agentApi.getAgentPreferences,
+    retry: false,
   });
 }

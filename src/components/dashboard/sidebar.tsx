@@ -63,8 +63,15 @@ const ecommerceAnalysis: AnalysisItem[] = [
   { label: 'Gross Margin', href: '/dashboard/analysis/gross-margin' },
   { label: 'Platform Fees', href: '/dashboard/analysis/platform-fees' },
   { label: 'Inventory Health', href: '/dashboard/analysis/inventory-health' },
+  { label: 'COGS Trends', href: '/dashboard/analysis/cogs-trends' },
   { label: 'Seasonal Patterns', href: '/dashboard/analysis/seasonal-patterns' },
   { label: 'Payouts', href: '/dashboard/analysis/payouts' },
+];
+
+const ecommerceTools: AnalysisItem[] = [
+  { label: 'Pricing Calculator', href: '/dashboard/tools/pricing' },
+  { label: 'Breakeven ROAS', href: '/dashboard/tools/breakeven-roas' },
+  { label: 'Spend Decision', href: '/dashboard/tools/spend-decision' },
 ];
 
 export default function Sidebar() {
@@ -158,6 +165,32 @@ export default function Sidebar() {
             </Link>
           );
         })}
+
+        {user?.business_type === 'ecommerce' && (
+          <>
+            <div className="pt-8 pb-2 px-4">
+              <h3 className="flow-label text-[10px] text-flow-muted uppercase tracking-[0.15em]">
+                Tools
+              </h3>
+            </div>
+            {ecommerceTools.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-4 py-3 font-body text-sm transition-all duration-200 ${
+                    active
+                      ? 'text-flow-gold font-bold border-l-4 border-flow-gold bg-white/5'
+                      : 'text-flow-muted hover:text-flow-gold hover:bg-white/5 border-l-4 border-transparent'
+                  }`}
+                >
+                  <span className="text-xs">{item.label}</span>
+                </Link>
+              );
+            })}
+          </>
+        )}
       </nav>
 
       <div className="px-4 mt-auto pt-6 border-t border-flow-line-dark/40">
