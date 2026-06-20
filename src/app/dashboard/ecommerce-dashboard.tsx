@@ -1,10 +1,13 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Landmark, ArrowRight, ShieldCheck } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Landmark, ArrowRight, ShieldCheck, TrendingDown, TrendingUp } from 'lucide-react';
 import UserAvatarButton from '@/components/dashboard/user-avatar-button';
 import { useUser } from '@/hooks/api/use-user';
 import { useEcommerceDashboard } from '@/hooks/api/use-ecommerce';
+import { apiClient } from '@/lib/api-client';
+import { SlowWeekContextData } from '@/lib/api/ecommerce';
 import SafeToSpendCard from '@/components/dashboard/safe-to-spend-card';
 import CashFlowChart from '@/components/dashboard/cash-flow-chart';
 import RecentTransactions from '@/components/dashboard/recent-transactions';
@@ -25,6 +28,15 @@ export default function EcommerceDashboardPage() {
   const router = useRouter();
   const { data: user, isLoading: userLoading } = useUser();
   const { data: dash, isLoading: dashLoading } = useEcommerceDashboard();
+  const [slowWeek, setSlowWeek] = useState<SlowWeekContextData | null>(null);
+
+  useEffect(() => {
+    if (user?.bank_synced) {
+      apiClient<SlowWeekContextData>('/api/v1/verticals/ecommerce/slow-week-context')
+        .then((data) => { if (data.is_slow_week) setSlowWeek(data); })
+        .catch(() => {});
+    }
+  }, [user?.bank_synced]);
 
   if (userLoading || dashLoading) return <LoadingSpinner />;
 
@@ -93,6 +105,42 @@ export default function EcommerceDashboardPage() {
                   </button>{' '}
                   to manage connections.
                 </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {slowWeek && (
+          <div className="mb-10 border border-amber-500/30 bg-amber-500/5 p-6 md:p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-amber-500/10">
+                <TrendingDown className="h-6 w-6 text-amber-400" />
+              </div>
+              <div>
+                <p className="flow-label text-[10px] text-amber-400 tracking-widest mb-1">SLOW WEEK DETECTED</p>
+                <p className="text-sm text-white/70 leading-relaxed">
+                  {slowWeek.context}
+                </p>
+                <div className="mt-3 flex items-center gap-4">
+                  <div>
+                    <span className="text-xs text-white/40">This week: </span>
+                    <span className="font-mono text-sm font-bold text-amber-400">
+                      ${slowWeek.current_week_revenue?.toLocaleString()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-xs text-white/40">Expected: </span>
+                    <span className="font-mono text-sm text-white/60">
+                      ${slowWeek.expected_weekly_revenue?.toLocaleString()}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setSlowWeek(null)}
+                    className="ml-auto text-xs text-white/30 hover:text-white/60"
+                  >
+                    Dismiss
+                  </button>
+                </div>
               </div>
             </div>
           </div>
