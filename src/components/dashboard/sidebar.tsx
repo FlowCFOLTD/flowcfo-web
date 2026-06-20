@@ -190,7 +190,7 @@ export default function Sidebar() {
                     : 'text-flow-muted hover:text-flow-gold hover:bg-white/5 border-l-4 border-transparent'
                 }`}
               >
-                <span className="text-xs">{item.label}</span>
+                <span className="text-sm">{item.label}</span>
               </Link>
             );
           })}
@@ -210,7 +210,7 @@ export default function Sidebar() {
                       : 'text-flow-muted hover:text-flow-gold hover:bg-white/5 border-l-4 border-transparent'
                   }`}
                 >
-                  <span className="text-xs">{item.label}</span>
+                  <span className="text-sm">{item.label}</span>
                 </Link>
               );
             })}

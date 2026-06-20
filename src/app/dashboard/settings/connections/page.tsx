@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useConnections, useConnectPlatform, useSyncPlatform, useDisconnectPlatform } from '@/hooks/api/use-connections';
-import { Link, ExternalLink, RefreshCw, Unplug, ShoppingBag, Store, Package } from 'lucide-react';
+import { Link, RefreshCw, Unplug, ShoppingBag, Store, Package } from 'lucide-react';
 import Nango from '@nangohq/frontend';
 
 const platformIcons: Record<string, React.ReactNode> = {
@@ -23,11 +23,13 @@ export default function ConnectionsPage() {
   const syncMutation = useSyncPlatform();
   const disconnectMutation = useDisconnectPlatform();
   const [syncFeedback, setSyncFeedback] = useState<{ platform: string; status: 'syncing' | 'ok' | 'error' } | null>(null);
+  const [connectingPlatform, setConnectingPlatform] = useState<string | null>(null);
 
   const connections = data?.connections || [];
   const platforms = data?.supported_platforms || {};
 
   const handleConnect = useCallback(async (platform: string) => {
+    setConnectingPlatform(platform);
     try {
       const session = await connectMutation.mutateAsync(platform);
 
@@ -35,14 +37,14 @@ export default function ConnectionsPage() {
       nango.openConnectUI({
         onEvent: (event) => {
           if (event.type === 'close') {
-            // Modal closed
+            setConnectingPlatform(null);
           } else if (event.type === 'connect') {
-            // Auth successful — webhook handles backend persistence
+            setConnectingPlatform(null);
           }
         },
       });
     } catch {
-      // Session creation failed
+      setConnectingPlatform(null);
     }
   }, [connectMutation]);
 
@@ -91,7 +93,7 @@ export default function ConnectionsPage() {
                     </div>
                     <div>
                       <h3 className="font-body text-sm font-bold text-white">{cfg.label}</h3>
-                      <p className="font-body text-[10px] text-white/30 uppercase tracking-wider">
+                      <p className="font-body text-sm text-white/30 uppercase tracking-wider">
                         {conn ? conn.status : 'Not connected'}
                       </p>
                     </div>
@@ -100,10 +102,10 @@ export default function ConnectionsPage() {
                   {conn ? (
                     <div className="space-y-3">
                       {conn.store_name && (
-                        <p className="font-body text-xs text-white/50">{conn.store_name}</p>
+                        <p className="font-body text-sm text-white/50">{conn.store_name}</p>
                       )}
                       {conn.last_synced_at && (
-                        <p className="font-body text-[10px] text-white/30">
+                        <p className="font-body text-xs text-white/30">
                           Last synced: {new Date(conn.last_synced_at).toLocaleString()}
                         </p>
                       )}
@@ -111,7 +113,7 @@ export default function ConnectionsPage() {
                         <button
                           onClick={() => handleSync(key)}
                           disabled={fb === 'syncing'}
-                          className={`flex items-center gap-1.5 px-4 py-2 font-body text-xs font-bold uppercase tracking-wider transition-colors disabled:opacity-50 ${
+                          className={`flex items-center gap-1.5 px-4 py-2 font-body text-sm font-bold uppercase tracking-wider transition-colors disabled:opacity-50 ${
                             fb === 'ok' ? 'bg-emerald-500/20 text-emerald-400' :
                             fb === 'error' ? 'bg-rose-500/20 text-rose-400' :
                             'bg-flow-gold/10 text-flow-gold hover:bg-flow-gold/20'
@@ -126,7 +128,7 @@ export default function ConnectionsPage() {
                         </button>
                         <button
                           onClick={() => handleDisconnect(key)}
-                          className="flex items-center gap-1.5 px-4 py-2 bg-white/5 text-white/40 font-body text-xs font-bold uppercase tracking-wider hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
+                          className="flex items-center gap-1.5 px-4 py-2 bg-white/5 text-white/40 font-body text-sm font-bold uppercase tracking-wider hover:bg-rose-500/10 hover:text-rose-400 transition-colors"
                         >
                           <Unplug className="h-3 w-3" />
                           Disconnect
@@ -136,10 +138,10 @@ export default function ConnectionsPage() {
                   ) : (
                     <button
                       onClick={() => handleConnect(key)}
-                      disabled={connectMutation.isPending}
-                      className="w-full px-4 py-3 bg-flow-gold text-black font-body text-xs font-bold uppercase tracking-wider hover:bg-flow-gold/90 transition-colors disabled:opacity-50"
+                      disabled={connectingPlatform !== null}
+                      className="w-full px-4 py-3 bg-flow-gold text-black font-body text-sm font-bold uppercase tracking-wider hover:bg-flow-gold/90 transition-colors disabled:opacity-50"
                     >
-                      {connectMutation.isPending ? 'Connecting...' : `Connect ${cfg.label}`}
+                      {connectingPlatform === key ? 'Connecting...' : `Connect ${cfg.label}`}
                     </button>
                   )}
                 </div>
@@ -155,21 +157,21 @@ export default function ConnectionsPage() {
               <span className="font-mono text-lg font-bold text-flow-gold">1</span>
               <div>
                 <p className="font-body text-xs font-bold text-white">Connect your store</p>
-                <p className="font-body text-[10px] text-white/30">OAuth flow via Nango — we never see your password</p>
+                <p className="font-body text-xs text-white/30">OAuth flow via Nango — we never see your password</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="font-mono text-lg font-bold text-flow-gold">2</span>
               <div>
                 <p className="font-body text-xs font-bold text-white">Sync orders</p>
-                <p className="font-body text-[10px] text-white/30">Pulls last 50 orders into your transaction feed</p>
+                <p className="font-body text-xs text-white/30">Pulls last 50 orders into your transaction feed</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <span className="font-mono text-lg font-bold text-flow-gold">3</span>
               <div>
                 <p className="font-body text-xs font-bold text-white">Agents analyze</p>
-                <p className="font-body text-[10px] text-white/30">Margin, fees, inventory — all自动 computed from real data</p>
+                <p className="font-body text-xs text-white/30">Margin, fees, inventory — all automatically computed from real data</p>
               </div>
             </div>
           </div>
