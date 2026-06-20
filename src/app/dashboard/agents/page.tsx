@@ -203,7 +203,8 @@ function SystemTab() {
   const { data: statusData, isLoading: statusLoading } = useOrchestratorStatus();
   const { data: briefData, isLoading: briefLoading } = useMorningBriefPreview();
   const sendBrief = useSendMorningBrief();
-  const agents = statusData?.agents || [];
+  const agentsObj = statusData?.agents || {};
+  const agents = Array.isArray(agentsObj) ? agentsObj : Object.entries(agentsObj).map(([name, data]) => ({ agent_name: name, ...(data as Record<string, unknown>) }));
   const brief = briefData?.brief;
 
   return (

@@ -91,7 +91,7 @@ function CollapsibleSection({
     <div>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between pt-3 pb-1 px-4"
+        className="w-full flex items-center justify-between pt-6 pb-2 px-4 group"
       >
         <h3 className="flow-label text-[10px] text-flow-muted uppercase tracking-[0.15em]">
           {title}
@@ -137,17 +137,17 @@ export default function Sidebar() {
             : 'Analysis';
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-flow-black flex flex-col border-r border-flow-line-dark z-50">
-      <div className="px-5 py-4 shrink-0">
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-flow-black flex flex-col py-8 border-r border-flow-line-dark z-50">
+      <div className="px-6 mb-10 shrink-0">
         <div className="flex items-center gap-3">
           <Image
             src="/logo-dark.svg"
             alt="FlowCFO"
-            width={32}
-            height={32}
-            className="h-8 w-8"
+            width={36}
+            height={36}
+            className="h-9 w-9"
           />
-          <h1 className="font-display text-xl font-bold text-flow-gold">
+          <h1 className="font-display text-2xl font-bold text-flow-gold">
             FlowCFO
           </h1>
         </div>
@@ -156,20 +156,20 @@ export default function Sidebar() {
         </p>
       </div>
 
-      <nav className="flex-1 overflow-y-auto min-h-0 px-3 space-y-0.5">
+      <nav className="flex-1 overflow-y-auto min-h-0 px-3 space-y-1">
         {mainNav.map((item) => {
           const active = isActive(item.href);
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 font-body text-sm transition-all duration-200 ${
+              className={`flex items-center gap-3 px-4 py-3 font-body text-sm transition-all duration-200 ${
                 active
                   ? 'text-flow-gold font-bold border-l-4 border-flow-gold bg-white/5'
                   : 'text-flow-muted hover:text-flow-gold hover:bg-white/5 border-l-4 border-transparent'
               }`}
             >
-              <span className="material-symbols-outlined text-lg">
+              <span className="material-symbols-outlined text-xl">
                 {item.icon}
               </span>
               <span>{item.label}</span>
@@ -184,7 +184,7 @@ export default function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-2 font-body text-sm transition-all duration-200 ${
+                className={`flex items-center gap-3 px-4 py-3 font-body text-sm transition-all duration-200 ${
                   active
                     ? 'text-flow-gold font-bold border-l-4 border-flow-gold bg-white/5'
                     : 'text-flow-muted hover:text-flow-gold hover:bg-white/5 border-l-4 border-transparent'
@@ -204,7 +204,7 @@ export default function Sidebar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-3 px-4 py-2 font-body text-sm transition-all duration-200 ${
+                  className={`flex items-center gap-3 px-4 py-3 font-body text-sm transition-all duration-200 ${
                     active
                       ? 'text-flow-gold font-bold border-l-4 border-flow-gold bg-white/5'
                       : 'text-flow-muted hover:text-flow-gold hover:bg-white/5 border-l-4 border-transparent'
@@ -218,27 +218,27 @@ export default function Sidebar() {
         )}
       </nav>
 
-      <div className="px-3 py-3 border-t border-flow-line-dark/40 space-y-0.5 shrink-0">
+      <div className="px-4 mt-auto pt-6 border-t border-flow-line-dark/40 space-y-1 shrink-0">
         <Link
           href="/dashboard/settings/connections"
-          className={`flex items-center gap-3 px-3 py-2 transition-colors duration-200 ${
+          className={`flex items-center gap-3 px-2 py-3 transition-colors duration-200 ${
             pathname === '/dashboard/settings/connections'
               ? 'text-flow-gold'
               : 'text-flow-muted hover:text-flow-gold'
           }`}
         >
-          <span className="material-symbols-outlined text-lg">link</span>
+          <span className="material-symbols-outlined text-xl">link</span>
           <span className="font-body text-sm">Connections</span>
         </Link>
         <Link
           href="/dashboard/settings/accounts"
-          className={`flex items-center gap-3 px-3 py-2 transition-colors duration-200 ${
+          className={`flex items-center gap-3 px-2 py-3 transition-colors duration-200 ${
             pathname === '/dashboard/settings/accounts'
               ? 'text-flow-gold'
               : 'text-flow-muted hover:text-flow-gold'
           }`}
         >
-          <span className="material-symbols-outlined text-lg">settings</span>
+          <span className="material-symbols-outlined text-xl">settings</span>
           <span className="font-body text-sm">Settings</span>
         </Link>
       </div>
