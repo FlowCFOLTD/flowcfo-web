@@ -35,14 +35,14 @@ const agents = [
       'Gross Margin Guardian',
       'Fee Auditor',
       'Inventory Replenishment',
-      'AI Advisor',
+      'Category Suggester',
     ],
   },
   {
     icon: Rocket,
     title: 'Startup Agent',
     subtitle: 'Burn rate, runway scenarios & spend anomaly detection',
-    stat: 'Active agents: 3',
+    stat: 'Coming soon',
     href: '/for-startups',
     features: [
       'Burn Rate Monitor',
@@ -54,7 +54,7 @@ const agents = [
     icon: Users,
     title: 'Agency Agent',
     subtitle: 'Client profitability, cash flow & resource allocation',
-    stat: 'Active agents: 3',
+    stat: 'Coming soon',
     href: '/for-agencies',
     features: [
       'Client Profitability Monitor',
@@ -66,7 +66,7 @@ const agents = [
     icon: User,
     title: 'Freelancer Agent',
     subtitle: 'Income smoothing, tax readiness & spending safety',
-    stat: 'Active agents: 3',
+    stat: 'Coming soon',
     href: '/for-freelancers',
     features: ['Income Pattern Monitor', 'Tax Readiness Agent', 'AI Advisor'],
   },
@@ -74,7 +74,7 @@ const agents = [
     icon: UtensilsCrossed,
     title: 'Restaurant Agent',
     subtitle: 'Food cost, labor cost & daily revenue intelligence',
-    stat: 'Active agents: 3',
+    stat: 'Coming soon',
     href: '/for-restaurants',
     features: ['Food Cost Guardian', 'Cash Flow Guardian', 'AI Advisor'],
   },
@@ -174,10 +174,10 @@ export default function HomePage() {
 
             <p className="max-w-lg text-lg leading-7 text-[#858383]">
               FlowCFO deploys specialized AI agents for your specific business
-              model. Margin Guardian, Fee Auditor, Inventory Replenishment, Burn
-              Rate Monitor, Tax Reserve Engine - each agent watches your
-              finances continuously and alerts you when action is needed. All
-              actions require your approval.
+              model. Margin Guardian, Fee Auditor, Inventory Replenishment,
+              Category Suggester - each agent watches your finances continuously
+              and alerts you when action is needed. All actions require your
+              approval.
             </p>
 
             <div className="flex flex-col gap-4 pt-4 sm:flex-row">
@@ -301,18 +301,18 @@ export default function HomePage() {
       {/* Vertical Agents */}
       <section id="agents" className="bg-black px-4 py-32 md:px-16">
         <div className="mx-auto max-w-[1440px]">
-          <div className="mb-16">
+          <div className="mb-16 max-w-2xl">
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#D4AF37]">
               AI Agents by Business Type
             </p>
             <h2 className="mt-4 font-display text-[32px] font-bold leading-10 tracking-[-0.01em] text-white md:text-[40px] md:leading-[48px]">
-              Vertical Financial Agents - One for Every Business Model
+              Vertical Financial Agents - Purpose-Built for Your Industry
             </h2>
-            <p className="mt-4 max-w-2xl text-lg leading-7 text-[#858383]">
+            <p className="mt-4 text-lg leading-7 text-[#858383]">
               Unlike generic financial tools, FlowCFO deploys AI agents
-              purpose-built for your industry. Ecommerce brands get margin and
-              fee monitoring. Freelancers get income smoothing and tax
-              readiness. Startups get burn rate and runway tracking. Each agent
+              purpose-built for your business type. Ecommerce brands get margin
+              and fee monitoring. Startups get burn rate and runway tracking.
+              Freelancers get income smoothing and tax readiness. Each agent
               works autonomously and alerts you when action is needed.
             </p>
           </div>

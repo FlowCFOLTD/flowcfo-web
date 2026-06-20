@@ -3,11 +3,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'FlowCFO for E-commerce | Real-Time Margin & Cash Flow Clarity',
+  title: 'FlowCFO for E-commerce | Margin Monitoring & Cash Flow Clarity',
   description:
-    'Institutional-grade financial command for high-growth brands. Monitor real-time margins, inflation-adjusted COGS, and automated tax liability forecasting.',
+    'Real-time margin monitoring, fee auditing, and inventory tracking for e-commerce brands. Know your true profit before you launch.',
   openGraph: {
-    title: 'FlowCFO for E-commerce | Margin Monitor & Cash Flow Command',
+    title: 'FlowCFO for E-commerce | Margin Monitor & Cash Flow Clarity',
     description:
       "Stop guessing your real profit. FlowCFO provides real-time margin monitoring and 'Safe-to-Spend' clarity for e-commerce founders.",
     type: 'website',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'FlowCFO for E-commerce | Know Your Real Margin',
     description:
-      'FlowCFO translates the chaos of e-commerce operations into institutional-grade financial clarity.',
+      'Real-time margin monitoring, fee auditing, and inventory tracking for e-commerce brands.',
     images: ['/og-ecommerce.jpg'],
   },
 };
@@ -38,7 +38,7 @@ export default function ForEcommercePage() {
         <div className="mx-auto grid max-w-[1440px] grid-cols-1 items-center gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <span className="flow-label mb-4 block text-flow-gold">
-              INSTITUTIONAL WEALTH FOR E-COMMERCE
+              AI-POWERED FINANCIAL CLARITY
             </span>
             <h1 className="flow-headline-xl mb-6 leading-tight text-flow-black">
               Know your real margin.
@@ -49,8 +49,8 @@ export default function ForEcommercePage() {
             </h1>
             <p className="mb-10 max-w-xl font-body text-lg text-on-surface-variant">
               Stop guessing. FlowCFO provides real-time clarity on your
-              e-commerce margins, accounting for every hidden cost from
-              inflation to restocking overhead.
+              e-commerce margins, accounting for platform fees, shipping costs,
+              and inventory carrying costs.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
@@ -190,7 +190,7 @@ export default function ForEcommercePage() {
           </div>
           <div className="grid h-auto grid-cols-1 gap-8 md:h-[600px] md:grid-cols-12">
             {/* Main Solution Card */}
-            <div className="relative flex flex-col justify-between overflow-hidden bg-flow-black p-12 text-white md:col-span-7">
+            <div className="relative flex flex-col justify-between overflow-hidden p-12 md:col-span-7">
               <div className="relative z-10">
                 <span className="flow-label text-flow-gold">
                   FLAGSHIP FEATURE
@@ -241,7 +241,7 @@ export default function ForEcommercePage() {
                   net profit.
                 </p>
               </div>
-              {/* Inflation Alerts */}
+              {/* Fee Audit Alerts */}
               <div className="flex flex-1 flex-col justify-center border border-transparent bg-surface-container p-8 transition-colors hover:border-flow-black">
                 <div className="mb-4 flex items-center gap-2">
                   <span className="material-symbols-outlined text-rose">
@@ -250,11 +250,11 @@ export default function ForEcommercePage() {
                   <span className="flow-label text-rose">PRIORITY ALERT</span>
                 </div>
                 <h4 className="mb-2 font-display text-2xl font-semibold leading-8 text-flow-black">
-                  Inflation-adjusted alerts
+                  Fee audit alerts
                 </h4>
                 <p className="font-body text-sm text-on-surface-variant">
-                  Instant notifications when shipping costs or raw material
-                  prices exceed your margin threshold.
+                  Instant notifications when platform fees exceed expected
+                  thresholds or unusual charges appear.
                 </p>
               </div>
             </div>
@@ -296,22 +296,13 @@ export default function ForEcommercePage() {
       <section className="relative overflow-hidden px-4 py-32 text-center md:px-16">
         <div className="relative z-10 mx-auto max-w-3xl">
           <h2 className="flow-headline-xl mb-8 text-flow-black">
-            Ready for institutional-grade clarity?
+            Ready for real margin clarity?
           </h2>
           <p className="mb-12 font-body text-lg text-on-surface-variant">
-            Join the exclusive waitlist for FlowCFO&apos;s e-commerce suite. We
-            are rolling out access to a limited number of high-volume brands
-            each month.
+            Join the waitlist for FlowCFO&apos;s e-commerce suite. We are
+            rolling out access to early users each month.
           </p>
           <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-4 md:flex-row">
-            {/* <div className="flex-1 bg-white p-1 border border-flow-black focus-within:border-flow-gold">
-              <input
-                className="w-full h-full px-4 py-3 font-body text-base text-flow-black outline-none focus:ring-0"
-                placeholder="Enter your business email"
-                type="email"
-                required
-              />
-            </div> */}
             <Link
               href="/waitlist"
               className="flow-label bg-flow-black px-8 py-4 text-white transition-transform active:scale-95"
@@ -319,9 +310,6 @@ export default function ForEcommercePage() {
               Join the e-commerce waitlist
             </Link>
           </div>
-          <p className="mt-6 font-body text-sm italic opacity-50">
-            Limited slots available for Q4 intake.
-          </p>
         </div>
         {/* Abstract geometry */}
         <div className="absolute left-0 top-1/2 h-px w-64 -translate-y-1/2 bg-flow-gold opacity-30"></div>

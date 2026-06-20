@@ -13,13 +13,13 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "FlowCFO Features — AI Cash Flow, Tax Reserves & Safe-to-Spend",
+  title: "FlowCFO Features — AI Agents, Cash Flow & Financial Monitoring",
   description:
-    "Explore FlowCFO's Safe-to-Spend indicator, 90-day cash-flow forecasts, tax reserve engine, AI CFO advisor, financial alerts, and read-only bank sync.",
+    "Explore FlowCFO's AI agents, Safe-to-Spend indicator, cash-flow forecasts, tax reserve engine, Telegram bot, and morning brief.",
   openGraph: {
-    title: "FlowCFO Features — AI Cash Flow, Tax Reserves & Safe-to-Spend",
+    title: "FlowCFO Features — AI Agents, Cash Flow & Financial Monitoring",
     description:
-      "Explore FlowCFO's Safe-to-Spend indicator, 90-day cash-flow forecasts, tax reserve engine, AI CFO advisor, financial alerts, and read-only bank sync.",
+      "Explore FlowCFO's AI agents, Safe-to-Spend indicator, cash-flow forecasts, tax reserve engine, Telegram bot, and morning brief.",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "FlowCFO" }],
   },
   twitter: { card: "summary_large_image" },
@@ -57,8 +57,26 @@ const moduleFeatures = [
   {
     icon: Banknote,
     module: "Module 06",
-    title: "Read-only Bank Sync",
-    text: "Connect accounts through Plaid so FlowCFO can keep your Safe-to-Spend number current without manual spreadsheets.",
+    title: "Bank Sync",
+    text: "Connect your bank account through Plaid or upload CSV statements. FlowCFO keeps your Safe-to-Spend number current without manual spreadsheets.",
+  },
+  {
+    icon: Bot,
+    module: "Module 07",
+    title: "AI Agents",
+    text: "Specialized agents monitor margins, audit fees, track inventory, and suggest categorizations - working continuously in the background.",
+  },
+  {
+    icon: Bell,
+    module: "Module 08",
+    title: "Telegram Bot",
+    text: "Get alerts, run agents, and chat with your AI CFO directly from Telegram. OTP-based authentication, inline approve/reject buttons.",
+  },
+  {
+    icon: TrendingUp,
+    module: "Module 09",
+    title: "Morning Brief",
+    text: "Daily Telegram summary synthesizing yesterday's agent activity, cash position, and alerts into a single actionable message.",
   },
 ];
 
@@ -276,8 +294,8 @@ export default function FeaturesPage() {
         <div className="border border-flow-line bg-[#eeeeee] p-8 text-center md:p-16">
           <h2 className="flow-headline-xl mb-6 text-flow-obsidian">Know what your business can safely do next.</h2>
           <p className="mx-auto mb-10 max-w-2xl text-base leading-6 text-[#444748]">
-            Join the waitlist for early access. We&apos;re starting with e-commerce sellers, freelancers,
-            agencies, restaurants, and founders who want financial clarity before decisions get expensive.
+            Join the waitlist for early access. We&apos;re starting with e-commerce brands
+            who want financial clarity before decisions get expensive.
           </p>
           <div className="inline-flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
             <Link
