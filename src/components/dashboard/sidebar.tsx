@@ -193,11 +193,22 @@ export default function Sidebar() {
         )}
       </nav>
 
-      <div className="px-4 mt-auto pt-6 border-t border-flow-line-dark/40">
+      <div className="px-4 mt-auto pt-6 border-t border-flow-line-dark/40 space-y-1">
+        <Link
+          href="/dashboard/settings/connections"
+          className={`flex items-center gap-3 px-2 py-2 transition-colors duration-200 ${
+            pathname === '/dashboard/settings/connections'
+              ? 'text-flow-gold'
+              : 'text-flow-muted hover:text-flow-gold'
+          }`}
+        >
+          <span className="material-symbols-outlined text-xl">link</span>
+          <span className="font-body text-sm">Connections</span>
+        </Link>
         <Link
           href="/dashboard/settings/accounts"
-          className={`flex items-center gap-3 px-2 py-3 transition-colors duration-200 ${
-            pathname.startsWith('/dashboard/settings')
+          className={`flex items-center gap-3 px-2 py-2 transition-colors duration-200 ${
+            pathname === '/dashboard/settings/accounts'
               ? 'text-flow-gold'
               : 'text-flow-muted hover:text-flow-gold'
           }`}
