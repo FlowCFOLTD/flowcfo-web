@@ -2,12 +2,19 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, CheckCircle2, Landmark, User, Shield, CreditCard, LogOut, Tags } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Landmark, User, Shield, CreditCard, LogOut, Tags, Wallet, TrendingUp } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUser, useUpdateUser } from '@/hooks/api/use-user';
 import { authClient } from '@/lib/auth-client';
 import BankConnectionCard from '@/components/onboarding/bank-connection-card';
 import CategoryMappingsPanel from '@/components/settings/category-mappings';
+import { useTaxSuggestion } from '@/hooks/api/use-tools';
+
+const BUFFER_MODES = [
+  { value: 'conservative', label: 'Conservative', desc: '3 weeks of expenses as safety buffer — best for variable income' },
+  { value: 'standard', label: 'Standard', desc: '2 weeks of expenses — balanced default' },
+  { value: 'aggressive', label: 'Aggressive', desc: '1 week of expenses — maximise working capital' },
+] as const;
 
 export default function AccountSettingsPage() {
   const router = useRouter();
@@ -17,7 +24,7 @@ export default function AccountSettingsPage() {
 
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'billing' | 'accounts' | 'categories'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'billing' | 'accounts' | 'categories' | 'finance'>('profile');
 
   const refreshUser = () => {
     queryClient.invalidateQueries({ queryKey: ['user', 'me'] });
@@ -64,6 +71,7 @@ export default function AccountSettingsPage() {
     { key: 'billing', label: 'Billing', icon: CreditCard },
     { key: 'accounts', label: 'Accounts', icon: Landmark },
     { key: 'categories', label: 'Categories', icon: Tags },
+    { key: 'finance', label: 'Finance', icon: Wallet },
   ] as const;
 
   return (
@@ -200,7 +208,129 @@ export default function AccountSettingsPage() {
             <CategoryMappingsPanel />
           </div>
         )}
+
+        {activeTab === 'finance' && (
+          <FinanceSettings />
+        )}
       </div>
+    </div>
+  );
+}
+
+function FinanceSettings() {
+  const { data: user } = useUser();
+  const updateUser = useUpdateUser();
+  const { data: taxSuggestion } = useTaxSuggestion();
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const currentMode = (user?.buffer_mode as string) || 'standard';
+  const currentPct = user?.auto_allocate_pct ?? 0;
+
+  const handleBufferMode = async (mode: string) => {
+    await updateUser.mutateAsync({ buffer_mode: mode as 'conservative' | 'standard' | 'aggressive' });
+    setSuccess('Safety buffer updated.');
+    setTimeout(() => setSuccess(null), 3000);
+  };
+
+  const handleAutoAllocate = async (pct: number) => {
+    await updateUser.mutateAsync({ auto_allocate_pct: pct });
+    setSuccess('Auto-allocation updated.');
+    setTimeout(() => setSuccess(null), 3000);
+  };
+
+  return (
+    <div className="max-w-2xl space-y-6">
+      {success && (
+        <div className="flex items-center gap-3 border border-flow-gold/30 bg-flow-gold/5 p-4">
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-flow-gold" />
+          <p className="font-body text-sm text-flow-gold">{success}</p>
+        </div>
+      )}
+
+      <div className="border border-white/10 bg-white/5 p-8">
+        <h2 className="font-display text-xl font-bold text-white mb-2">Safety Buffer</h2>
+        <p className="font-body text-sm text-white/40 mb-6">
+          Controls how much cushion the safe-to-spend calculation keeps. Higher = more conservative.
+        </p>
+        <div className="space-y-3">
+          {BUFFER_MODES.map(({ value, label, desc }) => (
+            <button
+              key={value}
+              onClick={() => handleBufferMode(value)}
+              className={`w-full text-left p-4 border transition-all ${
+                currentMode === value
+                  ? 'border-flow-gold bg-flow-gold/10'
+                  : 'border-white/10 bg-white/5 hover:border-white/20'
+              }`}
+            >
+              <p className={`font-body text-sm font-semibold ${currentMode === value ? 'text-flow-gold' : 'text-white'}`}>
+                {label}
+              </p>
+              <p className="font-body text-xs text-white/40 mt-1">{desc}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="border border-white/10 bg-white/5 p-8">
+        <h2 className="font-display text-xl font-bold text-white mb-2">Auto-Allocation</h2>
+        <p className="font-body text-sm text-white/40 mb-6">
+          Automatically set aside a percentage of each incoming payment into your tax reserve.
+        </p>
+        <div className="space-y-4">
+          <div className="flex items-center gap-4">
+            <label className="font-body text-sm text-white/60 shrink-0">Set aside</label>
+            <input
+              type="range"
+              min={0}
+              max={50}
+              step={1}
+              value={currentPct}
+              onChange={(e) => handleAutoAllocate(Number(e.target.value))}
+              className="flex-1 accent-flow-gold"
+            />
+            <span className="font-body text-sm text-flow-gold font-semibold w-12 text-right">{currentPct}%</span>
+          </div>
+          <div className="flex gap-2">
+            {[0, 10, 15, 20, 25, 30].map((pct) => (
+              <button
+                key={pct}
+                onClick={() => handleAutoAllocate(pct)}
+                className={`px-3 py-1 text-xs font-body border transition-all ${
+                  currentPct === pct
+                    ? 'border-flow-gold bg-flow-gold/10 text-flow-gold'
+                    : 'border-white/10 text-white/40 hover:text-white/70'
+                }`}
+              >
+                {pct}%
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {taxSuggestion && (
+        <div className="border border-white/10 bg-white/5 p-8">
+          <h2 className="font-display text-xl font-bold text-white mb-2">Suggested Tax Rate</h2>
+          <p className="font-body text-sm text-white/40 mb-4">
+            Based on your location and business type.
+          </p>
+          <div className="flex items-baseline gap-3 mb-3">
+            <span className="font-display text-3xl font-bold text-flow-gold">{taxSuggestion.suggested_rate}%</span>
+            {taxSuggestion.country_name && (
+              <span className="font-body text-sm text-white/40">{taxSuggestion.country_name}</span>
+            )}
+            <span className={`ml-auto text-xs font-body px-2 py-0.5 ${
+              taxSuggestion.confidence === 'high' ? 'text-green-400 bg-green-400/10' :
+              taxSuggestion.confidence === 'medium' ? 'text-yellow-400 bg-yellow-400/10' :
+              'text-white/40 bg-white/5'
+            }`}>
+              {taxSuggestion.confidence} confidence
+            </span>
+          </div>
+          <p className="font-body text-xs text-white/30">{taxSuggestion.notes}</p>
+        </div>
+      )}
     </div>
   );
 }

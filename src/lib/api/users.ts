@@ -47,6 +47,8 @@ export interface UserProfile {
   approval_requested: boolean;
   plan: string;
   ai_insights: AIInsights;
+  buffer_mode: 'conservative' | 'standard' | 'aggressive';
+  auto_allocate_pct: number;
   created_at: string;
 }
 
@@ -197,4 +199,46 @@ export const accountsApi = {
       },
     ),
   list: () => apiClient<AccountData[]>('/api/v1/accounts'),
+};
+
+export interface SpendDecision {
+  id: string;
+  amount: number;
+  category: string;
+  verdict: 'safe' | 'borderline' | 'risky';
+  confidence: number;
+  reasoning: string;
+  safe_to_spend_at_time: number | null;
+  remaining_after: number | null;
+  tax_reserve_pct: number | null;
+  user_feedback: string | null;
+  feedback_note: string | null;
+  created_at: string | null;
+}
+
+export interface TaxSuggestion {
+  suggested_rate: number;
+  country: string | null;
+  country_name: string | null;
+  base_rate: number;
+  business_type: string;
+  adjustment_factor: number;
+  notes: string;
+  confidence: 'high' | 'medium' | 'low';
+}
+
+export const spendApi = {
+  listDecisions: (limit = 20, offset = 0) =>
+    apiClient<{ decisions: SpendDecision[]; total: number }>(
+      `/api/v1/tools/spend-decisions?limit=${limit}&offset=${offset}`,
+    ),
+  submitFeedback: (decisionId: string, feedback: 'good' | 'bad', note?: string) =>
+    apiClient<{ status: string; feedback: string }>(
+      `/api/v1/tools/spend-decisions/${decisionId}/feedback`,
+      { method: 'POST', body: { feedback, note } },
+    ),
+};
+
+export const taxSuggestionApi = {
+  getSuggestion: () => apiClient<TaxSuggestion>('/api/v1/tax/suggest-rate'),
 };
