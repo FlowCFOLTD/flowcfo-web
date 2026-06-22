@@ -20,9 +20,9 @@ interface BlogPostSummary {
 }
 
 async function getPosts(): Promise<BlogPostSummary[]> {
-  const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const api = process.env.BLOG_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   try {
-    const res = await fetch(`${api}/api/v1/blog/posts?limit=50`);
+    const res = await fetch(`${api}/api/v1/blog/posts?limit=50`, { cache: 'no-store' });
     if (!res.ok) {
       console.error(
         '[BLOG] fetch failed',
