@@ -21,20 +21,23 @@ interface BlogPostSummary {
 
 async function getPosts(): Promise<BlogPostSummary[]> {
   const api = process.env.BLOG_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const url = `${api}/api/v1/blog/posts?limit=50`;
+  console.log('[BLOG_DEBUG] fetch url:', url);
+  console.log('[BLOG_DEBUG] BLOG_API_URL:', process.env.BLOG_API_URL);
+  console.log('[BLOG_DEBUG] NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL);
   try {
-    const res = await fetch(`${api}/api/v1/blog/posts?limit=50`, { cache: 'no-store' });
+    const res = await fetch(url, { cache: 'no-store' });
+    console.log('[BLOG_DEBUG] response status:', res.status);
     if (!res.ok) {
-      console.error(
-        '[BLOG] fetch failed',
-        res.status,
-        await res.text().catch(() => ''),
-      );
+      const body = await res.text().catch(() => '');
+      console.error('[BLOG_DEBUG] fetch failed', res.status, body);
       return [];
     }
     const data = await res.json();
+    console.log('[BLOG_DEBUG] posts count:', data.posts?.length ?? 0);
     return data.posts || [];
   } catch (e) {
-    console.error('[BLOG] fetch error', e);
+    console.error('[BLOG_DEBUG] fetch error:', e);
     return [];
   }
 }
