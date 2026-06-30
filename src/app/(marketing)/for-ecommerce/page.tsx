@@ -60,7 +60,7 @@ export default function ForEcommercePage() {
                 Join the e-commerce waitlist
               </Link>
               <Link
-                href="/features"
+                href="/demo"
                 className="flow-label border border-flow-black px-8 py-4 text-center text-sm font-bold text-flow-black transition-all hover:bg-flow-black hover:text-white"
               >
                 View Demo

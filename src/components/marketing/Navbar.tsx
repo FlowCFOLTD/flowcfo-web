@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown } from "lucide-react";
 
 const navLinks = [
+  { label: "Demo", href: "/demo" },
   { label: "Features", href: "/features" },
   { label: "Calculators", href: "/calculator/safe-to-spend" },
   { label: "About", href: "/about" },
@@ -34,6 +35,14 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden items-center space-x-12 md:flex">
+            <Link
+              className={`flow-label transition-opacity hover:text-flow-black ${
+                pathname === "/demo" ? "border-b-2 border-[#735c00] pb-1 text-flow-black" : "text-[#444748]"
+              }`}
+              href="/demo"
+            >
+              Demo
+            </Link>
             <Link
               className={`flow-label transition-opacity hover:text-flow-black ${
                 pathname === "/features" ? "border-b-2 border-[#735c00] pb-1 text-flow-black" : "text-[#444748]"
