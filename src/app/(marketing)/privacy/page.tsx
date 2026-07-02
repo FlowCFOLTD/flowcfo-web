@@ -1,25 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | FlowCFO — High-Performance Data Sovereignty",
+export const metadata: Metadata = createMetadata({
+  title: "FlowCFO Privacy Policy — Financial Data & Security",
   description:
-    "We prioritize your financial sovereignty. We protect your wealth with institutional-grade encryption and a strict policy of minimal intrusion.",
-  openGraph: {
-    title: "FlowCFO Privacy Policy | High-Performance Data Sovereignty",
-    description:
-      "We prioritize your financial sovereignty. We protect your wealth with institutional-grade encryption and a strict policy of minimal intrusion.",
-    type: "website",
-    url: "https://flowcfo.net/privacy",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "FlowCFO Privacy Policy | High-Performance Data Sovereignty",
-    description:
-      "We prioritize your financial sovereignty. We protect your wealth with institutional-grade encryption and a strict policy of minimal intrusion.",
-  },
-};
+    "Read how FlowCFO protects financial data, secures account information, limits data collection, and keeps your business information private.",
+  path: "/privacy",
+});
 
 const sections = [
   { id: "collect", label: "1. Collection" },

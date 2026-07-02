@@ -1,34 +1,23 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { createMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'FlowCFO for E-commerce | Margin Monitoring & Cash Flow Clarity',
+export const metadata: Metadata = createMetadata({
+  title: 'FlowCFO for Ecommerce — Margin Monitoring & Cash Flow',
   description:
-    'Real-time margin monitoring, fee auditing, and inventory tracking for e-commerce brands. Know your true profit before you launch.',
-  openGraph: {
-    title: 'FlowCFO for E-commerce | Margin Monitor & Cash Flow Clarity',
-    description:
-      "Stop guessing your real profit. FlowCFO provides real-time margin monitoring and 'Safe-to-Spend' clarity for e-commerce founders.",
-    type: 'website',
-    url: 'https://flowcfo.net/for-ecommerce',
-    images: [
-      {
-        url: '/og-ecommerce.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'FlowCFO for E-commerce Dashboard',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'FlowCFO for E-commerce | Know Your Real Margin',
-    description:
-      'Real-time margin monitoring, fee auditing, and inventory tracking for e-commerce brands.',
-    images: ['/og-ecommerce.jpg'],
-  },
-};
+    'AI financial agents for ecommerce brands. Monitor gross margin, COGS, platform fees, inventory cash flow, payouts, VAT, and Safe-to-Spend before you restock.',
+  path: '/for-ecommerce',
+  image: '/og-ecommerce.jpg',
+  imageAlt: 'FlowCFO ecommerce margin monitoring dashboard',
+  keywords: [
+    'ecommerce cash flow software',
+    'Shopify margin monitoring',
+    'Amazon seller profit tracking',
+    'ecommerce Safe-to-Spend',
+    'platform fee audit',
+  ],
+});
 
 export default function ForEcommercePage() {
   return (

@@ -1,21 +1,13 @@
 import type { Metadata } from 'next';
 import DemoVideoPlayer from './demo-video-player';
+import { createMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'FlowCFO Demo — See It In Action',
+export const metadata: Metadata = createMetadata({
+  title: 'FlowCFO Demo — AI CFO Dashboard, Agents & Cash Flow Tools',
   description:
-    'Watch a guided walkthrough of FlowCFO — dashboard overview, AI agents, cash flow analysis, pricing tools, and more.',
-  openGraph: {
-    title: 'FlowCFO Demo — See It In Action',
-    description:
-      'Watch a guided walkthrough of FlowCFO — dashboard overview, AI agents, cash flow analysis, pricing tools, and more.',
-    images: [
-      { url: '/og-image.png', width: 1200, height: 630, alt: 'FlowCFO' },
-    ],
-  },
-  twitter: { card: 'summary_large_image' },
-  alternates: { canonical: 'https://flowcfo.net/demo' },
-};
+    'Watch a guided walkthrough of FlowCFO: Safe-to-Spend, AI agents, ecommerce margin monitoring, cash flow analysis, pricing tools, and Telegram alerts.',
+  path: '/demo',
+});
 
 export default function DemoPage() {
   return (

@@ -1,18 +1,37 @@
 import type { MetadataRoute } from "next";
+import { siteUrl } from "@/lib/seo";
 
-const baseUrl = "https://flowcfo.net";
+export const revalidate = 3600;
 
-const posts = [
-  { slug: "safe-to-spend-explained", date: "2026-01-15" },
-  { slug: "quarterly-taxes-freelancers", date: "2026-02-01" },
-  { slug: "ecommerce-margin-mistakes", date: "2026-03-10" },
-];
+type BlogPostSummary = {
+  slug: string;
+  published_at: string | null;
+};
 
-export default function sitemap(): MetadataRoute.Sitemap {
+async function getPublishedPosts(): Promise<BlogPostSummary[]> {
+  const api =
+    process.env.BLOG_API_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "http://localhost:8000";
+
+  try {
+    const res = await fetch(`${api}/api/v1/blog/posts?limit=200`, {
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data.posts) ? data.posts : [];
+  } catch {
+    return [];
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const routes = [
     { path: "", priority: 1, freq: "weekly" as const },
     { path: "/features", priority: 0.9, freq: "monthly" as const },
     { path: "/pricing", priority: 0.9, freq: "monthly" as const },
+    { path: "/demo", priority: 0.8, freq: "monthly" as const },
     { path: "/for-ecommerce", priority: 0.8, freq: "monthly" as const },
     { path: "/for-freelancers", priority: 0.8, freq: "monthly" as const },
     { path: "/for-agencies", priority: 0.8, freq: "monthly" as const },
@@ -29,15 +48,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const staticRoutes = routes.map((route) => ({
-    url: `${baseUrl}${route.path}`,
+    url: `${siteUrl}${route.path}`,
     lastModified: new Date(),
     changeFrequency: route.freq,
     priority: route.priority,
   }));
 
+  const posts = await getPublishedPosts();
   const blogRoutes = posts.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+    url: `${siteUrl}/blog/${post.slug}`,
+    lastModified: post.published_at ? new Date(post.published_at) : new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));

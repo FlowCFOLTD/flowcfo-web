@@ -1,35 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { createMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title:
-    'FlowCFO for Agencies | Institutional-Grade Cash Flow & Profit Modeling',
+export const metadata: Metadata = createMetadata({
+  title: 'FlowCFO for Agencies — Cash Flow & Client Profitability',
   description:
-    'Go beyond bookkeeping. Institutional-grade cash flow modeling for high-growth agencies managing complex payroll and retainer cycles.',
-  openGraph: {
-    title: 'FlowCFO for Agencies | Financial Command for Modern Agencies',
-    description:
-      'Your agency looks profitable on paper. FlowCFO shows you if it actually is. Manage payroll, retainers, and growth with absolute clarity.',
-    type: 'website',
-    url: 'https://flowcfo.net/for-agencies',
-    images: [
-      {
-        url: '/og-agencies.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'FlowCFO for Agencies Dashboard',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'FlowCFO for Agencies | Know Your Real Profitability',
-    description:
-      'Institutional-grade financial modeling specifically for high-growth agencies managing complex payroll and retainer cycles.',
-    images: ['/og-agencies.jpg'],
-  },
-};
+    'AI CFO software for agencies. Track client profitability, retainers, payroll timing, revenue concentration, cash flow, tax reserves, and Safe-to-Spend.',
+  path: '/for-agencies',
+  image: '/og-agencies.jpg',
+  imageAlt: 'FlowCFO agency profitability dashboard',
+  keywords: [
+    'agency cash flow software',
+    'client profitability tracking',
+    'agency financial dashboard',
+    'agency Safe-to-Spend',
+  ],
+});
 
 export default function ForAgenciesPage() {
   return (

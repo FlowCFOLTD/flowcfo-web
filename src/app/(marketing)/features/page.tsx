@@ -11,20 +11,21 @@ import {
   TrendingUp,
   WalletCards,
 } from "lucide-react";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "FlowCFO Features — AI Agents, Cash Flow & Financial Monitoring",
+export const metadata: Metadata = createMetadata({
+  title: "FlowCFO Features — AI CFO Agents, Cash Flow & Taxes",
   description:
-    "Explore FlowCFO's AI agents, Safe-to-Spend indicator, cash-flow forecasts, tax reserve engine, Telegram bot, and morning brief.",
-  openGraph: {
-    title: "FlowCFO Features — AI Agents, Cash Flow & Financial Monitoring",
-    description:
-      "Explore FlowCFO's AI agents, Safe-to-Spend indicator, cash-flow forecasts, tax reserve engine, Telegram bot, and morning brief.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "FlowCFO" }],
-  },
-  twitter: { card: "summary_large_image" },
-  alternates: { canonical: "https://flowcfo.net/features" },
-};
+    "Explore FlowCFO's Safe-to-Spend indicator, cash flow forecasts, tax reserve engine, ecommerce AI agents, Telegram bot, alerts, and morning brief.",
+  path: "/features",
+  keywords: [
+    "AI CFO features",
+    "Safe-to-Spend",
+    "cash flow forecasting",
+    "tax reserve engine",
+    "financial alerts",
+  ],
+});
 
 const primaryFeatures = [
   {

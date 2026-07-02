@@ -1,11 +1,20 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { createMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'FlowCFO Blog — Financial Clarity for Founders',
-  description: 'Insights, guides, and updates from FlowCFO.',
-  alternates: { canonical: 'https://flowcfo.net/blog' },
-};
+export const metadata: Metadata = createMetadata({
+  title: 'FlowCFO Blog — Cash Flow, Taxes, Margins & AI CFO Guides',
+  description:
+    'Practical guides for small business cash flow, Safe-to-Spend decisions, ecommerce margins, tax reserves, startup runway, agency profit, and AI CFO workflows.',
+  path: '/blog',
+  keywords: [
+    'small business cash flow blog',
+    'AI CFO guides',
+    'Safe-to-Spend',
+    'ecommerce margin guides',
+    'freelancer tax reserve',
+  ],
+});
 
 export const dynamic = 'force-dynamic';
 

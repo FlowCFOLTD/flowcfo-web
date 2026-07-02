@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { absoluteUrl, createMetadata, jsonLd } from '@/lib/seo';
 
 interface BlogPostDetail {
   id: string;
@@ -18,7 +19,9 @@ interface BlogPostDetail {
 async function getPost(slug: string): Promise<BlogPostDetail | null> {
   const api = process.env.BLOG_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   try {
-    const res = await fetch(`${api}/api/v1/blog/posts/${slug}`);
+    const res = await fetch(`${api}/api/v1/blog/posts/${slug}`, {
+      next: { revalidate: 3600 },
+    });
     if (!res.ok) {
       console.error(
         '[BLOG] post fetch failed',
@@ -42,10 +45,15 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return { title: 'Post Not Found — FlowCFO' };
-  return {
+  return createMetadata({
     title: `${post.title} — FlowCFO Blog`,
     description: post.meta_description || '',
-  };
+    path: `/blog/${post.slug}`,
+    type: 'article',
+    publishedTime: post.published_at,
+    authors: post.author ? [post.author] : ['FlowCFO'],
+    keywords: post.keywords,
+  });
 }
 
 export default async function BlogPostPage({
@@ -57,8 +65,39 @@ export default async function BlogPostPage({
   const post = await getPost(slug);
   if (!post) notFound();
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.meta_description || undefined,
+    url: absoluteUrl(`/blog/${post.slug}`),
+    datePublished: post.published_at || undefined,
+    dateModified: post.published_at || undefined,
+    author: {
+      '@type': 'Person',
+      name: post.author || 'FlowCFO',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'FlowCFO',
+      logo: {
+        '@type': 'ImageObject',
+        url: absoluteUrl('/logo.png'),
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': absoluteUrl(`/blog/${post.slug}`),
+    },
+    keywords: post.keywords?.join(', '),
+  };
+
   return (
     <article className="py-24 md:py-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(articleJsonLd) }}
+      />
       <div className="mx-auto max-w-3xl px-6">
         <Link href="/blog" className="text-sm text-primary hover:underline">
           ← Back to blog

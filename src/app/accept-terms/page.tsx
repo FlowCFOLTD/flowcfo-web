@@ -3,6 +3,7 @@ import AcceptTerms from './accept-terms';
 
 export const metadata: Metadata = {
   title: 'Accept Terms | FlowCFO',
+  robots: { index: false, follow: false },
 };
 
 export default async function AcceptTermsPage(props: { searchParams: Promise<{ token?: string; email?: string }> }) {

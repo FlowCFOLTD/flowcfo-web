@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: 'Onboarding | FlowCFO',
   description:
     'Start your journey with FlowCFO. Select your business entity to begin.',
+  robots: { index: false, follow: false },
 };
 
 export default function OnboardingPage() {

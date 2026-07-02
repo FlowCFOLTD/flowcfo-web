@@ -1,25 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { sections, contactSection } from "@/lib/terms-content";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Service | FlowCFO — High-Performance Financial Command",
+export const metadata: Metadata = createMetadata({
+  title: "FlowCFO Terms of Service",
   description:
-    "Review the terms governing your use of FlowCFO. Precision financial intelligence for founders who refuse to fly blind.",
-  openGraph: {
-    title: "FlowCFO Terms of Service | High-Performance Financial Command",
-    description:
-      "Review the terms governing your use of FlowCFO. Precision financial intelligence for founders who refuse to fly blind.",
-    type: "website",
-    url: "https://flowcfo.net/terms",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "FlowCFO Terms of Service | High-Performance Financial Command",
-    description:
-      "Review the terms governing your use of FlowCFO. Precision financial intelligence for founders who refuse to fly blind.",
-  },
-};
+    "Review the terms governing your use of FlowCFO's AI CFO platform, cash flow tools, financial agents, and account services.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

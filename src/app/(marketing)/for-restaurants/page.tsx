@@ -1,34 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { createMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'FlowCFO for Restaurants | Institutional-Grade Financial Clarity',
+export const metadata: Metadata = createMetadata({
+  title: 'FlowCFO for Restaurants — Food Cost & Cash Flow Clarity',
   description:
-    'Control inflation, optimize labor, and scale your hospitality business with absolute confidence. Institutional-grade financial command for modern restaurateurs.',
-  openGraph: {
-    title: 'FlowCFO for Restaurants | Financial Command for Hospitality',
-    description:
-      'Translate the chaos of restaurant operations into institutional-grade financial clarity. Know your ingredients costs and your financial health.',
-    type: 'website',
-    url: 'https://flowcfo.net/for-restaurants',
-    images: [
-      {
-        url: '/og-restaurants.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'FlowCFO for Restaurants Dashboard',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'FlowCFO for Restaurants | Scale with Confidence',
-    description:
-      'Control inflation, optimize labor, and scale your restaurant with absolute confidence using FlowCFO.',
-    images: ['/og-restaurants.jpg'],
-  },
-};
+    'Restaurant financial software for food cost, labor cost, daily revenue, tax reserves, cash flow forecasting, and Safe-to-Spend decisions.',
+  path: '/for-restaurants',
+  image: '/og-restaurants.jpg',
+  imageAlt: 'FlowCFO restaurant food cost and daily revenue dashboard',
+  keywords: [
+    'restaurant cash flow software',
+    'restaurant food cost tracking',
+    'restaurant labor cost dashboard',
+    'restaurant financial forecasting',
+  ],
+});
 
 export default function ForRestaurantsPage() {
   return (

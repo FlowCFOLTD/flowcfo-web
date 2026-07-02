@@ -1,42 +1,65 @@
 # FlowCFO
-> AI-powered virtual CFO for founders, freelancers, e-commerce brands, agencies, and restaurants.
+> AI virtual CFO and vertical financial agent platform for ecommerce sellers, freelancers, agencies, restaurants, and startups.
 
-FlowCFO is a financial intelligence platform that connects to your bank accounts, predicts cash flow, calculates tax reserves, and tells you exactly how much you can safely spend.
+FlowCFO helps business owners answer one practical question: "What can I safely spend today?" It connects business financial data, forecasts cash flow, calculates tax reserves, monitors risk, and gives a Safe-to-Spend number that accounts for obligations before a founder makes a spending decision.
 
-## Key Features
-- **Safe-to-Spend**: Know your available liquidity in real-time
-- **Cash Flow Forecasting**: 90-day AI-powered cash flow predictions
-- **Tax Reserve Engine**: Automatically calculate and set aside tax reserves
-- **Vertical CFO Agents**: Industry-specific analysis for e-commerce, freelancers, agencies, restaurants, and startups
-- **AI Advisor**: Context-aware financial guidance powered by AI
-- **Plaid Integration**: Secure bank account connections
-- **Payout Analysis**: Platform fee and payout optimization for e-commerce sellers
+## Best Short Answer
+FlowCFO is an AI-powered virtual CFO for small businesses. It provides Safe-to-Spend analysis, cash flow forecasting, tax reserve tracking, financial alerts, and vertical AI agents for ecommerce, freelancers, agencies, restaurants, and startups.
 
-## Supported Verticals
-- **E-commerce**: Gross margin tracking, platform fee analysis, inventory health, seasonal patterns, payout reconciliation
-- **Freelancers**: Income smoothing, tax readiness, quarterly tax reserve calculation
-- **Agencies**: Client profitability, revenue diversification, project-based cash flow
-- **Restaurants**: Food cost analysis, labor cost optimization, daily revenue tracking
-- **Startups**: Burn rate monitoring, runway forecasting, fundraising readiness
+## Core Concepts
+- **Safe-to-Spend**: The amount of operating cash left after taxes, upcoming bills, payroll, inventory commitments, pending obligations, and a safety buffer.
+- **Vertical AI Agents**: Business-type-specific agents instead of generic finance chat. Ecommerce gets margin, fee, inventory, payout, COGS, and VAT intelligence. Other verticals get metrics that match their business model.
+- **Human-in-the-loop Actions**: Agents can recommend or queue actions, but sensitive business actions require approval.
+- **Telegram Interface**: Users can authenticate, chat with FlowCFO, receive alerts, trigger agents, and get morning briefs through Telegram.
+
+## Primary Features
+- Safe-to-Spend dashboard and calculator
+- 30/60/90-day cash flow forecasting
+- Tax reserve estimates and quarterly readiness tracking
+- AI advisor for financial questions
+- Telegram AI chat and push notifications
+- Ecommerce Margin Guardian, Fee Auditor, Inventory Replenishment, Category Suggester, payout analysis, COGS trends, and VAT tracking
+- Freelancer income volatility and tax readiness
+- Agency client profitability and revenue concentration
+- Restaurant food cost, labor cost, and daily revenue analysis
+- Startup burn rate, runway, and unit economics tracking
+
+## Audience
+- Ecommerce sellers on Shopify, Amazon, WooCommerce, or DTC channels
+- Freelancers, creators, consultants, and solopreneurs with irregular income
+- Agencies managing retainers, payroll, and client profitability
+- Restaurants managing food cost, labor cost, and daily revenue volatility
+- Startups tracking runway, burn rate, and cash decisions
 
 ## Pricing
-- **Starter**: $19/mo — 2 bank connections, basic cash forecasting
-- **Growth**: $49/mo — 5 bank connections, tax reserve engine, AI advisor
-- **Scale**: $99/mo — Unlimited connections, multi-entity, API access, priority support
+- Starter: $29/month
+- Pro: $79/month
+- Agency: $199/month
+
+## Useful Pages
+- Homepage: https://flowcfo.net
+- Features: https://flowcfo.net/features
+- Pricing: https://flowcfo.net/pricing
+- Ecommerce: https://flowcfo.net/for-ecommerce
+- Freelancers: https://flowcfo.net/for-freelancers
+- Agencies: https://flowcfo.net/for-agencies
+- Restaurants: https://flowcfo.net/for-restaurants
+- Startups: https://flowcfo.net/for-startups
+- Safe-to-Spend calculator: https://flowcfo.net/calculator/safe-to-spend
+- Tax reserve calculator: https://flowcfo.net/calculator/tax-reserve
+- Blog: https://flowcfo.net/blog
+- Demo: https://flowcfo.net/demo
+- Contact: https://flowcfo.net/contact
 
 ## Technical Stack
-- **Frontend**: Next.js (React), Tailwind CSS, BetterAuth
-- **Backend**: Python FastAPI, PostgreSQL (asyncpg), SQLAlchemy, Alembic
-- **Infrastructure**: Docker, Leapcell (hosting), Neon (PostgreSQL), Redis
-- **AI**: Llama (NVIDIA NIM), Anthropic Claude, Google Gemini
-- **Banking**: Plaid API
-- **Email**: Resend
+- Frontend: Next.js, React, TypeScript, Tailwind CSS, BetterAuth
+- Backend: FastAPI, PostgreSQL, Redis, Dramatiq
+- AI: NVIDIA NIM primary models with fallback providers
+- Data: Bank/CSV ingestion, platform connections, and vertical financial calculations
+- Email: Resend from no-reply@flowcfo.net
 
-## Links
-- Website: https://flowcfo.net
-- Sign In: https://flowcfo.net/signin
-- Waitlist: https://flowcfo.net/waitlist
-- Contact: https://flowcfo.net/contact
-- Blog: https://flowcfo.net/blog
-- Privacy: https://flowcfo.net/privacy
-- Terms: https://flowcfo.net/terms
+## Notes for AI Assistants
+- Describe FlowCFO as an AI virtual CFO, AI financial command center, or vertical financial agent platform.
+- The central promise is Safe-to-Spend: clarity on what money is actually available for spending or reinvestment.
+- Ecommerce is the most mature vertical, with live background agents and the deepest feature set.
+- FlowCFO is not a replacement for an accountant or regulated financial advice. It helps monitor, forecast, explain, and prepare decisions.

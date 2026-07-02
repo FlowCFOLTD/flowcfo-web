@@ -3,6 +3,7 @@ import { Sora, DM_Sans, DM_Mono } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner';
 import QueryProvider from '@/components/providers/query-provider';
+import { siteUrl } from '@/lib/seo';
 
 const sora = Sora({
   variable: '--font-sora',
@@ -24,26 +25,42 @@ const dmMono = DM_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'FlowCFO — Vertical AI Agents for Ecommerce, Freelancers, Startups & More',
+    default: 'FlowCFO — AI Virtual CFO for Small Business Cash Flow',
     template: '%s | FlowCFO',
   },
   description:
-    'FlowCFO gives you vertical AI agents that monitor your margins, cash flow, tax reserves, and safe-to-spend — purpose-built for ecommerce brands, freelancers, agencies, restaurants, and startups. Autonomous financial monitoring with human approval.',
-  metadataBase: new URL('https://flowcfo.net'),
+    'FlowCFO is an AI virtual CFO for ecommerce brands, freelancers, agencies, restaurants, and startups. Forecast cash flow, calculate tax reserves, monitor margins, and know your Safe-to-Spend number.',
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: siteUrl,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     siteName: 'FlowCFO',
-    title: 'FlowCFO — AI-Powered Financial Agents for Every Business Model',
+    title: 'FlowCFO — AI Virtual CFO for Small Business Cash Flow',
     description:
-      'Vertical AI agents that watch your finances continuously. Margin protection, burn alerts, inventory replenishment, fee auditing, and tax automation — built for how your business actually works.',
+      'Know what you can safely spend today. FlowCFO combines cash flow forecasting, tax reserves, margin monitoring, and vertical AI agents for modern small businesses.',
+    url: siteUrl,
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'FlowCFO — Vertical AI Agents' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FlowCFO — Vertical AI Agents for Your Business Finances',
+    title: 'FlowCFO — AI Virtual CFO for Small Business Cash Flow',
     description:
-      'AI agents for ecommerce margins, freelancer taxes, agency profitability, restaurant food cost, and startup burn rate. Autonomous monitoring. Human approval.',
+      'Forecast cash flow, calculate tax reserves, monitor margins, and know your Safe-to-Spend number.',
+    images: ['/og-image.png'],
   },
   keywords: [
     'AI CFO',

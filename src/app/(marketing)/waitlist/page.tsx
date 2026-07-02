@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import WaitlistForm from '@/components/marketing/WaitlistForm';
 import Image from 'next/image';
+import { createMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'FlowCFO | Join the Waitlist',
+export const metadata: Metadata = createMetadata({
+  title: 'Join the FlowCFO Waitlist — AI Virtual CFO Early Access',
   description:
-    "Be first. Shape the product. Join the FlowCFO waitlist and we'll reach out personally to learn about your business before we build anything.",
-  alternates: { canonical: 'https://flowcfo.net/waitlist' },
-};
+    "Join the FlowCFO waitlist for early access to AI CFO agents, Safe-to-Spend clarity, cash flow forecasts, tax reserves, and ecommerce margin monitoring.",
+  path: '/waitlist',
+});
 
 export default function WaitlistPage() {
   return (

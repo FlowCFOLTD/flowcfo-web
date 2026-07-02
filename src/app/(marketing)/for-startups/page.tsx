@@ -1,35 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { createMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'FlowCFO for Startups — Burn Rate, Runway, and Absolute Clarity',
+export const metadata: Metadata = createMetadata({
+  title: 'FlowCFO for Startups — Burn Rate, Runway & Cash Flow',
   description:
-    "The financial command center for venture-backed teams. Real-time burn rate, dynamic runway forecasting, and 'Safe-to-Spend' intelligence for founders who refuse to fly blind.",
-  openGraph: {
-    title:
-      'FlowCFO for Startups | Financial Command Center for Venture-Backed Teams',
-    description:
-      'Precision financial intelligence for high-growth startups. Reconcile accrual accounting with cash reality and know your exact date of zero cash.',
-    type: 'website',
-    url: 'https://flowcfo.net/for-startups',
-    images: [
-      {
-        url: '/og-startups.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'FlowCFO for Startups Dashboard',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'FlowCFO for Startups | Burn Rate, Runway, and Absolute Clarity',
-    description:
-      'Stop second-guessing your monthly outlays. FlowCFO provides dynamic forecasting that updates with every transaction.',
-    images: ['/og-startups.jpg'],
-  },
-};
+    'AI CFO software for startups. Track burn rate, runway, cash flow forecasts, spend anomalies, tax reserves, and your real Safe-to-Spend number.',
+  path: '/for-startups',
+  image: '/og-startups.jpg',
+  imageAlt: 'FlowCFO startup burn rate and runway dashboard',
+  keywords: [
+    'startup burn rate software',
+    'runway forecasting tool',
+    'startup cash flow dashboard',
+    'AI CFO for startups',
+  ],
+});
 
 export default function ForStartupsPage() {
   return (

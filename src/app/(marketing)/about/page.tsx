@@ -2,20 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Quote } from "lucide-react";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "About FlowCFO — Why We're Building This",
   description:
-    "FlowCFO helps business owners stop guessing what they can safely spend with AI cash-flow forecasts, tax reserves, and decision clarity.",
-  openGraph: {
-    title: "About FlowCFO — Why We're Building This",
-    description:
-      "FlowCFO helps business owners stop guessing what they can safely spend with AI cash-flow forecasts, tax reserves, and decision clarity.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "FlowCFO" }],
-  },
-  twitter: { card: "summary_large_image" },
-  alternates: { canonical: "https://flowcfo.net/about" },
-};
+    "FlowCFO helps small business owners stop guessing what they can safely spend with AI cash flow forecasts, tax reserves, and decision clarity.",
+  path: "/about",
+  keywords: ["about FlowCFO", "AI virtual CFO", "small business financial clarity"],
+});
 
 const values = [
   {

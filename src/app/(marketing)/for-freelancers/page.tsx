@@ -1,34 +1,22 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
+import { createMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'FlowCFO for Freelancers | Master Your Cash Flow & Tax Reserves',
+export const metadata: Metadata = createMetadata({
+  title: 'FlowCFO for Freelancers — Cash Flow & Tax Reserves',
   description:
-    "Institutional-grade financial command for solo professionals. Automate your tax reserves, track 'Safe-to-Spend' capital, and stop guessing your bank balance.",
-  openGraph: {
-    title: 'FlowCFO for Freelancers | Professional Cash Flow Management',
-    description:
-      'Transform your freelance business with institutional wealth architecture. Real-time tax forecasting and automated cash flow clarity.',
-    type: 'website',
-    url: 'https://flowcfo.net/for-freelancers',
-    images: [
-      {
-        url: '/og-freelancers.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'FlowCFO for Freelancers Dashboard',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'FlowCFO for Freelancers | Master Your Cash Flow',
-    description:
-      'Stop treating your business like a hobby. FlowCFO brings institutional-grade financial command to solo professionals.',
-    images: ['/og-freelancers.jpg'],
-  },
-};
+    'Cash flow and tax reserve software for freelancers. Smooth irregular income, estimate quarterly taxes, forecast bills, and see your real Safe-to-Spend number.',
+  path: '/for-freelancers',
+  image: '/og-freelancers.jpg',
+  imageAlt: 'FlowCFO freelancer cash flow and tax reserve dashboard',
+  keywords: [
+    'freelancer tax reserve calculator',
+    'freelancer cash flow software',
+    'quarterly tax planning for freelancers',
+    'Safe-to-Spend for freelancers',
+  ],
+});
 
 export default function ForFreelancersPage() {
   return (
