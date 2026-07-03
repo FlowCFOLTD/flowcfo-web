@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+export const dynamic = 'force-static';
 import Pricing from './pricing';
 import { createMetadata } from '@/lib/seo';
 

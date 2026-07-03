@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+export const dynamic = 'force-static';
 import SafeToSpend from "./safe-to-spend";
 import { createMetadata, jsonLd } from "@/lib/seo";
 

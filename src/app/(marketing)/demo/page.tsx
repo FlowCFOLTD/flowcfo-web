@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+export const dynamic = 'force-static';
 import DemoVideoPlayer from './demo-video-player';
 import { createMetadata } from '@/lib/seo';
 

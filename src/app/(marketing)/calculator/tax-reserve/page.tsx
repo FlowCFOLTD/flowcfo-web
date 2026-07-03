@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+export const dynamic = 'force-static';
 import TaxReserve from "./tax-reserve";
 import { createMetadata, jsonLd } from "@/lib/seo";
 

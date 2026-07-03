@@ -5,6 +5,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { absoluteUrl, createMetadata, jsonLd } from '@/lib/seo';
 
+export const revalidate = 3600;
+
 interface BlogPostDetail {
   id: string;
   title: string;
@@ -19,21 +21,24 @@ interface BlogPostDetail {
 async function getPost(slug: string): Promise<BlogPostDetail | null> {
   const api = process.env.BLOG_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   try {
-    const res = await fetch(`${api}/api/v1/blog/posts/${slug}`, {
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) {
-      console.error(
-        '[BLOG] post fetch failed',
-        res.status,
-        await res.text().catch(() => ''),
-      );
-      return null;
-    }
+    const res = await fetch(`${api}/api/v1/blog/posts/${slug}`, { next: { revalidate: 3600 } });
+    if (!res.ok) return null;
     return await res.json();
-  } catch (e) {
-    console.error('[BLOG] post fetch error', e);
+  } catch {
     return null;
+  }
+}
+
+export async function generateStaticParams() {
+  const api = process.env.BLOG_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  try {
+    const res = await fetch(`${api}/api/v1/blog/posts?limit=200`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    const posts: { slug: string }[] = data?.posts ?? [];
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
   }
 }
 

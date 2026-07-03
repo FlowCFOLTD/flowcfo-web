@@ -16,7 +16,7 @@ export const metadata: Metadata = createMetadata({
   ],
 });
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 interface BlogPostSummary {
   id: string;
@@ -32,7 +32,7 @@ async function getPosts(): Promise<BlogPostSummary[]> {
   const api = process.env.BLOG_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   const url = `${api}/api/v1/blog/posts?limit=50`;
   try {
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url, { next: { revalidate: 3600 } });
     if (!res.ok) {
       console.error('[BLOG] fetch failed', res.status);
       return [];
