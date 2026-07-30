@@ -6,7 +6,8 @@
     "dev": "next dev --port 3002",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "node -e \"const fs=require('fs');const p='node_modules/pg-cloudflare/package.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));j.exports['.']='./dist/index.js';fs.writeFileSync(p,JSON.stringify(j,null,2))\""
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
@@ -21,6 +22,7 @@
     "lucide-react": "^1.16.0",
     "next": "16.2.6",
     "pg": "^8.13.3",
+    "pg-cloudflare": "^1.4.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-markdown": "^10.1.0",
@@ -41,6 +43,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.116.0"
   }
 }
