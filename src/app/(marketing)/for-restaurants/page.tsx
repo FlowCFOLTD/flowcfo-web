@@ -39,10 +39,10 @@ export default function ForRestaurantsPage() {
           </p>
           <div className="flex gap-4">
             <Link
-              href="/waitlist"
+              href="/signup"
               className="flow-label bg-flow-gold px-10 py-4 font-bold text-flow-obsidian transition-all hover:brightness-110"
             >
-              Join Waitlist
+              Start Free
             </Link>
             <Link
               href="/features"
@@ -245,10 +245,10 @@ export default function ForRestaurantsPage() {
               required
             /> */}
             <Link
-              href="/waitlist"
+              href="/signup"
               className="bg-flow-obsidian px-8 py-4 font-bold text-white transition-all hover:bg-zinc-800"
             >
-              Join Waitlist
+              Start Free
             </Link>
           </div>
         </div>

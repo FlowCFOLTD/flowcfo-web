@@ -41,10 +41,10 @@ export default function ForAgenciesPage() {
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
-                href="/waitlist"
+                href="/signup"
                 className="flow-label bg-flow-gold px-8 py-4 text-center font-bold text-flow-black transition-all hover:opacity-90"
               >
-                Join Waitlist
+                Start free
               </Link>
               <Link
                 href="/about"
@@ -304,10 +304,10 @@ export default function ForAgenciesPage() {
               required
             /> */}
             <Link
-              href="/waitlist"
+              href="/signup"
               className="flow-label bg-flow-gold px-10 py-4 font-bold text-flow-black transition-all hover:scale-105"
             >
-              JOIN WAITLIST
+              START FREE
             </Link>
           </div>
           <p className="mt-6 font-mono text-[10px] uppercase tracking-widest text-flow-muted">

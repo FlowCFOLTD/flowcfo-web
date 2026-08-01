@@ -44,10 +44,10 @@ export default function ForEcommercePage() {
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
-                href="/waitlist"
+                href="/signup"
                 className="flow-label bg-flow-gold px-8 py-4 text-center text-sm font-bold text-flow-black transition-transform active:scale-95"
               >
-                Join the e-commerce waitlist
+                Start free
               </Link>
               <Link
                 href="/demo"
@@ -289,15 +289,16 @@ export default function ForEcommercePage() {
             Ready for real margin clarity?
           </h2>
           <p className="mb-12 font-body text-lg text-on-surface-variant">
-            Join the waitlist for FlowCFO&apos;s e-commerce suite. We are
-            rolling out access to early users each month.
+            Create your account for free and connect your bank. Early e-commerce
+            users get full access to margin monitoring, fee audits, and
+            Safe-to-Spend.
           </p>
           <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-4 md:flex-row">
             <Link
-              href="/waitlist"
+              href="/signup"
               className="flow-label bg-flow-black px-8 py-4 text-white transition-transform active:scale-95"
             >
-              Join the e-commerce waitlist
+              Start free
             </Link>
           </div>
         </div>

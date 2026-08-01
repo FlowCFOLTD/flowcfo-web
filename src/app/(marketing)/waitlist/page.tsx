@@ -47,12 +47,12 @@ export default function WaitlistPage() {
           </div>
 
           <h1 className="flow-headline-xl text-flow-black mb-6">
-            Be first. Shape the product.
+            Get early access.
           </h1>
           <p className="font-body text-base text-on-surface-variant max-w-[600px] mx-auto mb-16 leading-relaxed">
-            We&apos;re building FlowCFO with our early community — not for them.
-            Join the waitlist and we&apos;ll reach out personally to learn about
-            your business before we build anything.
+            FlowCFO is live. Join early access and tell us about your business
+            so we can set you up with Safe-to-Spend clarity, cash flow
+            forecasts, and tax reserves — before your next big decision.
           </p>
 
           {/* Conversion Form */}

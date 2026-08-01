@@ -183,7 +183,7 @@ export default function Contact() {
             </div>
             <Link
               className="flow-label mt-10 inline-block border-b border-flow-gold pb-1 text-flow-gold transition-all hover:border-white hover:text-white"
-              href="/waitlist"
+              href="/signup"
             >
               Join the early community
             </Link>

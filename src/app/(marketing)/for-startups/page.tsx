@@ -39,10 +39,10 @@ export default function ForStartupsPage() {
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
-                href="/waitlist"
+                href="/signup"
                 className="flow-label bg-flow-gold px-10 py-4 text-center text-lg font-bold text-flow-black transition-transform hover:scale-105"
               >
-                Join the Waitlist
+                Start Free
               </Link>
               <Link
                 href="/features"
@@ -306,10 +306,10 @@ export default function ForStartupsPage() {
                   required
                 /> */}
                 <Link
-                  href="/waitlist"
+                  href="/signup"
                   className="bg-flow-gold px-8 py-4 font-bold text-flow-black transition-colors hover:bg-flow-gold-soft"
                 >
-                  Join Waitlist
+                  Start Free
                 </Link>
               </div>
               <p className="mt-4 font-body text-sm text-flow-muted">

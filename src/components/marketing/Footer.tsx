@@ -55,8 +55,8 @@ export default function Footer() {
             <Link className="flow-label text-[#444748] underline transition-colors hover:text-flow-black" href="/contact">
               Contact
             </Link>
-            <Link className="flow-label font-bold text-flow-black underline transition-colors hover:text-[#735c00]" href="/waitlist">
-              Join Waitlist
+            <Link className="flow-label font-bold text-flow-black underline transition-colors hover:text-[#735c00]" href="/signup">
+              Get Started
             </Link>
           </div>
         </div>

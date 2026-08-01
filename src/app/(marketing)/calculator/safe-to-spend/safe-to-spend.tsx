@@ -75,7 +75,7 @@ export default function SafeToSpend() {
           <div className="mb-8 flex items-center justify-between gap-4">
             <h2 className="flow-label text-flow-obsidian">Business Inputs</h2>
             <Link
-              href="/waitlist"
+              href="/signup"
               className="flow-label flex items-center gap-2 bg-flow-obsidian px-4 py-2 text-white transition-colors hover:bg-flow-gold hover:text-flow-obsidian"
             >
               <Banknote className="h-[18px] w-[18px]" aria-hidden="true" />
@@ -227,7 +227,7 @@ export default function SafeToSpend() {
               FlowCFO connects to your accounts, learns recurring bills and income patterns, tracks tax reserves, and refreshes Safe-to-Spend automatically.
             </p>
             <Link
-              href="/waitlist"
+              href="/signup"
               className="flow-label mt-8 inline-flex items-center gap-2 bg-flow-gold px-8 py-4 text-flow-obsidian transition-all hover:brightness-110"
             >
               Get Early Access

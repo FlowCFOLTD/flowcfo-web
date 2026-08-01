@@ -265,9 +265,9 @@ export default function FeaturesPage() {
             </ul>
             <Link
               className="flow-label inline-flex items-center gap-2 bg-flow-gold px-10 py-5 text-flow-obsidian transition-all hover:scale-105"
-              href="/waitlist"
+              href="/signup"
             >
-              Join the waitlist
+              Get started
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
@@ -296,15 +296,16 @@ export default function FeaturesPage() {
         <div className="border border-flow-line bg-[#eeeeee] p-8 text-center md:p-16">
           <h2 className="flow-headline-xl mb-6 text-flow-obsidian">Know what your business can safely do next.</h2>
           <p className="mx-auto mb-10 max-w-2xl text-base leading-6 text-[#444748]">
-            Join the waitlist for early access. We&apos;re starting with e-commerce brands
-            who want financial clarity before decisions get expensive.
+            Create your account for free and connect your bank. We&apos;re
+            starting with e-commerce brands who want financial clarity before
+            decisions get expensive.
           </p>
           <div className="inline-flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
             <Link
               className="flow-label border border-flow-obsidian bg-flow-obsidian px-10 py-4 text-white transition-colors hover:bg-[#444748]"
-              href="/waitlist"
+              href="/signup"
             >
-              Secure early access
+              Start free
             </Link>
             <Link
               className="flow-label border border-flow-obsidian bg-white px-10 py-4 text-flow-obsidian transition-colors hover:bg-flow-gold"

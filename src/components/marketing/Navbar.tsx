@@ -87,10 +87,10 @@ export default function Navbar() {
           </div>
 
           <Link
-            href="/waitlist"
+            href="/signup"
             className="flow-label bg-flow-black px-4 py-3 text-white transition-opacity hover:opacity-80 md:px-8"
           >
-            Join Waitlist
+            Get Started
           </Link>
         </nav>
       </header>
@@ -143,10 +143,10 @@ export default function Navbar() {
         </div>
 
         <Link
-          href="/waitlist"
+          href="/signup"
           className="flow-label inline-flex items-center gap-2 bg-flow-gold px-4 py-3 text-flow-obsidian transition-all hover:opacity-90 active:scale-95 md:px-6"
         >
-          <span className="hidden sm:inline">Join Waitlist</span>
+          <span className="hidden sm:inline">Get Started</span>
           <span className="sm:hidden">Join</span>
           <ArrowRight className="h-[18px] w-[18px]" aria-hidden="true" />
         </Link>

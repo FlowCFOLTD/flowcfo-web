@@ -118,14 +118,14 @@ export default function HomePage() {
                 aria-hidden="true"
               />
               <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#ffe088]">
-                Vertical AI Agents for Your Business
+                AI Virtual CFO for Small Business
               </span>
             </div>
 
             <h1 className="max-w-xl font-display text-[44px] font-extrabold leading-[1.08] tracking-[-0.03em] text-white sm:text-6xl lg:text-[64px] lg:leading-[72px]">
-              AI Agents That{' '}
+              Know what you can{' '}
               <span className="text-[#D4AF37]">
-                Know Your Business Finance.
+                safely spend today.
               </span>
             </h1>
 
@@ -173,19 +173,18 @@ export default function HomePage() {
             </div>
 
             <p className="max-w-lg text-lg leading-7 text-[#858383]">
-              FlowCFO deploys specialized AI agents for your specific business
-              model. Margin Guardian, Fee Auditor, Inventory Replenishment,
-              Category Suggester - each agent watches your finances continuously
-              and alerts you when action is needed. All actions require your
-              approval.
+              FlowCFO connects your bank accounts and tells you exactly how
+              much you can safely spend after taxes, bills, and upcoming
+              commitments. It forecasts cash flow, reserves taxes, and monitors
+              your margins 24/7 — so you stop guessing and start deciding.
             </p>
 
             <div className="flex flex-col gap-4 pt-4 sm:flex-row">
               <Link
-                href="/waitlist"
+                href="/signup"
                 className="inline-flex items-center justify-center gap-3 bg-[#D4AF37] px-10 py-5 text-xs font-bold uppercase tracking-[0.12em] text-[#0A0A0A] transition-all hover:opacity-90 active:scale-95"
               >
-                Get Early Access
+                Start Free
                 <ArrowRight className="h-5 w-5" aria-hidden="true" />
               </Link>
               <Link
@@ -470,7 +469,7 @@ export default function HomePage() {
             ))}
 
             <Link
-              href="/waitlist"
+              href="/signup"
               className="group flex cursor-pointer flex-col justify-between bg-[#D4AF37] p-10 text-[#0A0A0A] transition-all active:scale-95 md:col-span-4"
             >
               <h3 className="font-display text-xl font-bold">
@@ -478,7 +477,7 @@ export default function HomePage() {
               </h3>
               <div className="mt-8 flex items-center justify-between">
                 <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#0A0A0A]/80">
-                  AI Agents for Your Business
+                  Try it free
                 </p>
                 <PhoneCall
                   className="h-8 w-8 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"

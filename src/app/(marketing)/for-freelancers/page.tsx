@@ -39,10 +39,10 @@ export default function ForFreelancersPage() {
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
-                href="/waitlist"
+                href="/signup"
                 className="flow-label bg-primary-design px-10 py-4 text-center text-flow-black transition-all duration-300 hover:brightness-110"
               >
-                Join the waitlist
+                Start free
               </Link>
               <Link
                 href="/features"
@@ -304,10 +304,10 @@ export default function ForFreelancersPage() {
               required
             /> */}
             <Link
-              href="/waitlist"
+              href="/signup"
               className="bg-primary-design px-12 py-5 text-xs font-bold uppercase tracking-[0.08em] text-flow-black transition-all hover:brightness-110"
             >
-              Join the waitlist
+              Start free
             </Link>
           </form>
         </div>

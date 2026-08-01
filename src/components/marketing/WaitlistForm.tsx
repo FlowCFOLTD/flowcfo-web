@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, Loader2 } from 'lucide-react';
 import { useJoinWaitlist } from '@/hooks/api/use-public';
-import Image from 'next/image';
 
 export default function WaitlistForm() {
   const [email, setEmail] = useState('');
@@ -143,37 +142,9 @@ export default function WaitlistForm() {
                 SUBMITTING...
               </span>
             ) : (
-              'JOIN THE WAITLIST →'
+              'GET EARLY ACCESS →'
             )}
           </button>
-          <div className="flex items-center gap-2">
-            <div className="flex -space-x-2">
-              <div className="w-8 h-8 rounded-full border-2 border-white bg-surface-container overflow-hidden relative">
-                <Image
-                  fill
-                  priority
-                  className="object-cover"
-                  alt="Community member"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVjeZEQJRQaDBTgO9U-JhAE_iyCJeZz_Uupi-grUrnKu1omfP8Tci_B25okfmSFn2juPG9csdgoNVvM35P-dUFqfRrRLZQ9a4Ss8GBEMMQz_S7eSKZW7UtK77CpycD8wTKQ3F1Uu7SSTc7aj6gMAntjutytw4eunxCVYqupelbmg5BR90o4-864I-jOuRU4_T_rwgltqxmuEyFQL4GamxXEtjF3lmbo31xDSgiWUdddUNir7KnVRCpQQ2xUdKbc8VP5j5WAGZoBznB"
-                />
-              </div>
-              <div className="w-8 h-8 rounded-full border-2 border-white bg-surface-container overflow-hidden relative">
-                <Image
-                  fill
-                  priority
-                  className="object-cover"
-                  alt="Community member"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgmWEtlFHdw_BOKbAiDwRJ5x_C__ZDyumxNOzMqnvs0hT49VrNEoPLKwCtRlc4qvU5_jiORf2FEwF6ye006FIhU80NLodDbY3CBNiXBqQg5S_Jd3uBGMDyx1Ubzs-XDzrxupNP5xCjSD6vi0uGgT6-J5GxZOETAIl8I__1LCOnTeLaP1mKqovSarlXzBeThf488Xj9-nYaMX-pf9ZKZHGFXAlCQ_Ixlp_s0mGE28eVn7SOaciFPjoPjBZnORX1C2BV1vLgNlBi5gis"
-                />
-              </div>
-              <div className="w-8 h-8 rounded-full border-2 border-white bg-flow-black flex items-center justify-center text-[10px] text-white font-bold">
-                +100
-              </div>
-            </div>
-            <span className="font-body text-sm text-on-surface-variant">
-              Already 100+ businesses waiting.
-            </span>
-          </div>
         </div>
       </form>
       <MicroInteractions />

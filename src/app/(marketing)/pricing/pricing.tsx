@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ChevronDown, CheckCircle2 } from 'lucide-react';
 
 const plans = [
@@ -99,10 +98,10 @@ export default function Pricing() {
           </p>
           <div className="flex flex-col justify-center gap-6 md:flex-row">
             <Link
-              href="/waitlist"
+              href="/signup"
               className="flow-label bg-flow-gold px-12 py-5 font-bold text-flow-black transition-transform hover:scale-105"
             >
-              JOIN THE WAITLIST
+              START FREE
             </Link>
             <Link
               href="/features"
@@ -117,21 +116,6 @@ export default function Pricing() {
       {/* Section 2: Cassie Quote */}
       <section className="border-b border-flow-line bg-white py-32">
         <div className="mx-auto flex max-w-[1440px] flex-col items-center gap-16 px-4 md:flex-row md:px-16">
-          <div className="w-full md:w-1/3">
-            <div className="relative">
-              <div className="relative aspect-square overflow-hidden border border-flow-line grayscale transition-all duration-700 hover:grayscale-0">
-                <Image
-                  alt="Cassie V. - E-commerce Founder"
-                  fill
-                  className="object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLslxl13rxOaaAbeEdDvGi7XsOMOI5aNDHEKbSols0jM2OFjw1M56svfUbK1yz400Nbkqjt_d8fHda1YiHyifJXbBhrz9sOD1nCgGlPodeYeIWuHWeCBs0av2cBViYQ_oGjHeKrhTLZBP0QJjB2NbH7Aib0MkhO2qJwBiWl_QDStLI-yKPrYN66DWdDRPdgABq_CCJ_Eu-mt3V1Ke1-W4IAB3Skaijso7q_kQ1j824hHVKxyVm6kP-htHrQbwr5lYA3-1_Re2AgrFr"
-                />
-              </div>
-              <div className="flow-label absolute -bottom-4 -right-4 bg-flow-gold p-6 font-bold text-flow-black">
-                VERIFIED FOUNDER
-              </div>
-            </div>
-          </div>
           <div className="w-full md:w-3/4">
             <span className="material-symbols-outlined mb-6 text-6xl text-flow-gold">
               format_quote
@@ -218,7 +202,7 @@ export default function Pricing() {
                   {plan.description}
                 </p>
                 <ul
-                  className={`mb-12 flex-grow space-y-4 ${
+                  className={`mb-0 flex-grow space-y-4 ${
                     plan.popular ? 'text-white' : 'text-flow-black'
                   }`}
                 >
@@ -229,16 +213,6 @@ export default function Pricing() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href="/waitlist"
-                  className={`flow-label w-full py-4 text-center font-bold transition-all ${
-                    plan.popular
-                      ? 'bg-flow-gold text-flow-black hover:bg-white'
-                      : 'border border-flow-black text-flow-black hover:bg-flow-black hover:text-white'
-                  }`}
-                >
-                  {plan.cta}
-                </Link>
               </div>
             ))}
           </div>

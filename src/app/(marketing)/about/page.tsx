@@ -145,16 +145,16 @@ export default function AboutPage() {
           <h2 className="flow-headline-xl mb-8 text-flow-black">Ready for absolute clarity?</h2>
           <div className="flex flex-col gap-6 sm:flex-row">
             <Link
-              href="/waitlist"
+              href="/signup"
               className="flow-label bg-flow-gold px-12 py-4 text-flow-black transition-all hover:opacity-90"
             >
-              Join the Waitlist
+              Start Free
             </Link>
             <Link
-              href="/waitlist"
+              href="/contact"
               className="flow-label bg-flow-black px-12 py-4 text-white transition-all hover:bg-[#444748]"
             >
-              Shape the Product
+              Talk to Us
             </Link>
           </div>
         </div>
