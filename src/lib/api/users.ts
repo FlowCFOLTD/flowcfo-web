@@ -1,5 +1,13 @@
 import { apiClient } from '../api-client';
 
+export interface Envelope<T> {
+  status: 'ok';
+  data: T;
+  meta: { request_id: string; timestamp: string };
+}
+
+const unwrap = <T,>(p: Promise<Envelope<T>>): Promise<T> => p.then((r) => r.data);
+
 export interface AIInsights {
   market?: {
     label: string;
@@ -241,4 +249,99 @@ export const spendApi = {
 
 export const taxSuggestionApi = {
   getSuggestion: () => apiClient<TaxSuggestion>('/api/v1/tax/suggest-rate'),
+};
+
+export interface InvoiceItem {
+  id: string;
+  invoice_no: string;
+  client_name: string;
+  amount: number;
+  currency: string;
+  issue_date: string | null;
+  due_date: string;
+  status: string;
+  paid_date: string | null;
+  description: string | null;
+  days_overdue: number;
+  is_overdue: boolean;
+  aging_bucket: string;
+}
+
+export interface AgingSummary {
+  outstanding_total: number;
+  outstanding_count: number;
+  overdue_total: number;
+  overdue_count: number;
+  buckets: Record<string, number>;
+}
+
+export interface CurrencyOption {
+  code: string;
+  name: string;
+}
+
+export const invoiceApi = {
+  list: () => unwrap(apiClient<Envelope<{ invoices: InvoiceItem[] }>>('/api/v1/invoices')),
+  create: (data: { invoice_no: string; client_name: string; amount: number; due_date: string; issue_date?: string; currency?: string; description?: string }) =>
+    unwrap(apiClient<Envelope<InvoiceItem>>('/api/v1/invoices', { method: 'POST', body: data })),
+  markPaid: (id: string) =>
+    unwrap(apiClient<Envelope<InvoiceItem>>(`/api/v1/invoices/${id}/paid`, { method: 'POST' })),
+  importCsv: (formData: FormData) =>
+    unwrap(apiClient<Envelope<{ imported: number; warnings: string[] }>>('/api/v1/invoices/import', {
+      method: 'POST',
+      body: formData,
+    })),
+  aging: () => unwrap(apiClient<Envelope<AgingSummary>>('/api/v1/invoices/aging')),
+  currencies: () => unwrap(apiClient<Envelope<{ currencies: CurrencyOption[] }>>('/api/v1/invoices/currencies')),
+};
+
+export interface OpexOutlook {
+  horizon_days: number;
+  reference_date: string;
+  monthly_opex_avg: number;
+  two_month_opex: number;
+  will_shortfall: boolean;
+  shortfall_amount: number;
+  shortfall_date: string | null;
+  min_projected_balance: number;
+  projected_end_balance: number;
+  confidence: string;
+}
+
+export interface RiskDriver {
+  factor: string;
+  points: number;
+  value: number | string;
+  detail: string;
+}
+
+export interface RiskOverview {
+  risk_score: number;
+  band: string;
+  health_score: number;
+  drivers: RiskDriver[];
+  reference_date: string;
+  confidence: string;
+}
+
+export const insightsApi = {
+  opex: () => unwrap(apiClient<Envelope<OpexOutlook>>('/api/v1/insights/opex')),
+  risk: () => unwrap(apiClient<Envelope<RiskOverview>>('/api/v1/insights/risk')),
+};
+
+export interface ConsentItem {
+  id: string;
+  bank_code: string;
+  scopes: string[];
+  purpose: string;
+  revoked: boolean;
+  consented_at: string | null;
+}
+
+export const consentsApi = {
+  list: () => unwrap(apiClient<Envelope<{ consents: ConsentItem[] }>>('/api/v1/consents')),
+  grant: (data: { bank_code: string; scopes?: string[]; purpose?: string }) =>
+    unwrap(apiClient<Envelope<{ id: string; bank_code: string; scopes: string[] }>>('/api/v1/consents', { method: 'POST', body: data })),
+  revoke: (id: string) =>
+    unwrap(apiClient<Envelope<{ revoked: boolean }>>(`/api/v1/consents/${id}`, { method: 'DELETE' })),
 };

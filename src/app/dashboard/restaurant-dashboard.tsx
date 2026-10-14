@@ -10,6 +10,7 @@ import CashFlowChart from '@/components/dashboard/cash-flow-chart';
 import RecentTransactions from '@/components/dashboard/recent-transactions';
 import TaxReserveGauge from '@/components/dashboard/tax-reserve-gauge';
 import ActiveAlerts from '@/components/dashboard/active-alerts';
+import { InvoiceAgingCard, OpexOutlookCard, RiskScoreCard } from '@/components/dashboard/financial-health-cards';
 import AIInsightCards from '@/components/dashboard/ai-insight-cards';
 
 function LoadingSpinner() {
@@ -150,6 +151,9 @@ export default function RestaurantDashboardPage() {
                   shortfall={dash.tax_reserve_status.shortfall}
                 />
                 <ActiveAlerts data={dash.active_alerts} />
+                <InvoiceAgingCard />
+                <OpexOutlookCard />
+                <RiskScoreCard />
 
                 {/* AI Insights */}
                 {user?.ai_insights && Object.keys(user.ai_insights).length > 0 && (

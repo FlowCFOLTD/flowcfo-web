@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
 import { adminApi, blogApi } from '@/lib/api/users';
+import EnterpriseConsole from '@/components/admin/enterprise-console';
 import type {
   BlogSettingsData,
   BlogPostSummary,
@@ -32,6 +33,7 @@ import {
   Eye,
   Trash2,
   X,
+  Building2,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -129,7 +131,7 @@ export default function AdminDashboard() {
   const [settingsDirty, setSettingsDirty] = useState(false);
 
   const [activeTab, setActiveTab] = useState<
-    'overview' | 'waitlist' | 'contacts' | 'users' | 'events' | 'health' | 'blog'
+    'overview' | 'waitlist' | 'contacts' | 'users' | 'events' | 'health' | 'blog' | 'enterprise'
   >('overview');
   const router = useRouter();
 
@@ -264,6 +266,12 @@ export default function AdminDashboard() {
             onClick={() => setActiveTab('blog')}
             icon={<FileText className="h-4 w-4" />}
             label="Blog"
+          />
+          <NavButton
+            active={activeTab === 'enterprise'}
+            onClick={() => setActiveTab('enterprise')}
+            icon={<Building2 className="h-4 w-4" />}
+            label="Enterprise"
           />
         </nav>
 
@@ -1074,6 +1082,7 @@ export default function AdminDashboard() {
               )}
             </div>
           )}
+          {activeTab === 'enterprise' && <EnterpriseConsole />}
         </div>
       </main>
     </div>

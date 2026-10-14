@@ -10,6 +10,7 @@ import CashFlowChart from '@/components/dashboard/cash-flow-chart';
 import RecentTransactions from '@/components/dashboard/recent-transactions';
 import TaxReserveGauge from '@/components/dashboard/tax-reserve-gauge';
 import ActiveAlerts from '@/components/dashboard/active-alerts';
+import { InvoiceAgingCard, OpexOutlookCard, RiskScoreCard } from '@/components/dashboard/financial-health-cards';
 import MarketInsightCard from '@/components/dashboard/market-insight-card';
 import AIInsightCards from '@/components/dashboard/ai-insight-cards';
 
@@ -118,6 +119,9 @@ export default function StartupDashboardPage() {
                 shortfall={dash.tax_reserve_status.shortfall}
               />
               <ActiveAlerts data={dash.active_alerts} />
+                <InvoiceAgingCard />
+                <OpexOutlookCard />
+                <RiskScoreCard />
               <MarketInsightCard
                 index_label={dash.market_insight.index_label}
                 index_value={dash.market_insight.index_value}
