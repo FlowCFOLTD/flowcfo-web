@@ -4,17 +4,16 @@ import JsonLd from "@/components/json-ld";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata({
-  title: "FlowCFO — AI Virtual CFO for Small Business Cash Flow",
+  title: "FlowCFO — Financial intelligence for people and businesses",
   description:
-    "Know what you can safely spend today. FlowCFO forecasts cash flow, calculates tax reserves, monitors margins, and runs vertical AI agents for your business.",
-  imageAlt: "FlowCFO financial command center dashboard",
+    "FlowCFO turns financial activity into useful guidance for consumers and small businesses, with APIs for banks and platforms to embed financial intelligence.",
+  imageAlt: "FlowCFO financial intelligence for consumers and SMEs",
   keywords: [
-    "AI virtual CFO",
-    "small business cash flow software",
-    "safe to spend",
-    "cash flow forecasting AI",
-    "ecommerce margin monitoring",
-    "freelancer tax reserve",
+    "consumer financial insights",
+    "small business cash flow",
+    "banking financial intelligence API",
+    "SME cash flow forecasting",
+    "embedded financial guidance",
   ],
 });
 

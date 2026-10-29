@@ -290,7 +290,7 @@ export default function TaxReserve() {
               Your bank balance includes money that may belong to tax authorities. FlowCFO strips that out before telling you what is safe to spend.
             </p>
             <Link
-              href="/signup"
+              href="/contact"
               className="flow-label mt-8 inline-flex items-center gap-2 bg-flow-gold px-8 py-4 text-flow-obsidian transition-all hover:brightness-110"
             >
               Automate Tax Reserves
@@ -342,14 +342,14 @@ export default function TaxReserve() {
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </span>
         </Link>
-        <Link href="/signup" className="group border border-flow-line bg-white p-8 transition-all hover:border-flow-obsidian">
+        <Link href="/contact" className="group border border-flow-line bg-white p-8 transition-all hover:border-flow-obsidian">
           <Globe2 className="mb-6 h-8 w-8 text-flow-gold" aria-hidden="true" />
           <h2 className="font-display text-2xl font-bold text-flow-obsidian">Country-specific tax rules</h2>
           <p className="mt-3 text-sm leading-5 text-[#444748]">
             Create a free account to help us tune FlowCFO for your country, business type, and tax calendar.
           </p>
           <span className="flow-label mt-8 inline-flex items-center gap-2 text-flow-obsidian">
-            Start free
+            Discuss access
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
           </span>
         </Link>

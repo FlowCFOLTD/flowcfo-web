@@ -7,8 +7,8 @@ import { useSubmitContact } from "@/hooks/api/use-public";
 
 const subjects = [
   "General question",
-  "Early access",
-  "Partnership",
+  "Early access / assisted setup",
+  "Enterprise API or banking partnership",
   "Product feedback",
   "Press",
   "Bug report",
@@ -46,10 +46,9 @@ export default function Contact() {
         <section className="lg:col-span-7">
           <div className="mb-16">
             <span className="flow-label mb-4 block text-flow-gold">Get in Touch</span>
-            <h1 className="flow-headline-xl mb-6 text-flow-obsidian">We actually read these.</h1>
+            <h1 className="flow-headline-xl mb-6 text-flow-obsidian">Let’s talk about what you need.</h1>
             <p className="max-w-xl text-base leading-6 text-[#444748]">
-              We&apos;re building FlowCFO with the people who need it: freelancers, e-commerce sellers,
-              agencies, restaurants, and small business owners trying to make better money decisions before it is too late.
+              Tell us whether you’re exploring personal financial guidance, SME cash-flow intelligence, or an API integration for your customers. We’ll arrange a conversation and help define the right setup.
             </p>
           </div>
 
@@ -59,7 +58,7 @@ export default function Contact() {
                 <CheckCircle2 className="mb-6 h-16 w-16 text-flow-forest" />
                 <h2 className="flow-headline-lg mb-4 text-flow-obsidian">Message sent!</h2>
                 <p className="max-w-xs text-base text-[#444748]">
-                  Thanks for reaching out. We&apos;ll get back to you within 24 hours.
+                  Thanks for reaching out. We&apos;ll review your message and follow up to arrange next steps.
                 </p>
                 <button
                   onClick={() => setStatus("idle")}
@@ -112,7 +111,7 @@ export default function Contact() {
                     className="border-0 border-b border-flow-obsidian bg-transparent px-0 py-2 text-base focus:border-b-2 focus:ring-0"
                     id="contact-subject"
                     name="subject"
-                    defaultValue="Early access"
+                    defaultValue="Early access / assisted setup"
                   >
                     {subjects.map((subject) => (
                       <option key={subject} value={subject}>
@@ -162,8 +161,7 @@ export default function Contact() {
             <span className="flow-label mb-6 block text-flow-gold">Partnerships</span>
             <h2 className="flow-headline-lg mb-4 text-white">Build financial clarity into the tools operators already use.</h2>
             <p className="mb-8 text-base leading-6 text-flow-muted">
-              We&apos;re open to thoughtful integrations with banks, accounting platforms, e-commerce tools, payroll products,
-              and communities serving freelancers or small businesses.
+              We&apos;re exploring integrations with banks and platforms that want to bring consumer or SME financial intelligence into the customer journeys they already provide.
             </p>
             <div className="space-y-4">
               <div className="flex items-start gap-4">
@@ -183,9 +181,9 @@ export default function Contact() {
             </div>
             <Link
               className="flow-label mt-10 inline-block border-b border-flow-gold pb-1 text-flow-gold transition-all hover:border-white hover:text-white"
-              href="/signup"
+              href="/contact"
             >
-              Join the early community
+              Talk about assisted access
             </Link>
           </div>
 
@@ -206,7 +204,7 @@ export default function Contact() {
             <div>
               <h3 className="flow-label mb-2 text-flow-obsidian">Small team, real replies</h3>
               <p className="text-sm leading-5 text-[#444748]">
-                No call-center maze. If you write with a real use case, a founder will read it and respond.
+                Tell us your customer, data source and goal. We’ll use that context to make the first conversation practical.
               </p>
             </div>
           </div>

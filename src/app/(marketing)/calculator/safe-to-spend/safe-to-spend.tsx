@@ -75,11 +75,11 @@ export default function SafeToSpend() {
           <div className="mb-8 flex items-center justify-between gap-4">
             <h2 className="flow-label text-flow-obsidian">Business Inputs</h2>
             <Link
-              href="/signup"
+              href="/contact"
               className="flow-label flex items-center gap-2 bg-flow-obsidian px-4 py-2 text-white transition-colors hover:bg-flow-gold hover:text-flow-obsidian"
             >
               <Banknote className="h-[18px] w-[18px]" aria-hidden="true" />
-              Connect bank
+              Discuss setup
             </Link>
           </div>
 
@@ -222,15 +222,15 @@ export default function SafeToSpend() {
       <section className="mt-24 overflow-hidden border border-flow-line bg-flow-obsidian">
         <div className="grid grid-cols-1 lg:grid-cols-12">
           <div className="p-8 text-white md:p-12 lg:col-span-7">
-            <h2 className="flow-headline-lg max-w-lg text-white">A calculator helps. A connected CFO engine updates daily.</h2>
+            <h2 className="flow-headline-lg max-w-lg text-white">Use this estimate as a starting point for a fuller cash-flow view.</h2>
             <p className="mt-4 max-w-xl text-base leading-6 text-flow-muted">
-              FlowCFO connects to your accounts, learns recurring bills and income patterns, tracks tax reserves, and refreshes Safe-to-Spend automatically.
+              FlowCFO is designed to combine financial activity, recurring commitments and cash-flow context. Available data connections and refresh timing are confirmed during setup.
             </p>
             <Link
-              href="/signup"
+              href="/contact"
               className="flow-label mt-8 inline-flex items-center gap-2 bg-flow-gold px-8 py-4 text-flow-obsidian transition-all hover:brightness-110"
             >
-              Get Early Access
+              Discuss access
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>

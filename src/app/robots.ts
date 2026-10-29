@@ -9,6 +9,8 @@ export default function robots(): MetadataRoute.Robots {
     "/accept-terms",
     "/signin",
     "/signup",
+    "/login",
+    "/register",
     "/forgot-password",
     "/reset-password",
   ];

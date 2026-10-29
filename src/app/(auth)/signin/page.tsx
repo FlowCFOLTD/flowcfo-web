@@ -4,10 +4,9 @@ import Signin from './signin';
 export const metadata: Metadata = {
   title: 'Sign In | FlowCFO',
   description:
-    'Access your financial command center. CFO-level clarity for founders and business owners.',
+    'Self-service sign-in is currently unavailable. Contact FlowCFO to arrange access and a setup conversation.',
 };
 
-export default async function SigninPage(props: { searchParams: Promise<{ verify?: string; email?: string }> }) {
-  const searchParams = await props.searchParams;
-  return <Signin verify={searchParams?.verify} verifyEmail={searchParams?.email} />;
+export default function SigninPage() {
+  return <Signin />;
 }

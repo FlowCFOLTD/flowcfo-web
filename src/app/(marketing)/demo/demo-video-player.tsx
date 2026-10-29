@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
+import Link from "next/link";
 import { Play, Pause, RotateCcw, RotateCw } from "lucide-react";
 
 const SKIP_SECONDS = 10;
@@ -10,6 +11,7 @@ export default function DemoVideoPlayer() {
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const [showControls, setShowControls] = useState(true);
   const hideTimer = useRef<ReturnType<typeof setTimeout>>(null);
 
@@ -47,7 +49,9 @@ export default function DemoVideoPlayer() {
     (seconds: number) => {
       const video = videoRef.current;
       if (!video) return;
-      video.currentTime = Math.max(0, Math.min(video.currentTime + seconds, video.duration || 0));
+      const nextTime = Math.max(0, Math.min(video.currentTime + seconds, video.duration || 0));
+      video.currentTime = nextTime;
+      setCurrentTime(nextTime);
       setShowControls(true);
       scheduleHide();
     },
@@ -58,6 +62,7 @@ export default function DemoVideoPlayer() {
     const video = videoRef.current;
     if (!video || !video.duration) return;
     setProgress((video.currentTime / video.duration) * 100);
+    setCurrentTime(video.currentTime);
   }, []);
 
   const handleLoadedMetadata = useCallback(() => {
@@ -75,6 +80,7 @@ export default function DemoVideoPlayer() {
       const seekTime = (x / rect.width) * video.duration;
       video.currentTime = seekTime;
       setProgress((seekTime / video.duration) * 100);
+      setCurrentTime(seekTime);
     },
     [],
   );
@@ -92,8 +98,13 @@ export default function DemoVideoPlayer() {
 
   if (!videoUrl) {
     return (
-      <div className="flex aspect-video items-center justify-center bg-black p-8 text-center">
-        <p className="flow-label text-flow-muted">Demo video not configured.</p>
+      <div className="flex aspect-video items-center justify-center bg-[#f7f6f1] p-8 text-center">
+        <div className="max-w-xl">
+          <p className="text-xs font-semibold uppercase tracking-[.14em] text-[#806a1f]">Tailored walkthroughs</p>
+          <h2 className="mt-4 font-display text-3xl font-semibold text-[#202421]">See the journey that matters to your customers.</h2>
+          <p className="mt-4 leading-7 text-[#626a63]">We’ll walk through consumer or SME scenarios using a setup tailored to your institution’s questions and data context.</p>
+          <Link href="/contact" className="mt-6 inline-flex rounded-lg bg-[#b89a32] px-5 py-3 font-semibold text-[#171914]">Arrange a walkthrough</Link>
+        </div>
       </div>
     );
   }
@@ -196,7 +207,7 @@ export default function DemoVideoPlayer() {
             </div>
 
             <div className="font-mono text-[11px] text-white/80">
-              {formatTime(videoRef.current?.currentTime || 0)} / {formatTime(duration)}
+              {formatTime(currentTime)} / {formatTime(duration)}
             </div>
           </div>
         </div>

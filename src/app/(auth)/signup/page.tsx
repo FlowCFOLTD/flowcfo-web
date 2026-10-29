@@ -4,7 +4,7 @@ import Signup from './signup';
 export const metadata: Metadata = {
   title: 'Create Account | FlowCFO',
   description:
-    'Join the elite founders managing their business finances with CFO-level clarity. Be in control of your business finances today.',
+    'FlowCFO access is currently arranged through an assisted setup. Contact our team to discuss personal, SME, or enterprise use.',
 };
 
 export default function SignupPage() {

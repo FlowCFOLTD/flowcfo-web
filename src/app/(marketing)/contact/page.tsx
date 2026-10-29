@@ -6,7 +6,7 @@ import { createMetadata } from "@/lib/seo";
 export const metadata: Metadata = createMetadata({
   title: "Contact FlowCFO — Get in Touch",
   description:
-    "Talk to FlowCFO about early access, partnerships, or the financial clarity problem your business is trying to solve.",
+    "Talk to FlowCFO about assisted access, consumer or SME financial intelligence, and API integrations for banks and platforms.",
   path: "/contact",
 });
 

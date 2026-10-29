@@ -4,9 +4,9 @@ import Pricing from './pricing';
 import { createMetadata } from '@/lib/seo';
 
 export const metadata: Metadata = createMetadata({
-  title: 'FlowCFO Pricing — AI CFO Plans for Small Businesses',
+  title: 'FlowCFO Pricing — Personal, SME and enterprise plans',
   description:
-    'Compare FlowCFO plans for freelancers, ecommerce sellers, agencies, restaurants, and startups. Get Safe-to-Spend clarity, AI agents, tax reserves, and cash flow forecasts.',
+    'Explore indicative FlowCFO pricing for personal finance guidance, small-business cash-flow intelligence and enterprise API deployments.',
   path: '/pricing',
   keywords: ['FlowCFO pricing', 'AI CFO pricing', 'virtual CFO software pricing'],
 });

@@ -25,11 +25,11 @@ const dmMono = DM_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'FlowCFO — AI Virtual CFO for Small Business Cash Flow',
+    default: 'FlowCFO — Financial intelligence for people and businesses',
     template: '%s | FlowCFO',
   },
   description:
-    'FlowCFO is an AI virtual CFO for ecommerce brands, freelancers, agencies, restaurants, and startups. Forecast cash flow, calculate tax reserves, monitor margins, and know your Safe-to-Spend number.',
+    'FlowCFO turns financial activity into useful guidance for consumers and small businesses, with APIs for banks and platforms to embed financial intelligence.',
   metadataBase: new URL(siteUrl),
   alternates: {
     canonical: siteUrl,
@@ -49,44 +49,30 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName: 'FlowCFO',
-    title: 'FlowCFO — AI Virtual CFO for Small Business Cash Flow',
+    title: 'FlowCFO — Financial intelligence for people and businesses',
     description:
-      'Know what you can safely spend today. FlowCFO combines cash flow forecasting, tax reserves, margin monitoring, and vertical AI agents for modern small businesses.',
+      'FlowCFO helps consumers understand spending and commitments, helps SMEs anticipate cash-flow pressure, and gives partners APIs to embed financial guidance.',
     url: siteUrl,
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'FlowCFO — Vertical AI Agents' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'FlowCFO financial intelligence for people, SMEs and platforms' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'FlowCFO — AI Virtual CFO for Small Business Cash Flow',
+    title: 'FlowCFO — Financial intelligence for people and businesses',
     description:
-      'Forecast cash flow, calculate tax reserves, monitor margins, and know your Safe-to-Spend number.',
+      'Useful financial insights for consumers and SMEs, delivered directly or through partner APIs.',
     images: ['/og-image.png'],
   },
   keywords: [
     'AI CFO',
-    'vertical AI agents',
-    'ecommerce financial software',
-    'autonomous finance platform',
-    'cash flow forecasting AI',
-    'gross margin monitoring tool',
-    'freelancer tax planning AI',
-    'agency profitability tracking',
-    'restaurant food cost AI',
-    'startup burn rate monitoring',
-    'safe to spend calculator',
-    'AI bookkeeping for small business',
-    'platform fee tracking ecommerce',
-    'inventory replenishment AI',
-    'virtual CFO for entrepreneurs',
+    'consumer financial insights',
+    'small business cash flow intelligence',
+    'banking financial intelligence API',
+    'SME cash flow forecasting',
+    'embedded financial guidance',
   ],
   icons: {
-    icon: [
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
-      { url: '/favicon-96x96.png', sizes: '96x96', type: 'image/png' },
-    ],
-    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+    icon: '/icon.svg',
+    apple: '/apple-touch-icon.png',
   },
 };
 

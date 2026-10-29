@@ -1,116 +1,14 @@
-import type { Metadata } from 'next';
-export const dynamic = 'force-static';
-import DemoVideoPlayer from './demo-video-player';
-import { createMetadata } from '@/lib/seo';
+import type { Metadata } from "next";
+import Link from "next/link";
+import DemoVideoPlayer from "./demo-video-player";
+import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = createMetadata({
-  title: 'FlowCFO Demo — AI CFO Dashboard, Agents & Cash Flow Tools',
-  description:
-    'Watch a guided walkthrough of FlowCFO: Safe-to-Spend, AI agents, ecommerce margin monitoring, cash flow analysis, pricing tools, and Telegram alerts.',
-  path: '/demo',
-});
+export const metadata: Metadata = createMetadata({ title: "FlowCFO product demo", description: "See how FlowCFO can turn consumer and small-business financial activity into useful guidance, alerts and next steps.", path: "/demo" });
 
 export default function DemoPage() {
-  return (
-    <div className="overflow-x-hidden bg-flow-paper text-flow-black">
-      <header className="flow-container pb-20 pt-40">
-        <div className="grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
-          <div className="lg:col-span-8">
-            <p className="flow-label mb-4 text-[#735c00]">Walkthrough</p>
-            <h1 className="flow-headline-xl max-w-4xl text-flow-black">
-              See FlowCFO <span className="gold-underline">in action</span>.
-            </h1>
-          </div>
-          <div className="pb-4 lg:col-span-4">
-            <p className="text-base leading-6 text-[#444748]">
-              A guided tour of the dashboard, AI agents, cash flow tools,
-              pricing calculators, and financial alerts — all in under 5
-              minutes.
-            </p>
-          </div>
-        </div>
-      </header>
-
-      <section className="flow-container mb-32">
-        <div className="executive-border overflow-hidden bg-black">
-          <DemoVideoPlayer />
-        </div>
-      </section>
-
-      <section className="border-y border-flow-line bg-[#f3f3f3] py-24">
-        <div className="flow-container">
-          <div className="mx-auto max-w-3xl">
-            <h2 className="flow-headline-lg mb-8 text-center text-flow-black">
-              What you&apos;ll see
-            </h2>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {[
-                {
-                  title: 'Dashboard Overview',
-                  text: 'Safe-to-Spend, cash position, recent transactions, and key metrics at a glance.',
-                },
-                {
-                  title: 'AI Agents',
-                  text: 'Automated margin monitoring, fee audits, inventory alerts, and category suggestions.',
-                },
-                {
-                  title: 'Cash Flow Analysis',
-                  text: '30/60/90-day forecasts, transaction history, and income/expense patterns.',
-                },
-                {
-                  title: 'Pricing Tools',
-                  text: 'Break-even calculator, ideal pricing, and recommended ad spend for products.',
-                },
-                {
-                  title: 'Tax Reserves',
-                  text: 'Automatic tax allocation per transaction, quarterly payment tracking.',
-                },
-                {
-                  title: 'Telegram Bot',
-                  text: 'Real-time alerts, AI chat, agent triggers, and morning briefs via Telegram.',
-                },
-              ].map((item) => (
-                <article
-                  key={item.title}
-                  className="executive-border bg-white p-6"
-                >
-                  <h3 className="flow-label mb-2 text-flow-black">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm leading-5 text-[#444748]">
-                    {item.text}
-                  </p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="flow-container py-24">
-        <div className="flex flex-col items-center text-center">
-          <h2 className="flow-headline-xl mb-8 text-flow-black">
-            Ready to try it yourself?
-          </h2>
-          <p className="mb-10 max-w-xl text-base leading-6 text-[#444748]">
-            Signup and help shape this further.
-          </p>
-          <div className="flex flex-col gap-6 sm:flex-row">
-            <a
-              href="/signup"
-              className="flow-label bg-flow-gold px-12 py-4 text-flow-black transition-all hover:opacity-90"
-            >
-              Signup
-            </a>
-            <a
-              href="/features"
-              className="flow-label border border-flow-black px-12 py-4 text-flow-black transition-all hover:bg-flow-black hover:text-white"
-            >
-              Explore Features
-            </a>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+  return <main className="bg-[#fbfaf7] text-[#202421]"><header className="flow-container pb-12 pt-32 md:pb-16 md:pt-40"><p className="text-sm font-semibold uppercase tracking-[.14em] text-[#806a1f]">Product walkthrough</p><h1 className="mt-4 max-w-4xl font-display text-5xl font-semibold tracking-[-.045em] md:text-6xl">From financial activity to a more timely decision.</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[#5e665f]">This walkthrough introduces the FlowCFO experience. For an institution-specific demonstration, we can walk through your customer scenario, data sources, alerts and integration requirements together.</p></header>
+    <section className="flow-container pb-14 md:pb-20"><div className="overflow-hidden rounded-2xl border border-[#e5e2d7] bg-[#202722] shadow-lg"><DemoVideoPlayer/></div></section>
+    <section className="border-y border-[#e7e5de] bg-white py-14 md:py-20"><div className="flow-container grid gap-6 md:grid-cols-2"><article className="rounded-2xl bg-[#f7f6f1] p-7"><p className="text-xs font-semibold uppercase tracking-[.13em] text-[#806a1f]">Consumer banking</p><h2 className="mt-3 text-2xl font-semibold">Understand spending and prepare for commitments.</h2><p className="mt-3 leading-7 text-[#626a63]">Explore how behaviour summaries, reminders, budgeting guidance and relevant product options could support a customer’s personal financial journey.</p></article><article className="rounded-2xl bg-[#f7f6f1] p-7"><p className="text-xs font-semibold uppercase tracking-[.13em] text-[#806a1f]">Business banking</p><h2 className="mt-3 text-2xl font-semibold">See cash-flow pressure early enough to act.</h2><p className="mt-3 leading-7 text-[#626a63]">Explore how SME cash monitoring, liquidity outlooks, obligation alerts and early-warning signals can support a virtual-CFO experience.</p></article></div></section>
+    <section className="flow-container py-14 md:py-20"><div className="rounded-3xl bg-[#202722] p-8 text-white md:p-12"><h2 className="max-w-2xl font-display text-3xl font-semibold">Want to see your own customer journey?</h2><p className="mt-4 max-w-2xl leading-7 text-white/70">We’ll tailor a short walkthrough around your priority scenario, available data and product rules. For banks and platforms, we can include the API and deployment discussion.</p><Link href="/contact" className="mt-7 inline-flex rounded-lg bg-[#d2b84d] px-6 py-3.5 font-semibold text-[#20231b]">Arrange a walkthrough</Link></div></section>
+  </main>;
 }

@@ -1,107 +1,11 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { HelpCircle, Share2 } from "lucide-react";
 
-const footerGroups = [
-  {
-    title: "Product",
-    links: [
-      { label: "Features", href: "/features" },
-      { label: "For Freelancers", href: "/for-freelancers" },
-      { label: "For E-commerce", href: "/for-ecommerce" },
-      { label: "For Agencies", href: "/for-agencies" },
-      { label: "Calculators", href: "/calculator/safe-to-spend" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "Contact", href: "/contact" },
-      { label: "Blog", href: "/blog" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Service", href: "/terms" },
-    ],
-  },
+const groups = [
+  { title: "Explore", links: [["Consumer & business", "/features"], ["API platform", "/developers"], ["Product demo", "/demo"], ["Pricing", "/pricing"]] },
+  { title: "FlowCFO", links: [["About", "/about"], ["Contact", "/contact"], ["Blog", "/blog"]] },
+  { title: "Legal", links: [["Privacy", "/privacy"], ["Terms", "/terms"]] },
 ];
 
 export default function Footer() {
-  const pathname = usePathname();
-
-  if (pathname !== "/") {
-    return (
-      <footer className="w-full border-t border-flow-line bg-white py-12">
-        <div className="flow-container flex flex-col items-center justify-between gap-8 md:flex-row">
-          <div>
-            <Link href="/" className="font-display text-2xl font-bold leading-8 text-flow-black">
-              FlowCFO
-            </Link>
-            <p className="mt-2 text-sm leading-5 text-[#444748]">© 2026 FlowCFO. All rights reserved.</p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-8">
-            <Link className="flow-label text-[#444748] underline transition-colors hover:text-flow-black" href="/privacy">
-              Privacy Policy
-            </Link>
-            <Link className="flow-label text-[#444748] underline transition-colors hover:text-flow-black" href="/terms">
-              Terms of Service
-            </Link>
-            <Link className="flow-label text-[#444748] underline transition-colors hover:text-flow-black" href="/contact">
-              Contact
-            </Link>
-            <Link className="flow-label font-bold text-flow-black underline transition-colors hover:text-[#735c00]" href="/signup">
-              Get Started
-            </Link>
-          </div>
-        </div>
-      </footer>
-    );
-  }
-
-  return (
-    <footer className="border-t border-flow-line-dark bg-black">
-      <div className="flow-container flex flex-col items-start justify-between gap-12 py-12 md:flex-row">
-        <div className="max-w-xs space-y-4 text-left">
-          <Link href="/" className="font-display text-[40px] font-bold leading-[48px] tracking-[-0.04em] text-flow-gold-soft">
-            FlowCFO
-          </Link>
-          <p className="text-sm leading-5 text-flow-muted">
-            The virtual CFO for businesses that can&apos;t afford a real one.
-          </p>
-          <div className="flex gap-4 pt-2">
-            <Share2 className="h-5 w-5 text-flow-muted transition-colors hover:text-flow-gold-soft" aria-hidden="true" />
-            <HelpCircle className="h-5 w-5 text-flow-muted transition-colors hover:text-flow-gold-soft" aria-hidden="true" />
-          </div>
-          <p className="pt-4 text-[10px] font-bold uppercase tracking-[0.16em] text-flow-line-dark">
-            © 2026 FlowCFO. All rights reserved.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-10 md:gap-16">
-          {footerGroups.map((group) => (
-            <div key={group.title} className="flex min-w-32 flex-col gap-3">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.16em] text-flow-gold-soft">
-                {group.title}
-              </p>
-              {group.links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-sm leading-5 text-flow-muted transition-colors hover:text-flow-gold-soft"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    </footer>
-  );
+  return <footer className="border-t border-[#e5e2d7] bg-white"><div className="flow-container grid gap-10 py-12 md:grid-cols-[1.4fr_2fr] md:py-14"><div><Link href="/" className="font-display text-2xl font-semibold tracking-[-.05em] text-[#202722]">FlowCFO</Link><p className="mt-3 max-w-sm text-sm leading-6 text-[#657067]">Useful financial intelligence for people, small businesses and the platforms that serve them.</p><a href="mailto:hello@flowcfo.net" className="mt-4 inline-block text-sm font-semibold text-[#66561c] underline underline-offset-4">hello@flowcfo.net</a><p className="mt-8 text-xs text-[#858b83]">© 2026 FlowCFO. All rights reserved.</p></div><div className="grid grid-cols-2 gap-8 sm:grid-cols-3">{groups.map(group=><div key={group.title}><p className="text-xs font-semibold uppercase tracking-[.13em] text-[#806a1f]">{group.title}</p><ul className="mt-4 space-y-3">{group.links.map(([label,href])=><li key={href}><Link href={href} className="text-sm text-[#59625b] hover:text-[#806a1f]">{label}</Link></li>)}</ul></div>)}</div></div></footer>;
 }
