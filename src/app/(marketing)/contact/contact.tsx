@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, BarChart3, CheckCircle2, Handshake, Mail, MessageSquare, PlugZap, ShieldCheck, Users, Loader2 } from "lucide-react";
-import { useSubmitContact } from "@/hooks/api/use-public";
+import { ArrowRight, BarChart3, CheckCircle2, Handshake, Mail, MessageSquare, PlugZap, ShieldCheck, Users } from "lucide-react";
 
 const subjects = [
   "General question",
@@ -15,13 +14,10 @@ const subjects = [
 ];
 
 export default function Contact() {
-  const [status, setStatus] = useState<"idle" | "sent">("idle");
-  const [error, setError] = useState<string | null>(null);
-  const { mutate: submitContact, isPending } = useSubmitContact();
+  const [status, setStatus] = useState<"idle" | "draft">("idle");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
     const formData = new FormData(e.currentTarget);
     const data = {
       name: formData.get("name") as string,
@@ -30,14 +26,10 @@ export default function Contact() {
       message: formData.get("message") as string,
     };
 
-    submitContact(data, {
-      onSuccess: () => {
-        setStatus("sent");
-      },
-      onError: (err) => {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      }
-    });
+    const subject = encodeURIComponent(`${data.subject} — FlowCFO enquiry`);
+    const body = encodeURIComponent(`Hello FlowCFO,\n\n${data.message}\n\nName: ${data.name}\nReply to: ${data.email}`);
+    window.location.href = `mailto:hello@flowcfo.net?subject=${subject}&body=${body}`;
+    setStatus("draft");
   };
 
   return (
@@ -45,7 +37,7 @@ export default function Contact() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <section className="lg:col-span-7">
           <div className="mb-16">
-            <span className="flow-label mb-4 block text-flow-gold">Get in Touch</span>
+            <span className="flow-label mb-4 block text-[#087f75]">Get in Touch</span>
             <h1 className="flow-headline-xl mb-6 text-flow-obsidian">Let’s talk about what you need.</h1>
             <p className="max-w-xl text-base leading-6 text-[#444748]">
               Tell us whether you’re exploring personal financial guidance, SME cash-flow intelligence, or an API integration for your customers. We’ll arrange a conversation and help define the right setup.
@@ -53,27 +45,23 @@ export default function Contact() {
           </div>
 
           <div className="border border-flow-line bg-white p-8 md:p-12">
-            {status === "sent" ? (
+            {status === "draft" ? (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <CheckCircle2 className="mb-6 h-16 w-16 text-flow-forest" />
-                <h2 className="flow-headline-lg mb-4 text-flow-obsidian">Message sent!</h2>
+                <Mail className="mb-6 h-16 w-16 text-[#087f75]" />
+                <h2 className="flow-headline-lg mb-4 text-flow-obsidian">Your email draft is ready.</h2>
                 <p className="max-w-xs text-base text-[#444748]">
-                  Thanks for reaching out. We&apos;ll review your message and follow up to arrange next steps.
+                  Your email app should open with your message prepared. It is not sent until you review and send it.
                 </p>
+                <a href="mailto:hello@flowcfo.net" className="mt-4 font-semibold text-[#087f75] underline underline-offset-4">If it didn&apos;t open, email hello@flowcfo.net</a>
                 <button
                   onClick={() => setStatus("idle")}
-                  className="mt-8 font-mono text-sm uppercase tracking-widest text-flow-gold hover:underline"
+                  className="mt-8 font-mono text-sm uppercase tracking-widest text-[#087f75] hover:underline"
                 >
-                  Send another message
+                  Edit message
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-8">
-                {error && (
-                  <div className="bg-red-500/10 border border-red-500/20 p-4 text-red-600 text-sm">
-                    {error}
-                  </div>
-                )}
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                   <div className="flex flex-col gap-2">
                     <label className="flow-label text-flow-obsidian" htmlFor="contact-name">
@@ -137,17 +125,9 @@ export default function Contact() {
 
                 <div className="pt-4">
                   <button
-                    disabled={isPending}
-                    className="flow-label flex w-full items-center justify-center gap-2 px-12 py-4 transition-all md:w-auto bg-flow-gold text-flow-obsidian hover:brightness-110 disabled:opacity-50"
+                    className="flow-label flex w-full items-center justify-center gap-2 rounded-lg bg-[#087f75] px-8 py-4 text-white transition-colors hover:bg-[#066b63] md:w-auto"
                   >
-                    {isPending ? (
-                      <Loader2 className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <>
-                        Send Message
-                        <ArrowRight className="h-4 w-4" />
-                      </>
-                    )}
+                    Prepare Email <ArrowRight className="h-4 w-4" />
                   </button>
                 </div>
               </form>
@@ -216,7 +196,7 @@ export default function Contact() {
             </div>
             <div className="space-y-4 text-sm leading-5 text-[#444748]">
               <p>
-                <span className="font-bold text-flow-obsidian">Email:</span> hello@flowcfo.net
+                <span className="font-bold text-flow-obsidian">Email:</span> <a className="font-semibold text-[#087f75] underline underline-offset-4" href="mailto:hello@flowcfo.net">hello@flowcfo.net</a>
               </p>
               <p>
                 <span className="font-bold text-flow-obsidian">Response time:</span> Usually within 24 business hours.

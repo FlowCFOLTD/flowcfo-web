@@ -12,33 +12,33 @@
   --color-coal: #0b0e11;
   --color-charcoal: #1a1d23;
   --color-pewter: #2a2d35;
-  --color-gold: #d4a853;
-  --color-gold-light: #e4c06a;
+  --color-gold: #087f75;
+  --color-gold-light: #66d9bc;
   --color-ember: #f59e0b;
   --color-emerald: #059669;
   --color-emerald-light: #10b981;
   --color-rose: #ef4444;
   --color-indigo: #6366f1;
-  --color-ivory: #f5f0eb;
-  --color-stone: #e5e0db;
-  --color-slate: #a1a1aa;
-  --color-steel: #71717a;
-  --color-mist: #f8f7f5;
+  --color-ivory: #f4faf7;
+  --color-stone: #d8e9e1;
+  --color-slate: #61756d;
+  --color-steel: #526760;
+  --color-mist: #f8fcfa;
   --color-flow-black: #000000;
-  --color-flow-obsidian: #0a0a0a;
-  --color-flow-paper: #f9f9f9;
-  --color-flow-gold: #d4af37;
-  --color-flow-gold-soft: #ffe088;
-  --color-flow-line: #c4c7c7;
+  --color-flow-obsidian: #123e3b;
+  --color-flow-paper: #f7fbf9;
+  --color-flow-gold: #c9ec88;
+  --color-flow-gold-soft: #d9f2ad;
+  --color-flow-line: #d4e2dd;
   --color-flow-line-dark: #474646;
-  --color-flow-muted: #858383;
-  --color-flow-forest: #1b4332;
+  --color-flow-muted: #c2d4ce;
+  --color-flow-forest: #087f75;
 
   /* Material Design 3 / Design System additions */
   --color-surface-variant: #e2e2e2;
   --color-on-surface-variant: #444748;
-  --color-primary-design: #d4af37;
-  --color-secondary-design: #735c00;
+  --color-primary-design: #087f75;
+  --color-secondary-design: #17645b;
   --color-surface-container: #eeeeee;
   --color-surface-container-lowest: #ffffff;
 
@@ -54,6 +54,39 @@
   --color-background: var(--color-ivory);
   --color-foreground: var(--color-coal);
 }
+
+/* Legacy admin and pitch widgets are retained functionally, but share the
+   current light, high-contrast FlowCFO palette instead of their former dark/gold skin. */
+.flow-admin [class*="bg-[#0A0A0B]"],
+.flow-admin [class*="bg-[#141416]"],
+.flow-admin [class*="bg-[#1c1b1b]"],
+.flow-admin [class*="bg-black/40"] { background-color: #ffffff !important; }
+.flow-admin [class*="bg-white/[0.03]"],
+.flow-admin [class*="bg-white/5"],
+.flow-admin [class*="bg-white/10"] { background-color: #f0f8f4 !important; }
+.flow-admin [class*="text-white/"],
+.flow-admin [class~="text-white"] { color: #294943 !important; }
+.flow-admin [class*="border-white/"] { border-color: #d8e9e1 !important; }
+.flow-admin [class*="#FFD700"] { color: #087f75 !important; border-color: #a9ddd0 !important; }
+.flow-admin [class*="bg-[#FFD700]"] { background-color: #087f75 !important; color: #ffffff !important; }
+
+.flow-pitch [class*="#D4AF37"],
+.flow-pitch [class*="#E4C06A"],
+.flow-pitch [class*="#735C00"],
+.flow-pitch [class*="#8A6D12"] { color: #087f75 !important; border-color: #82cbbb !important; }
+.flow-pitch [class*="bg-[#D4AF37]"],
+.flow-pitch [class*="bg-[#1B4332]"] { background-color: #087f75 !important; color: #ffffff !important; }
+.flow-pitch [class*="bg-[#FFF9DC]"],
+.flow-pitch [class*="bg-[#FFF8D8]"],
+.flow-pitch [class*="bg-[#FFF3B8]"],
+.flow-pitch [class*="bg-[#FFF1A8]"],
+.flow-pitch [class*="bg-[#F3E9B8]"] { background-color: #e6f6ef !important; }
+.flow-pitch [class*="border-[#D4AF37]"] { border-color: #82cbbb !important; }
+.flow-pitch [class*="text-[#D4AF37]"],
+.flow-pitch [class*="text-[#E4C06A]"],
+.flow-pitch [class*="text-[#735C00]"],
+.flow-pitch [class*="text-[#8A6D12]"] { color: #087f75 !important; }
+.flow-pitch [class*="bg-[#0A0A0A]"] { background-color: #123e3b !important; }
 
 @keyframes count-up {
   from {
@@ -317,11 +350,23 @@
   .blog-content li {
     @apply leading-relaxed text-charcoal;
   }
+  .blog-content table {
+    @apply my-7 w-full border-collapse text-left text-sm;
+  }
+  .blog-content th {
+    @apply border border-[#d4e2dd] bg-[#eff6f3] px-4 py-3 font-semibold text-[#123e3b];
+  }
+  .blog-content td {
+    @apply border border-[#d4e2dd] px-4 py-3 align-top text-[#455d56];
+  }
   .blog-content strong {
     @apply font-bold text-ink;
   }
   .blog-content a {
-    @apply text-indigo underline decoration-indigo/30 hover:decoration-indigo/60 transition-all;
+    @apply text-[#087f75] underline decoration-[#087f75]/30 transition-all hover:decoration-[#087f75]/70;
+  }
+  .blog-content a.blog-cta {
+    @apply text-white no-underline hover:text-white hover:no-underline;
   }
   .blog-content blockquote {
     @apply border-l-4 border-gold pl-4 italic text-steel my-6;

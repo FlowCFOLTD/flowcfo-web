@@ -119,8 +119,8 @@ export default function OnboardingLayout({
                 Consult a professional for specific decisions.
               </p>
               <p>
-                Your data is protected with bank-grade encryption and will never
-                be shared with third parties without your consent.
+                We use encrypted connections and do not share your data with
+                third parties without a lawful basis or your consent.
               </p>
             </div>
             <button

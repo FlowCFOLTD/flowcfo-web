@@ -23,6 +23,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/blog/spreadsheet-vs-accounting-software-vs-bank-feed",
+        destination: "/blog/xero-vs-float-vs-flowcfo",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

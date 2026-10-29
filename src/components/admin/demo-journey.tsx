@@ -195,7 +195,7 @@ export default function DemoJourney({ enterpriseId, enterpriseName }: { enterpri
         <div className="flex flex-wrap gap-3">
           <label className={`flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest border border-white/20 hover:bg-white hover:text-black cursor-pointer ${!sme || busy ? 'opacity-40 pointer-events-none' : ''}`}>
             <Upload className="h-3 w-3" /> Upload receivables CSV
-            <input type="file" accept=".csv" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) void uploadInvoices(f); e.target.value = ''; }} />
+            <input type="file" accept=".csv,.xls,.xlsx" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) void uploadInvoices(f); e.target.value = ''; }} />
           </label>
           <Btn disabled={busy || !sme} onClick={() => void fetchSample('/demo/demo-invoices.csv', 'demo-invoices.csv').then(uploadInvoices)}>
             <span className="flex items-center gap-2"><FileText className="h-3 w-3" /> Use sample file</span>
@@ -227,7 +227,7 @@ export default function DemoJourney({ enterpriseId, enterpriseName }: { enterpri
         <div className="flex flex-wrap gap-3">
           <label className={`flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest border border-white/20 hover:bg-white hover:text-black cursor-pointer ${!sme || busy ? 'opacity-40 pointer-events-none' : ''}`}>
             <Upload className="h-3 w-3" /> Upload bank statement
-            <input type="file" accept=".csv" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) void uploadStatement(f); e.target.value = ''; }} />
+            <input type="file" accept=".csv,.xls,.xlsx,.mt940,.sta,.txt" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) void uploadStatement(f); e.target.value = ''; }} />
           </label>
           <Btn disabled={busy || !sme} onClick={() => void fetchSample('/demo/demo-statement.csv', 'demo-statement.csv').then(uploadStatement)}>
             <span className="flex items-center gap-2"><FileText className="h-3 w-3" /> Use sample statement</span>

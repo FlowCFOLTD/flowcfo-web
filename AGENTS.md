@@ -6,6 +6,18 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 <!-- BEGIN:flowcfo-project-rules -->
 
+# Reusable FlowCFO Skills
+
+Before substantial work in these areas, read the matching repository skill in `.agents/skills/`:
+
+- `flowcfo-brand-ui` — visual design, components, marketing/auth/admin/product surfaces, logos.
+- `flowcfo-editorial` — blog research, writing, comparisons, product-claim guardrails.
+- `flowcfo-seo` — metadata, structured data, social images and crawl/index behavior.
+- `flowcfo-api-integration` — frontend/backend contracts, auth, data integrity and financial flows.
+- `flowcfo-enterprise-demo` — bank/platform demos, ingestion, alerts and technical rehearsal.
+
+These repository skills are the source of truth for future AI-assisted work. Update them when the product’s design or integration conventions materially change.
+
 # Data Fetching Pattern
 
 All backend API calls must go through `lib/api-client.ts` (`apiClient`) which:

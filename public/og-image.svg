@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fcfa"/><stop offset="1" stop-color="#eaf6f0"/></linearGradient>
+    <radialGradient id="glow"><stop stop-color="#b9eddd" stop-opacity=".85"/><stop offset="1" stop-color="#b9eddd" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#paper)"/>
+  <circle cx="1040" cy="110" r="360" fill="url(#glow)"/>
+  <circle cx="1080" cy="510" r="280" fill="url(#glow)" opacity=".6"/>
+  <rect x="78" y="76" width="72" height="72" rx="22" fill="#123e3b"/>
+  <path d="M98 130V95h30M98 110h19" stroke="#f5fbf8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M120 101c3-4 8-7 13-6 8 1 13 8 12 16-1 8-8 14-16 13-3 0-6-1-9-3" stroke="#66d9bc" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="127" cy="111" r="3.5" fill="#c9ec88" stroke="#123e3b" stroke-width="2"/>
+  <text x="172" y="125" fill="#123e3b" font-family="Arial, sans-serif" font-size="36" font-weight="700" letter-spacing="-1.5">FlowCFO</text>
+  <rect x="78" y="250" width="11" height="130" rx="6" fill="#c9ec88"/>
+  <text x="120" y="298" fill="#123e3b" font-family="Arial, sans-serif" font-size="66" font-weight="700" letter-spacing="-2">Financial clarity,</text>
+  <text x="120" y="378" fill="#087f75" font-family="Arial, sans-serif" font-size="66" font-weight="700" letter-spacing="-2">built around real life.</text>
+  <text x="122" y="447" fill="#526760" font-family="Arial, sans-serif" font-size="26">Consumer guidance · SME cash flow · Partner APIs</text>
+  <path d="M120 515h960" stroke="#d2e5dc" stroke-width="2"/>
+  <text x="120" y="560" fill="#60766e" font-family="Arial, sans-serif" font-size="18" letter-spacing="1.2">FLOWCFO.NET</text>
+  <circle cx="1081" cy="516" r="10" fill="#087f75"/><circle cx="1110" cy="516" r="5" fill="#c9ec88"/>
+</svg>

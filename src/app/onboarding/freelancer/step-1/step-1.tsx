@@ -265,10 +265,10 @@ export default function FreelancerStep1() {
                 <span className="text-white">{serviceType || 'PENDING'}</span>
               </span>
               <span className="font-mono text-sm text-white/40">
-                PRECISION-SCORE: <span className="text-white">99.8%</span>
+                REVIEW-MODE: <span className="text-white">ACTIVE</span>
               </span>
               <span className="font-mono text-sm text-white/40">
-                ENCRYPTION: <span className="text-flow-gold">AES-256</span>
+                CONNECTION: <span className="text-flow-gold">TLS</span>
               </span>
             </div>
           ))}

@@ -82,28 +82,29 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] flex flex-col items-center justify-center p-4">
+    <div className="relative min-h-screen bg-[#f4faf7] flex flex-col items-center justify-center overflow-hidden p-4 text-[#173b38]">
+      <div aria-hidden="true" className="pointer-events-none absolute -right-24 top-0 h-96 w-96 rounded-full bg-[#b9eddd]/55 blur-3xl" />
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-12">
-          <Image src="/logo-dark.svg" alt="FlowCFO" width={44} height={44} className="h-11 w-11" />
+          <Image src="/logo.svg" alt="FlowCFO" width={44} height={44} className="h-11 w-11" />
           <div className="text-left">
-            <h1 className="text-white font-bold text-2xl tracking-tight">
+            <h1 className="text-[#123e3b] font-bold text-2xl tracking-tight">
               FlowCFO
             </h1>
-            <p className="text-[#FFD700] text-[10px] uppercase tracking-[0.3em] font-medium">
+            <p className="text-[#087f75] text-[10px] uppercase tracking-[0.3em] font-medium">
               Admin Portal
             </p>
           </div>
         </div>
 
         {/* Login Card */}
-        <div className="bg-[#141416] border border-white/5 p-8 md:p-10">
+        <div className="rounded-3xl bg-white border border-[#d8e9e1] p-8 shadow-[0_28px_90px_-60px_rgba(18,62,59,.3)] md:p-10">
           <div className="mb-8">
-            <h2 className="text-xl font-bold text-white mb-2">
+            <h2 className="text-xl font-bold text-[#173b38] mb-2">
               {step === 'email' ? 'Welcome back' : 'Verify Identity'}
             </h2>
-            <p className="text-white/40 text-sm">
+            <p className="text-[#647770] text-sm">
               {step === 'email'
                 ? 'Enter your @flowcfo.net email to continue.'
                 : `We've sent a 6-digit code to ${email}`}
@@ -116,28 +117,28 @@ export default function AdminLoginPage() {
           >
             {step === 'email' ? (
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                <label className="text-[10px] uppercase tracking-widest text-[#61756d] font-medium">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/20" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#82958d]" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@flowcfo.net"
-                    className="w-full bg-white/[0.03] border border-white/10 px-12 py-4 text-white placeholder:text-white/10 focus:outline-none focus:border-[#FFD700]/50 transition-colors"
+                    className="w-full rounded-xl bg-[#fbfdfc] border border-[#d5e5dd] px-12 py-4 text-[#173b38] placeholder:text-[#9aa9a2] focus:outline-none focus:border-[#087f75] transition-colors"
                   />
                 </div>
               </div>
             ) : (
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                <label className="text-[10px] uppercase tracking-widest text-[#61756d] font-medium">
                   Verification Code
                 </label>
                 <div className="relative">
-                  <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/20" />
+                  <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#82958d]" />
                   <input
                     type="text"
                     required
@@ -145,7 +146,7 @@ export default function AdminLoginPage() {
                     onChange={(e) => setOtp(e.target.value)}
                     placeholder="000000"
                     maxLength={6}
-                    className="w-full bg-white/[0.03] border border-white/10 px-12 py-4 text-white placeholder:text-white/10 focus:outline-none focus:border-[#FFD700]/50 tracking-[0.5em] font-mono text-center transition-colors"
+                    className="w-full rounded-xl bg-[#fbfdfc] border border-[#d5e5dd] px-12 py-4 text-[#173b38] placeholder:text-[#9aa9a2] focus:outline-none focus:border-[#087f75] tracking-[0.5em] font-mono text-center transition-colors"
                   />
                 </div>
               </div>
@@ -160,7 +161,7 @@ export default function AdminLoginPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#FFD700] hover:bg-[#FFD700]/90 text-black font-bold h-14 rounded-none group"
+              className="w-full bg-[#087f75] hover:bg-[#066b63] text-white font-bold h-14 rounded-xl group"
             >
               {isLoading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -178,7 +179,7 @@ export default function AdminLoginPage() {
           {step === 'otp' && (
             <button
               onClick={() => setStep('email')}
-              className="mt-6 text-white/40 text-xs hover:text-[#FFD700] transition-colors"
+              className="mt-6 text-[#61756d] text-xs hover:text-[#087f75] transition-colors"
             >
               ← Use a different email
             </button>
@@ -186,7 +187,7 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="mt-8 text-center text-white/20 text-xs tracking-widest uppercase">
+        <p className="mt-8 text-center text-[#84958d] text-xs tracking-widest uppercase">
           Secure Administrative Access Only
         </p>
       </div>

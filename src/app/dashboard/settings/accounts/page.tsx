@@ -196,7 +196,7 @@ export default function AccountSettingsPage() {
               <div className="flex items-start gap-4">
                 <Landmark className="h-5 w-5 shrink-0 text-white/20" />
                 <p className="font-body text-sm text-white/30 leading-relaxed max-w-xl">
-                  Your financial data is encrypted using AES-256 at rest and in transit. FlowCFO uses read-only access and cannot initiate transfers. You can disconnect any account at any time.
+                  Bank connections use encrypted transport and protected, read-only provider tokens. FlowCFO cannot initiate transfers. You can disconnect an account at any time.
                 </p>
               </div>
             </div>

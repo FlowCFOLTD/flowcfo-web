@@ -1,14 +1,6 @@
-import type { Metadata } from "next";
-import Link from "next/link";
-import DemoVideoPlayer from "./demo-video-player";
-import { createMetadata } from "@/lib/seo";
+import { notFound } from "next/navigation";
 
-export const metadata: Metadata = createMetadata({ title: "FlowCFO product demo", description: "See how FlowCFO can turn consumer and small-business financial activity into useful guidance, alerts and next steps.", path: "/demo" });
-
-export default function DemoPage() {
-  return <main className="bg-[#fbfaf7] text-[#202421]"><header className="flow-container pb-12 pt-32 md:pb-16 md:pt-40"><p className="text-sm font-semibold uppercase tracking-[.14em] text-[#806a1f]">Product walkthrough</p><h1 className="mt-4 max-w-4xl font-display text-5xl font-semibold tracking-[-.045em] md:text-6xl">From financial activity to a more timely decision.</h1><p className="mt-6 max-w-3xl text-lg leading-8 text-[#5e665f]">This walkthrough introduces the FlowCFO experience. For an institution-specific demonstration, we can walk through your customer scenario, data sources, alerts and integration requirements together.</p></header>
-    <section className="flow-container pb-14 md:pb-20"><div className="overflow-hidden rounded-2xl border border-[#e5e2d7] bg-[#202722] shadow-lg"><DemoVideoPlayer/></div></section>
-    <section className="border-y border-[#e7e5de] bg-white py-14 md:py-20"><div className="flow-container grid gap-6 md:grid-cols-2"><article className="rounded-2xl bg-[#f7f6f1] p-7"><p className="text-xs font-semibold uppercase tracking-[.13em] text-[#806a1f]">Consumer banking</p><h2 className="mt-3 text-2xl font-semibold">Understand spending and prepare for commitments.</h2><p className="mt-3 leading-7 text-[#626a63]">Explore how behaviour summaries, reminders, budgeting guidance and relevant product options could support a customer’s personal financial journey.</p></article><article className="rounded-2xl bg-[#f7f6f1] p-7"><p className="text-xs font-semibold uppercase tracking-[.13em] text-[#806a1f]">Business banking</p><h2 className="mt-3 text-2xl font-semibold">See cash-flow pressure early enough to act.</h2><p className="mt-3 leading-7 text-[#626a63]">Explore how SME cash monitoring, liquidity outlooks, obligation alerts and early-warning signals can support a virtual-CFO experience.</p></article></div></section>
-    <section className="flow-container py-14 md:py-20"><div className="rounded-3xl bg-[#202722] p-8 text-white md:p-12"><h2 className="max-w-2xl font-display text-3xl font-semibold">Want to see your own customer journey?</h2><p className="mt-4 max-w-2xl leading-7 text-white/70">We’ll tailor a short walkthrough around your priority scenario, available data and product rules. For banks and platforms, we can include the API and deployment discussion.</p><Link href="/contact" className="mt-7 inline-flex rounded-lg bg-[#d2b84d] px-6 py-3.5 font-semibold text-[#20231b]">Arrange a walkthrough</Link></div></section>
-  </main>;
+// Product demo page temporarily unavailable while the walkthrough is being refined.
+export default function DemoPageUnavailable(): never {
+  notFound();
 }

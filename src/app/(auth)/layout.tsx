@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     template: '%s | FlowCFO',
     default: 'FlowCFO — Specialized Financial Agent for your business',
   },
-  robots: { index: false },
+  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
 };
 
 export default function AuthLayout({
@@ -14,7 +14,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#fbfaf7] text-[#202421] selection:bg-[#d9c36a] selection:text-[#202421]">
+    <div className="min-h-screen bg-[#f4faf7] text-[#173b38] selection:bg-[#c9ec88] selection:text-[#123e3b]">
       {children}
     </div>
   );

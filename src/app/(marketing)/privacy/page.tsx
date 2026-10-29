@@ -189,10 +189,11 @@ export default function PrivacyPage() {
                   4. How we store it
                 </h3>
                 <p className="font-body text-base leading-relaxed text-on-surface-variant">
-                  FlowCFO utilizes multi-region, distributed cloud architecture with
-                  AES-256 encryption at rest and TLS 1.3 in transit. Our data centers
-                  are SOC2 Type II and ISO 27001 compliant. Physical access to
-                  hardware is strictly restricted to vetted personnel only.
+                  FlowCFO uses encrypted transport, application-level protection
+                  for provider tokens, access controls, and auditable request IDs.
+                  Storage encryption, regions, retention, backups, and infrastructure
+                  certifications depend on the selected production hosting provider
+                  and are documented before an enterprise deployment.
                 </p>
                 <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
                   {[

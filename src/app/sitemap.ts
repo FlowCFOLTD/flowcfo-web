@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/lib/seo";
+import { editorialPosts } from "@/lib/blog";
 
 export const revalidate = 3600;
 
@@ -31,7 +32,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: "", priority: 1, freq: "weekly" as const },
     { path: "/features", priority: 0.9, freq: "monthly" as const },
     { path: "/pricing", priority: 0.9, freq: "monthly" as const },
-    { path: "/demo", priority: 0.8, freq: "monthly" as const },
     { path: "/developers", priority: 0.9, freq: "monthly" as const },
     { path: "/about", priority: 0.6, freq: "monthly" as const },
     { path: "/contact", priority: 0.6, freq: "monthly" as const },
@@ -50,7 +50,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const posts = await getPublishedPosts();
-  const blogRoutes = posts.map((post) => ({
+  const knownSlugs = new Set(editorialPosts.map((post) => post.slug));
+  const blogRoutes = [...editorialPosts.map((post) => ({ slug: post.slug, published_at: post.publishedAt })), ...posts.filter((post) => !knownSlugs.has(post.slug))].map((post) => ({
     url: `${siteUrl}/blog/${post.slug}`,
     lastModified: post.published_at ? new Date(post.published_at) : new Date(),
     changeFrequency: "monthly" as const,

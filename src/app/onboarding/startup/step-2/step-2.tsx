@@ -192,11 +192,11 @@ export default function StartupStep2() {
                 </div>
                 <div>
                   <p className="mb-2 font-display text-xl font-bold text-white">
-                    AES-256 Protocol
+                    Encrypted Connections
                   </p>
                   <p className="font-body text-base leading-relaxed text-white/50">
-                    Your financial data is encrypted at rest and in transit
-                    using military-grade standards.
+                    Data is protected in transit; provider tokens are encrypted
+                    by the application and deployment storage controls are documented.
                   </p>
                 </div>
               </div>
@@ -278,7 +278,7 @@ export default function StartupStep2() {
       <div className="mt-12 pb-24 text-center">
         <p className="flex items-center justify-center gap-2 font-body text-sm text-white/30">
           <ShieldCheck className="h-4 w-4" />
-          All financial data is encrypted via Institutional Protocol AES-256.
+          Financial connections use encrypted transport and scoped, read-only access.
         </p>
       </div>
     </div>

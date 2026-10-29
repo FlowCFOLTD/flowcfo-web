@@ -128,11 +128,11 @@ export default function EcommerceStep2() {
                 </div>
                 <div>
                   <p className="mb-2 font-display text-xl font-bold text-white">
-                    AES-256 Encryption
+                    Encrypted Connections
                   </p>
                   <p className="font-body text-base leading-relaxed text-white/50">
-                    Your data is protected by bank-grade encryption at rest and
-                    in transit.
+                    Connections use encrypted transport; provider access tokens
+                    are encrypted by the application.
                   </p>
                 </div>
               </div>
@@ -142,11 +142,11 @@ export default function EcommerceStep2() {
                 </div>
                 <div>
                   <p className="mb-2 font-display text-xl font-bold text-white">
-                    Plaid Certified
+                    Plaid Integration
                   </p>
                   <p className="font-body text-base leading-relaxed text-white/50">
-                    Official financial partner. We never see or store your login
-                    passwords.
+                    Read-only account access where Plaid is available. We do not
+                    collect or store your bank login passwords.
                   </p>
                 </div>
               </div>

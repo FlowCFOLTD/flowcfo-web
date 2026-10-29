@@ -1,0 +1,25 @@
+{
+  "as_of": "2026-11-05",
+  "currency": "MYR",
+  "current_balance": 3650,
+  "transactions": [
+    { "date": "2026-10-08", "amount": 7200, "category": "salary", "description": "Monthly salary" },
+    { "date": "2026-10-09", "amount": -2100, "category": "housing", "description": "Rent" },
+    { "date": "2026-10-11", "amount": -380, "category": "groceries", "description": "Groceries" },
+    { "date": "2026-10-14", "amount": -720, "category": "dining", "description": "Dining and delivery" },
+    { "date": "2026-10-18", "amount": -410, "category": "transport", "description": "Fuel and ride hailing" },
+    { "date": "2026-10-23", "amount": -890, "category": "shopping", "description": "Online purchases" },
+    { "date": "2026-10-29", "amount": -340, "category": "utilities", "description": "Electricity and mobile" },
+    { "date": "2026-11-02", "amount": -260, "category": "groceries", "description": "Groceries" }
+  ],
+  "commitments": [
+    { "name": "Motor insurance", "amount": 980, "due_date": "2026-11-12" },
+    { "name": "Education instalment", "amount": 650, "due_date": "2026-11-19" },
+    { "name": "Home internet", "amount": 139, "due_date": "2026-11-25" }
+  ],
+  "products": [
+    { "id": "cimb-goal-saver-demo", "name": "Goal Saver (mock catalogue)", "type": "savings", "min_buffer": 500 },
+    { "id": "cimb-rewards-demo", "name": "Dining Rewards Card (mock catalogue)", "type": "rewards_card", "reward_category": "dining", "min_category_spend": 500 },
+    { "id": "cimb-credit-demo", "name": "Personal Credit Line (mock catalogue)", "type": "credit_line" }
+  ]
+}

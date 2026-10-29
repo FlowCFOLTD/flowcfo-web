@@ -34,6 +34,7 @@ import {
   Trash2,
   X,
   Building2,
+  MonitorPlay,
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -209,18 +210,18 @@ export default function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 text-[#FFD700] animate-spin" />
+      <div className="min-h-screen bg-[#f4faf7] flex items-center justify-center">
+        <Loader2 className="h-8 w-8 text-[#087f75] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-white">
+    <div className="flow-admin min-h-screen bg-[#f4faf7] text-[#173b38]">
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 bottom-0 w-64 bg-[#141416] border-r border-white/5 flex flex-col">
         <div className="p-6 flex items-center gap-3 border-b border-white/5">
-          <Image src="/logo-dark.svg" alt="FlowCFO" width={32} height={32} className="h-8 w-8" />
+          <Image src="/logo.svg" alt="FlowCFO" width={32} height={32} className="h-8 w-8" />
           <span className="font-bold tracking-tight">FlowCFO Admin</span>
         </div>
 
@@ -273,6 +274,13 @@ export default function AdminDashboard() {
             icon={<Building2 className="h-4 w-4" />}
             label="Enterprise"
           />
+          <a
+            href="/admin/pitch"
+            className="flex items-center gap-3 px-4 py-3 text-sm transition-all text-white/40 hover:text-white hover:bg-white/5"
+          >
+            <MonitorPlay className="h-4 w-4" />
+            Pitch Deck
+          </a>
         </nav>
 
         <div className="p-4 border-t border-white/5">

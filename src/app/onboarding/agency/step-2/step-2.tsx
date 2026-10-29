@@ -91,8 +91,8 @@ export default function AgencyStep2() {
                   Institutional Security
                 </h3>
                 <p className="font-body text-base text-white/40 leading-relaxed">
-                  Bank-level AES-256 encryption. We never see or store your
-                  credentials.
+                  Encrypted connections and encrypted provider tokens. We do
+                  not collect or store your bank login credentials.
                 </p>
               </div>
             </div>
@@ -103,11 +103,11 @@ export default function AgencyStep2() {
               </div>
               <div>
                 <h3 className="font-display text-xl font-bold text-white">
-                  Plaid Certified
+                  Plaid Integration
                 </h3>
                 <p className="font-body text-base text-white/40 leading-relaxed">
-                  Direct integration with 12,000+ financial institutions
-                  globally.
+                  Institution availability depends on Plaid&apos;s supported
+                  countries and current coverage.
                 </p>
               </div>
             </div>

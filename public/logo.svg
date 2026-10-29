@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
-  <rect x="4" y="4" width="120" height="120" rx="34" fill="#202722"/>
-  <path d="M31 83.5 51.5 63l14 14L98 44.5" stroke="#D9C15A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M78 44h20v20" stroke="#D9C15A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="31" cy="83.5" r="5" fill="#F8F5E8"/>
+  <rect width="128" height="128" rx="34" fill="#123E3B"/>
+  <!-- Bespoke FC monogram: the F's middle stroke opens into a flowing C. -->
+  <path d="M39 91V37h45M39 61h29" stroke="#F5FBF8" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M75 47c5-7 13-11 22-9 13 2 21 14 19 27-2 14-13 23-27 22-5-.4-10-2.4-14-5" stroke="#66D9BC" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="88" cy="64" r="5.5" fill="#C9EC88" stroke="#123E3B" stroke-width="3"/>
 </svg>

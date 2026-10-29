@@ -105,11 +105,11 @@ export default function FreelancerStep2() {
               </div>
               <div>
                 <h3 className="font-display text-xl font-bold text-white">
-                  AES-256 Encryption
+                  Encrypted Connections
                 </h3>
                 <p className="font-body text-base text-white/40 leading-relaxed">
-                  Your financial data is protected by bank-grade encryption at
-                  rest and in transit.
+                  Bank connections use encrypted transport and read-only
+                  provider tokens protected by the application.
                 </p>
               </div>
             </div>
