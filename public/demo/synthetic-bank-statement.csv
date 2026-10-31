@@ -1,0 +1,9 @@
+date,amount,direction,description,category,currency,event_kind,reference
+2026-09-01,3250.00,credit,Payroll · Harbor Lane Test Co.,Income,USD,operating,SYN-0042-01
+2026-09-03,1450.00,debit,Rent · Maple Court Lettings,Housing,USD,operating,SYN-0042-02
+2026-09-05,86.42,debit,Card · Greenfield Grocers,Groceries,USD,operating,SYN-0042-03
+2026-09-09,112.30,debit,Utility · Springfield Power & Water,Utilities,USD,operating,SYN-0042-04
+2026-09-14,200.00,debit,ATM withdrawal · Main St,Cash,USD,operating,SYN-0042-05
+2026-09-15,3250.00,credit,Payroll · Harbor Lane Test Co.,Income,USD,operating,SYN-0042-06
+2026-09-21,45.00,debit,Card · City Transit,Transport,USD,operating,SYN-0042-07
+2026-09-28,500.00,debit,Transfer to savings ··0000,Transfer,USD,transfer,SYN-0042-08

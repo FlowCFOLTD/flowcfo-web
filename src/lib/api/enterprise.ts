@@ -22,6 +22,7 @@ export interface EnterpriseRow extends EnterpriseSummary {
 export interface PortfolioSme {
   user_id: string;
   email: string;
+  currency: string;
   business_name: string | null;
   business_type: string | null;
   risk_score: number;
@@ -38,7 +39,8 @@ export interface PortfolioSme {
 export interface PortfolioSummary {
   enterprise: EnterpriseSummary;
   sme_count: number;
-  total_overdue: number;
+  total_overdue: number | null;
+  total_overdue_by_currency: Record<string, number>;
   smes_with_overdue: number;
   risk_bands: Record<string, number>;
   smes: PortfolioSme[];

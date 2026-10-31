@@ -131,6 +131,12 @@ export default function EnterpriseConsole() {
     setBusy(null);
   };
 
+  const overdueTotalsLabel = portfolio
+    ? Object.entries(portfolio.total_overdue_by_currency ?? {})
+        .map(([currency, amount]) => `${currency} ${amount.toLocaleString()}`)
+        .join(' · ') || 'No overdue invoices'
+    : '—';
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-24">
@@ -201,7 +207,7 @@ export default function EnterpriseConsole() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
                   { l: 'SMEs monitored', v: String(portfolio.sme_count) },
-                  { l: 'Total overdue', v: `$${portfolio.total_overdue.toLocaleString()}` },
+                  { l: 'Total overdue by currency', v: overdueTotalsLabel },
                   { l: 'SMEs with overdue', v: String(portfolio.smes_with_overdue) },
                   { l: 'Critical / High risk', v: `${portfolio.risk_bands.critical ?? 0} / ${portfolio.risk_bands.high ?? 0}` },
                 ].map((c) => (
@@ -228,7 +234,7 @@ export default function EnterpriseConsole() {
                         <td className="py-3 pr-4">{s.business_name || s.email}<br /><span className="text-xs text-white/30">{s.email}</span></td>
                         <td className="py-3 pr-4 capitalize">{s.business_type}</td>
                         <td className={`py-3 pr-4 font-mono font-bold ${bandColor[s.risk_band] ?? 'text-white'}`}>{s.risk_band} ({s.risk_score})</td>
-                        <td className="py-3 pr-4 text-right font-mono">{s.overdue_count > 0 ? <span className="text-rose">${s.overdue_total.toLocaleString()} ({s.overdue_count})</span> : '—'}</td>
+                        <td className="py-3 pr-4 text-right font-mono">{s.overdue_count > 0 ? <span className="text-rose">{s.currency} {s.overdue_total.toLocaleString()} ({s.overdue_count})</span> : '—'}</td>
                         <td className="py-3 text-xs text-white/50">{s.top_risk_driver?.detail ?? '—'}</td>
                       </tr>
                     ))}
