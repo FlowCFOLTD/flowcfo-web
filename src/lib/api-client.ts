@@ -11,8 +11,25 @@ export interface ApiError extends Error {
   data?: unknown;
 }
 
+function apiErrorMessage(value: unknown): string | undefined {
+  if (typeof value === 'string' && value.trim()) return value.trim();
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+  const record = value as Record<string, unknown>;
+  for (const key of ['message', 'detail', 'error']) {
+    const message = apiErrorMessage(record[key]);
+    if (message) return message;
+  }
+  return undefined;
+}
+
 let cachedToken: string | null = null;
 let tokenPromise: Promise<string | null> | null = null;
+
+function localPitchPreviewToken(): string | null {
+  if (process.env.NODE_ENV === 'production' || typeof window === 'undefined') return null;
+  if (new URLSearchParams(window.location.search).get('preview') !== '1') return null;
+  return process.env.NEXT_PUBLIC_PITCH_TEST_BEARER || null;
+}
 
 async function refreshToken(): Promise<string | null> {
   try {
@@ -34,16 +51,18 @@ function getAuthToken(): Promise<string | null> {
   return tokenPromise;
 }
 
-export async function apiClient<T>(
+export async function apiClientAtBase<T>(
+  baseUrl: string,
   endpoint: string,
   {
     body,
     ...customConfig
   }: Omit<RequestInit, 'body'> & { body?: unknown } = {},
 ): Promise<T> {
-  const token = await getAuthToken();
+  const token = localPitchPreviewToken() ?? await getAuthToken();
   const isFormData = body instanceof FormData;
-  const headers: HeadersInit = isFormData ? {} : { 'Content-Type': 'application/json' };
+  const isRawBody = typeof body === 'string' || body instanceof Blob || body instanceof ArrayBuffer;
+  const headers: HeadersInit = isFormData || isRawBody ? {} : { 'Content-Type': 'application/json' };
 
   if (token) {
     headers.Authorization = `Bearer ${token}`;
@@ -59,10 +78,10 @@ export async function apiClient<T>(
   };
 
   if (body) {
-    config.body = isFormData ? body : JSON.stringify(body);
+    config.body = isFormData || isRawBody ? body as BodyInit : JSON.stringify(body);
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+  const response = await fetch(`${baseUrl}${endpoint}`, config);
 
   if (response.ok) {
     return (await response.json()) as T;
@@ -74,22 +93,24 @@ export async function apiClient<T>(
     if (freshToken) {
       headers.Authorization = `Bearer ${freshToken}`;
       config.headers = headers;
-      const retry = await fetch(`${API_BASE_URL}${endpoint}`, config);
+      const retry = await fetch(`${baseUrl}${endpoint}`, config);
       if (retry.ok) return (await retry.json()) as T;
     }
   }
 
   const errorData = await response.json().catch(() => ({}));
-  const errorMessage =
-    (errorData as Record<string, unknown>)?.error &&
-    typeof (errorData as Record<string, unknown>).error === 'object'
-      ? ((errorData as Record<string, unknown>).error as Record<string, unknown>)?.message as string
-      : (errorData as Record<string, unknown>)?.detail as string ||
-        (errorData as Record<string, unknown>)?.message as string;
+  const errorMessage = apiErrorMessage(errorData);
   const error: ApiError = new Error(
     errorMessage || 'An error occurred while fetching the data.',
   );
   error.status = response.status;
   error.data = errorData;
   throw error;
+}
+
+export function apiClient<T>(
+  endpoint: string,
+  options: Omit<RequestInit, 'body'> & { body?: unknown } = {},
+): Promise<T> {
+  return apiClientAtBase(API_BASE_URL, endpoint, options);
 }
