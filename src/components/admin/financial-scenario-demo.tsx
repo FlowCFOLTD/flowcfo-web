@@ -6,7 +6,8 @@ import {
   BriefcaseBusiness, CalendarClock, Check, CircleDollarSign, DatabaseZap, Landmark,
   Loader2, Play, ShieldAlert, Sparkles, WalletCards,
 } from 'lucide-react';
-import { productDemoApi, type ProductAlert, type ProductDemoResult } from '@/lib/api/product-demo';
+import { productDemoApi, clearApiTrace, type ProductAlert, type ProductDemoResult } from '@/lib/api/product-demo';
+import ProductApiTrace from './product-api-trace';
 
 type Scenario = 'consumer' | 'business';
 const COPY = {
@@ -105,6 +106,7 @@ export default function FinancialScenarioDemo({ scenario, autoRun = false }: { s
   const [error, setError] = useState('');
   const [running, setRunning] = useState(false);
   const autoRan = useRef(false);
+  useEffect(() => { clearApiTrace(); }, [scenario]);
   const config = COPY[scenario];
   const run = useCallback(async () => {
     setRunning(true); setError('');
@@ -120,5 +122,6 @@ export default function FinancialScenarioDemo({ scenario, autoRun = false }: { s
     {running && <p className="mt-6 flex items-center gap-2 text-sm text-[#53665f]"><Loader2 className="h-4 w-4 animate-spin text-[#087f75]" />Creating or reusing today&apos;s isolated synthetic workspace and calling the product API…</p>}
     {error && <div className="mt-6 rounded-xl border border-[#e4bcb3] bg-[#fff5f2] p-4 text-sm text-[#943e34]"><p className="font-semibold">The live product API flow did not complete.</p><p className="mt-1">{error}</p><p className="mt-2 text-xs">Pitch API URL: {process.env.NEXT_PUBLIC_PRODUCT_API_URL || 'http://localhost:8001'}</p></div>}
     {result && !running && <div className="mt-8 space-y-5">{scenario === 'consumer' ? <ConsumerView result={result} /> : <BusinessView result={result} />}<footer className="flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-[#dce8e1] pt-4 text-[11px] text-[#62766d]"><span className="inline-flex items-center gap-1.5 font-semibold text-[#087f75]"><Check className="h-3.5 w-3.5" /> Product v2 API response</span><span>{result.elapsedMs} ms end-to-end</span><span>{result.overview.observed.posted_external_entry_count} persisted entries</span><span>{result.overview.cash_outlook.method}</span><span>Workspace {result.workspace.id.slice(0, 8)}</span><span>Synthetic data</span></footer><p className="flex items-start gap-2 rounded-xl bg-[#f0f6f3] p-3 text-xs leading-5 text-[#53665f]"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-[#087f75]" />This flow demonstrates deterministic analysis of synthetic records. Forecast accuracy across customers, recommendation suitability and delinquency-prevention outcomes require separate validation.</p></div>}
+    <ProductApiTrace label={scenario === 'consumer' ? 'Personal guidance chapter' : 'SME cash-flow chapter'} />
   </section>;
 }

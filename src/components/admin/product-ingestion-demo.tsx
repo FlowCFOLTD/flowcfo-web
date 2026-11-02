@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check, FileSearch, Loader2, ShieldCheck, Trash2, Upload } from 'lucide-react';
-import { productDemoApi, type ProductAccount, type ProductWorkspace } from '@/lib/api/product-demo';
+import { productDemoApi, clearApiTrace, type ProductAccount, type ProductWorkspace } from '@/lib/api/product-demo';
+import ProductApiTrace from './product-api-trace';
 
 type ProductDocument = { id: string; document_kind: 'invoice' | 'receipt'; filename: string; state: string; extracted?: { engine?: string; text?: string; fields?: Record<string, unknown>; lines?: Array<{ page?: number; text: string; confidence: number | null; box: unknown }> }; error?: string | null; accepted_record_id?: string | null };
 type UploadResult = Record<string, unknown>;
@@ -29,6 +30,8 @@ export default function ProductIngestionDemo() {
   const [counterparty, setCounterparty] = useState('');
   const [occurredOn, setOccurredOn] = useState(new Date().toISOString().slice(0, 10));
   const [dueOn, setDueOn] = useState('');
+
+  useEffect(() => { clearApiTrace(); }, []);
 
   const upload = async (file: File, selectedDocumentKind: 'invoice' | 'receipt' = kind) => {
     setBusy(true); setError(''); setDocument(null); setUploadResult(null);
@@ -132,5 +135,7 @@ export default function ProductIngestionDemo() {
         {document.state === 'review_required' && <div className="space-y-2 rounded-lg bg-white p-3"><p className="text-xs font-bold text-[#173b38]">Reviewer-confirmed fields</p><div className="grid grid-cols-2 gap-2"><input aria-label="Amount" value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="Amount" className="rounded-lg border border-[#cdded5] px-3 py-2 text-sm text-[#173b38]" /><input aria-label="Currency" value={currency} onChange={(event) => setCurrency(event.target.value.toUpperCase().slice(0, 3))} placeholder="Currency" className="rounded-lg border border-[#cdded5] px-3 py-2 text-sm text-[#173b38]" /></div><input aria-label="Counterparty" value={counterparty} onChange={(event) => setCounterparty(event.target.value)} placeholder="Counterparty / merchant" className="w-full rounded-lg border border-[#cdded5] px-3 py-2 text-sm text-[#173b38]" />{kind === 'invoice' ? <><label className="block text-[10px] text-[#60756b]">Due date<input type="date" value={dueOn} onChange={(event) => setDueOn(event.target.value)} className="mt-1 block w-full rounded-lg border border-[#cdded5] px-3 py-2 text-sm text-[#173b38]" /></label></> : <label className="block text-[10px] text-[#60756b]">Receipt date<input type="date" value={occurredOn} onChange={(event) => setOccurredOn(event.target.value)} className="mt-1 block w-full rounded-lg border border-[#cdded5] px-3 py-2 text-sm text-[#173b38]" /></label>}<div className="flex gap-2 pt-1"><button type="button" onClick={() => void review('accept')} disabled={busy || !amount || !counterparty || (kind === 'invoice' && !dueOn)} className="rounded-lg bg-[#087f75] px-3 py-2 text-xs font-bold text-white disabled:opacity-40">Confirm and {kind === 'invoice' ? 'create commitment' : 'post receipt'}</button><button type="button" onClick={() => void review('reject')} disabled={busy} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d]">Reject</button></div></div>}
       </div>}
     </div>}
+
+    <ProductApiTrace label="Ingestion chapter" />
   </section>;
 }

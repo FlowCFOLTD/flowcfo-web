@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BellRing, Check, CircleAlert, Loader2, Mail, Send, ShieldCheck } from 'lucide-react';
-import { productDemoApi } from '@/lib/api/product-demo';
+import { productDemoApi, clearApiTrace } from '@/lib/api/product-demo';
+import ProductApiTrace from './product-api-trace';
 
 export default function AlertDeliveryDemo() {
   const [email, setEmail] = useState('');
@@ -14,6 +15,8 @@ export default function AlertDeliveryDemo() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
+
+  useEffect(() => { clearApiTrace(); }, []);
 
   const requestCode = async () => {
     if (!email.trim()) return;
@@ -43,7 +46,7 @@ export default function AlertDeliveryDemo() {
       const result = await productDemoApi.evaluateAlerts(workspaceId);
       const alerts = await productDemoApi.listAlerts(workspaceId);
       setQueued(result.new_alert_count);
-      setMessage(`${result.new_alert_count} new alert(s) evaluated; ${alerts.data.length} active alert(s) are recorded. Verified email delivery is queued through the product outbox worker.`);
+      setMessage(`${result.new_alert_count} new alert(s) raised by this evaluation; ${alerts.data.length} active alert(s) recorded in total. Verified email delivery is queued for every active alert through the product outbox worker.`);
     } catch (reason) { setError(reason instanceof Error ? reason.message : 'Alert evaluation failed.'); }
     finally { setBusy(false); }
   };
@@ -74,5 +77,7 @@ export default function AlertDeliveryDemo() {
 
     <div className="mt-6 grid gap-3 md:grid-cols-3">{[[BellRing, 'Commitment reminder', 'Due-date rule'], [CircleAlert, 'Projected cash below zero', 'Deterministic baseline'], [ShieldCheck, 'Budget pressure', 'Recorded spending vs limit']].map(([Icon, title, text]) => { const Graphic = Icon as typeof BellRing; return <div key={String(title)} className="rounded-2xl border border-[#dce8e1] bg-white p-4"><Graphic className="h-5 w-5 text-[#087f75]" /><p className="mt-3 font-semibold text-[#173b38]">{String(title)}</p><p className="mt-1 text-xs text-[#65766f]">{String(text)}</p></div>; })}</div>
     <p className="mt-5 flex items-start gap-2 rounded-xl bg-[#f0f6f3] p-4 text-xs leading-5 text-[#53665f]"><ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#087f75]" />Rules identify recorded obligations and financial pressure. They are not evidence that delinquency has been prevented; lead time, false-positive rates and customer outcomes still need validation.</p>
+
+    <ProductApiTrace label="Alert delivery chapter" />
   </section>;
 }

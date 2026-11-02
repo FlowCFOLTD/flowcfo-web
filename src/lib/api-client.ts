@@ -56,8 +56,9 @@ export async function apiClientAtBase<T>(
   endpoint: string,
   {
     body,
+    onResponse,
     ...customConfig
-  }: Omit<RequestInit, 'body'> & { body?: unknown } = {},
+  }: Omit<RequestInit, 'body'> & { body?: unknown; onResponse?: (status: number, json: unknown) => void } = {},
 ): Promise<T> {
   const token = localPitchPreviewToken() ?? await getAuthToken();
   const isFormData = body instanceof FormData;
@@ -84,7 +85,9 @@ export async function apiClientAtBase<T>(
   const response = await fetch(`${baseUrl}${endpoint}`, config);
 
   if (response.ok) {
-    return (await response.json()) as T;
+    const json = (await response.json()) as T;
+    onResponse?.(response.status, json);
+    return json;
   }
 
   if (response.status === 401) {
@@ -94,11 +97,16 @@ export async function apiClientAtBase<T>(
       headers.Authorization = `Bearer ${freshToken}`;
       config.headers = headers;
       const retry = await fetch(`${baseUrl}${endpoint}`, config);
-      if (retry.ok) return (await retry.json()) as T;
+      if (retry.ok) {
+        const json = (await retry.json()) as T;
+        onResponse?.(retry.status, json);
+        return json;
+      }
     }
   }
 
   const errorData = await response.json().catch(() => ({}));
+  onResponse?.(response.status, errorData);
   const errorMessage = apiErrorMessage(errorData);
   const error: ApiError = new Error(
     errorMessage || 'An error occurred while fetching the data.',

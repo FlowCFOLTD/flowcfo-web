@@ -46,10 +46,60 @@ export type ProductDemoResult = {
   elapsedMs: number;
 };
 
-async function request<T>(path: string, options: Omit<RequestInit, 'body'> & { body?: unknown } = {}): Promise<T> {
+async function request<T>(path: string, options: Omit<RequestInit, 'body'> & { body?: unknown } = {}, { trace = true }: { trace?: boolean } = {}): Promise<T> {
   const { body, ...config } = options;
-  return apiClientAtBase<T>(PRODUCT_API_BASE, `/api/v2${path}`, { ...config, body });
+  const method = options.method ?? (body ? 'POST' : 'GET');
+  const requestView = {
+    method,
+    url: `${PRODUCT_API_BASE}/api/v2${path}`,
+    ...(body === undefined ? {} : {
+      body: body instanceof File
+        ? { _file: body.name }
+        : body instanceof Blob || body instanceof ArrayBuffer
+          ? '<binary>'
+          : body instanceof FormData
+            ? '<form fields>'
+            : body,
+    }),
+  };
+  const started = trace ? performance.now() : 0;
+  try {
+    let captured: { status?: number; response: unknown } = { response: undefined };
+    const data = await apiClientAtBase<T>(PRODUCT_API_BASE, `/api/v2${path}`, {
+      ...config,
+      body,
+      onResponse: (status, response) => { captured = { status, response }; },
+    });
+    if (trace) recordApiTrace({ at: Date.now(), method, path: requestView.url, status: captured.status ?? 200, durationMs: Math.round(performance.now() - started), request: requestView, response: captured.response });
+    return data;
+  } catch (error) {
+    const captured = error as { status?: number; data?: unknown };
+    if (trace) recordApiTrace({ at: Date.now(), method, path: requestView.url, status: captured.status ?? null, durationMs: Math.round(performance.now() - started), request: requestView, response: captured.data ?? String(error) });
+    throw error;
+  }
 }
+
+export type ApiTraceEntry = { at: number; method: string; path: string; status: number | null; durationMs: number; request: unknown; response: unknown };
+export type ApiTraceSnapshot = readonly ApiTraceEntry[];
+const EMPTY_TRACE: ApiTraceSnapshot = [];
+let traceEntries: ApiTraceEntry[] = [];
+const traceListeners = new Set<() => void>();
+
+function recordApiTrace(entry: ApiTraceEntry) {
+  traceEntries = [...traceEntries.slice(-39), entry];
+  for (const listener of traceListeners) listener();
+}
+
+export function clearApiTrace() {
+  traceEntries = [];
+  for (const listener of traceListeners) listener();
+}
+
+export function subscribeApiTrace(listener: () => void) {
+  traceListeners.add(listener);
+  return () => { traceListeners.delete(listener); };
+}
+export const apiTraceSnapshot = () => (traceEntries.length ? traceEntries : EMPTY_TRACE);
 
 const isoDay = (day: Date) => `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
 const dateDaysAgo = (days: number) => { const date = new Date(); date.setDate(date.getDate() - days); return isoDay(date); };
@@ -68,6 +118,8 @@ function scenarioCsv(scenario: 'consumer' | 'business') {
       rows.push([day, money(amount), 'debit', `${category} purchase`, category, 'MYR', 'operating', `consumer-${day}-${cycle}`].map(csvCell).join(','));
       if (ago % 14 === 0) rows.push([day, '4200.00', 'credit', 'Salary payment', 'Income', 'MYR', 'operating', `salary-${day}`].map(csvCell).join(','));
     }
+    const today = dateDaysAgo(0);
+    rows.push([today, money(94), 'debit', 'Dining purchase', 'Dining', 'MYR', 'operating', 'consumer-today-dining'].map(csvCell).join(','));
     for (const [offset, amount, label] of [[6, 1800, 'Rent'], [36, 1800, 'Rent']] as const) {
       const day = dateDaysAgo(offset);
       rows.push([day, money(amount), 'debit', label, 'Housing', 'MYR', 'operating', `rent-${day}`].map(csvCell).join(','));
@@ -195,7 +247,7 @@ export const productDemoApi = {
   uploadDocument: (workspaceId: string, kind: 'invoice' | 'receipt', file: File) => request<Record<string, unknown>>(`/workspaces/${workspaceId}/documents?document_kind=${kind}&filename=${encodeURIComponent(file.name)}`, {
     method: 'POST', headers: { 'Content-Type': file.type || 'application/octet-stream' }, body: file,
   }),
-  listDocuments: (workspaceId: string) => request<Page<Record<string, unknown>>>(`/workspaces/${workspaceId}/documents?limit=50`),
+  listDocuments: (workspaceId: string) => request<Page<Record<string, unknown>>>(`/workspaces/${workspaceId}/documents?limit=50`, {}, { trace: false }),
   reviewDocument: (workspaceId: string, documentId: string, decision: Record<string, unknown>) => request<Record<string, unknown>>(`/workspaces/${workspaceId}/documents/${documentId}/review`, { method: 'POST', body: decision }),
   deleteDocumentContent: (workspaceId: string, documentId: string) => request<Record<string, unknown>>(`/workspaces/${workspaceId}/documents/${documentId}`, { method: 'DELETE' }),
   addNotificationDestination: (workspaceId: string, email: string) => request<{ id: string; address: string; message: string }>(`/workspaces/${workspaceId}/notification-destinations?address=${encodeURIComponent(email)}`, { method: 'POST' }),
