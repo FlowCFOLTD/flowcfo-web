@@ -11,7 +11,9 @@ export type ProductWorkspace = { id: string; name: string; workspace_type: 'pers
 export type ProductAccount = { id: string; name: string; currency: string; current_balance: string | null; available_balance: string | null };
 export type ProductCommitment = { id: string; name: string; direction: 'inflow' | 'outflow'; amount: string; currency: string; due_on: string; state: string };
 export type ProductAlert = { id: string; rule_key: string; severity: string; title: string; message: string; evidence: Record<string, unknown>; triggered_at: string };
-export type ProductOfferMatch = { offer_id: string; type: string; provider: string; name: string; description: string; reason: string; matching_exposure_currencies: string[]; requires_provider_assessment: boolean };
+export type FxExposureItem = { currency: string; account_balance: number | null; inflows: number | null; outflows: number | null; net_flow: number | null; entry_count: number; committed_due: number | null; committed_count: number; next_due_on: string | null };
+export type FxExposure = { base_currency: string; window_days: number; horizon_days: number; currencies: FxExposureItem[] };
+export type ProductOfferMatch = { offer_id: string; type: string; provider: string; name: string; description: string; reason: string; matching_exposure_currencies: string[]; exposure?: FxExposureItem | null; requires_provider_assessment: boolean };
 export type ProductLedgerEntry = { id: string; direction: 'inflow' | 'outflow'; amount: string; currency: string; occurred_on: string; description: string; category: string | null; event_kind: string };
 export type ProductOverview = {
   as_of: string;
@@ -42,6 +44,7 @@ export type ProductDemoResult = {
   guidance: ProductGuidance;
   alerts: ProductAlert[];
   offers: ProductOfferMatch[];
+  fxExposure: FxExposure | null;
   entries: ProductLedgerEntry[];
   elapsedMs: number;
 };
@@ -215,10 +218,10 @@ export const productDemoApi = {
       request<ProductSpending>(`/workspaces/${workspace.id}/insights/spending?${queryAsOf}`),
       request<ProductGuidance>(`/workspaces/${workspace.id}/insights/guidance?${queryAsOf}&horizon_days=60`),
       request<Page<ProductAlert>>(`/workspaces/${workspace.id}/alerts?state=active&limit=100`),
-      request<{ recommendations: ProductOfferMatch[] }>(`/workspaces/${workspace.id}/recommendations/products`),
+      request<{ recommendations: ProductOfferMatch[]; fx_exposure?: FxExposure }>(`/workspaces/${workspace.id}/recommendations/products`),
       request<Page<ProductLedgerEntry>>(`/workspaces/${workspace.id}/ledger-entries?from_date=${dateDaysAgo(60)}&to_date=${asOf}&limit=200`),
     ]);
-    return { workspace, account, overview, spending, guidance, alerts: alerts.data, offers: offers.recommendations, entries: entries.data, elapsedMs: Math.round(performance.now() - started) };
+    return { workspace, account, overview, spending, guidance, alerts: alerts.data, offers: offers.recommendations, fxExposure: offers.fx_exposure ?? null, entries: entries.data, elapsedMs: Math.round(performance.now() - started) };
   },
   listWorkspaces: () => request<Page<ProductWorkspace>>('/workspaces'),
   listAccounts: (workspaceId: string) => request<Page<ProductAccount>>(`/workspaces/${workspaceId}/accounts`),
