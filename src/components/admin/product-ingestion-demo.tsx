@@ -34,16 +34,21 @@ export default function ProductIngestionDemo() {
   useEffect(() => { clearApiTrace(); }, []);
 
   const upload = async (file: File, selectedDocumentKind: 'invoice' | 'receipt' = kind) => {
+    const isStatement = /\.(csv|xlsx)$/i.test(file.name);
+    if (!isStatement) {
+      setError(/\.xls$/i.test(file.name)
+        ? 'Legacy .xls is not supported by the rebuilt product importer. Export as .xlsx or .csv.'
+        : 'Invoice and receipt intake is in progress. Upload a CSV or XLSX bank statement for now.');
+      return;
+    }
     setBusy(true); setError(''); setDocument(null); setUploadResult(null);
     try {
       await productDemoApi.sessionReady();
-      const isStatement = /\.(csv|xlsx)$/i.test(file.name);
       const importCurrency = file.name.startsWith('synthesized-bank-statement-sample') ? 'USD' : statementCurrency;
       const demo = await productDemoApi.createIngestionWorkspace(scenario, importCurrency);
       setWorkspace(demo.workspace);
       const primary = demo.account;
       setAccount(primary);
-      if (/\.xls$/i.test(file.name)) throw new Error('Legacy .xls is not supported by the rebuilt product importer. Export as .xlsx or .csv.');
       const tabular = isStatement;
       if (tabular) {
         const data = await productDemoApi.uploadStatement(demo.workspace.id, primary.id, file);
@@ -113,15 +118,15 @@ export default function ProductIngestionDemo() {
   const tabularResult = uploadResult as { state?: string; accepted_count?: number; duplicate_count?: number; rejected_count?: number; errors?: Array<{ row: number; error: string }>; replayed_file?: boolean } | null;
 
   return <section className="rounded-2xl border border-[#dce8e1] bg-white p-6">
-    <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between"><div className="max-w-3xl"><p className="text-[10px] font-bold uppercase tracking-[.22em] text-[#087f75]">Live product API · actual import and review flow</p><h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-[#173b38]">Inspect what the file says before it changes the financial picture.</h2><p className="mt-2 text-sm leading-6 text-[#53665f]">Statements are validated and imported as ledger entries. Invoices and receipts pass through encrypted, asynchronous extraction and stay review-required until a person confirms the fields. OCR output is evidence—not a posted transaction or commitment.</p></div>
-      <div className="flex flex-wrap gap-2"><button disabled={busy} onClick={() => void sample('/demo/synthetic-bank-statement.csv', 'synthesized-bank-statement-sample.csv', 'text/csv')} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try public sample CSV</button><button disabled={busy} onClick={() => void sample('/demo/demo-statement.xlsx', 'demo-statement.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try XLSX</button><button disabled={busy} onClick={() => { setKind('invoice'); void sample('/demo/demo-invoice-scanned.pdf', 'demo-invoice.pdf', 'application/pdf', 'invoice'); }} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try scanned invoice PDF</button><button disabled={busy} onClick={() => { setKind('receipt'); void sample('/demo/sample-receipt-photo.jpg', 'sample-receipt-photo.jpg', 'image/jpeg', 'receipt'); }} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try photographed receipt</button></div><p className="mt-2 text-[10px] text-[#73837c]">Receipt photo is a fictional filedone.ai specimen (CC0 1.0). The MYR invoice is a fictional scan created for OCR testing; neither is a customer record.</p>
+    <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between"><div className="max-w-3xl"><p className="text-[10px] font-bold uppercase tracking-[.22em] text-[#087f75]">Live product API · actual import and review flow</p><h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-[#173b38]">Inspect what the file says before it changes the financial picture.</h2><p className="mt-2 text-sm leading-6 text-[#53665f]">Statements are validated and imported as ledger entries. Invoice and receipt intake is in progress and will stay review-required until a person confirms the fields when enabled.</p></div>
+      <div className="flex flex-wrap gap-2"><button disabled={busy} onClick={() => void sample('/demo/synthetic-bank-statement.csv', 'synthesized-bank-statement-sample.csv', 'text/csv')} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try public sample CSV</button><button disabled={busy} onClick={() => void sample('/demo/demo-statement.xlsx', 'demo-statement.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try XLSX</button><button type="button" disabled title="Invoice and receipt intake is in progress" className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:cursor-not-allowed disabled:opacity-40">Try scanned invoice PDF</button><button type="button" disabled title="Invoice and receipt intake is in progress" className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:cursor-not-allowed disabled:opacity-40">Try photographed receipt</button></div><p className="mt-2 text-[10px] text-[#73837c]">Invoice and receipt intake is in progress. Statement import (CSV/XLSX) is available now.</p>
     </div>
 
     <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_1fr_1fr_2fr_auto]">
       <label className="text-xs font-semibold text-[#53665f]">Workspace scenario<select value={scenario} onChange={(event) => setScenario(event.target.value as 'consumer' | 'business')} className="mt-1 block w-full rounded-lg border border-[#cdded5] bg-[#f7faf8] px-3 py-2.5 text-sm text-[#173b38]"><option value="business">SME business</option><option value="consumer">Personal</option></select></label>
-      <label className="text-xs font-semibold text-[#53665f]">Document type<select value={kind} onChange={(event) => setKind(event.target.value as 'invoice' | 'receipt')} className="mt-1 block w-full rounded-lg border border-[#cdded5] bg-[#f7faf8] px-3 py-2.5 text-sm text-[#173b38]"><option value="invoice">Invoice</option><option value="receipt">Receipt</option></select></label>
+      <label className="text-xs font-semibold text-[#53665f]">Document type (in progress)<select value={kind} onChange={(event) => setKind(event.target.value as 'invoice' | 'receipt')} disabled className="mt-1 block w-full cursor-not-allowed rounded-lg border border-[#cdded5] bg-[#f7faf8] px-3 py-2.5 text-sm text-[#173b38] opacity-50"><option value="invoice">Invoice</option><option value="receipt">Receipt</option></select></label>
       <label className="text-xs font-semibold text-[#53665f]">Statement currency<select value={statementCurrency} onChange={(event) => setStatementCurrency(event.target.value)} className="mt-1 block w-full rounded-lg border border-[#cdded5] bg-[#f7faf8] px-3 py-2.5 text-sm text-[#173b38]"><option>MYR</option><option>USD</option><option>EUR</option><option>GBP</option></select></label>
-      <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#123e3b] px-4 py-2.5 text-xs font-bold text-white">{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} Upload CSV, XLSX, PDF or image<input type="file" accept=".csv,.xlsx,.xls,.pdf,.png,.jpg,.jpeg,.webp,.tif,.tiff" className="hidden" disabled={busy} onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file); event.target.value = ''; }} /></label>
+      <label className="flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#123e3b] px-4 py-2.5 text-xs font-bold text-white">{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />} Upload CSV or XLSX statement<input type="file" accept=".csv,.xlsx" className="hidden" disabled={busy} onChange={(event) => { const file = event.target.files?.[0]; if (file) void upload(file); event.target.value = ''; }} /></label>
       <span className="self-center text-[10px] text-[#73837c]">Per-file limits enforced by API</span>
     </div>
 
