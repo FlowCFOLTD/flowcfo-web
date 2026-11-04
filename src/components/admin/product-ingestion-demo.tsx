@@ -38,7 +38,7 @@ export default function ProductIngestionDemo() {
     try {
       await productDemoApi.sessionReady();
       const isStatement = /\.(csv|xlsx)$/i.test(file.name);
-      const importCurrency = file.name.startsWith('synthesized-bank-statement-sample') ? 'USD' : isStatement ? statementCurrency : 'INR';
+      const importCurrency = file.name.startsWith('synthesized-bank-statement-sample') ? 'USD' : statementCurrency;
       const demo = await productDemoApi.createIngestionWorkspace(scenario, importCurrency);
       setWorkspace(demo.workspace);
       const primary = demo.account;
@@ -55,7 +55,6 @@ export default function ProductIngestionDemo() {
         throw new Error('Choose CSV/XLSX for a statement, or a PDF, PNG, JPEG, WebP or TIFF invoice/receipt.');
       }
       const uploaded = await productDemoApi.uploadDocument(demo.workspace.id, selectedDocumentKind, new File([file], file.name, { type: acceptedType })) as ProductDocument;
-      if (file.name.startsWith('sample-')) setCurrency('INR');
       setDocument(uploaded);
       let current = uploaded;
       for (let attempt = 0; current.state === 'queued' || current.state === 'processing'; attempt += 1) {
@@ -74,6 +73,10 @@ export default function ProductIngestionDemo() {
       if (currencies.find((value) => /^[A-Z]{3}$/.test(value))) setCurrency(currencies.find((value) => /^[A-Z]{3}$/.test(value))!);
       if (names[0]) setCounterparty(names[0]);
       if (dates[0] && /^\d{4}-\d{2}-\d{2}$/.test(dates[0])) setOccurredOn(dates[0]);
+      if (selectedDocumentKind === 'invoice' && dates.length > 1) {
+        const dueDateCandidate = [...dates].reverse().find((value) => /^\d{4}-\d{2}-\d{2}$/.test(value));
+        if (dueDateCandidate) setDueOn(dueDateCandidate);
+      }
     } catch (reason) { setError(reason instanceof Error ? reason.message : 'The ingestion request failed.'); }
     finally { setBusy(false); }
   };
@@ -111,7 +114,7 @@ export default function ProductIngestionDemo() {
 
   return <section className="rounded-2xl border border-[#dce8e1] bg-white p-6">
     <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between"><div className="max-w-3xl"><p className="text-[10px] font-bold uppercase tracking-[.22em] text-[#087f75]">Live product API · actual import and review flow</p><h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-[#173b38]">Inspect what the file says before it changes the financial picture.</h2><p className="mt-2 text-sm leading-6 text-[#53665f]">Statements are validated and imported as ledger entries. Invoices and receipts pass through encrypted, asynchronous extraction and stay review-required until a person confirms the fields. OCR output is evidence—not a posted transaction or commitment.</p></div>
-      <div className="flex flex-wrap gap-2"><button disabled={busy} onClick={() => void sample('/demo/synthetic-bank-statement.csv', 'synthesized-bank-statement-sample.csv', 'text/csv')} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try public sample CSV</button><button disabled={busy} onClick={() => void sample('/demo/demo-statement.xlsx', 'demo-statement.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try XLSX</button><button disabled={busy} onClick={() => { setKind('invoice'); void sample('/demo/sample-scanned-invoice.pdf', 'sample-scanned-invoice.pdf', 'application/pdf', 'invoice'); }} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try scanned invoice PDF</button><button disabled={busy} onClick={() => { setKind('receipt'); void sample('/demo/sample-receipt-photo.jpg', 'sample-receipt-photo.jpg', 'image/jpeg', 'receipt'); }} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try photographed receipt</button></div><p className="mt-2 text-[10px] text-[#73837c]">Invoice and receipt files are fictional SPECIMEN documents from filedone.ai, public-domain CC0 1.0; they are test inputs, not real customer records.</p>
+      <div className="flex flex-wrap gap-2"><button disabled={busy} onClick={() => void sample('/demo/synthetic-bank-statement.csv', 'synthesized-bank-statement-sample.csv', 'text/csv')} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try public sample CSV</button><button disabled={busy} onClick={() => void sample('/demo/demo-statement.xlsx', 'demo-statement.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try XLSX</button><button disabled={busy} onClick={() => { setKind('invoice'); void sample('/demo/demo-invoice-scanned.pdf', 'demo-invoice.pdf', 'application/pdf', 'invoice'); }} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try scanned invoice PDF</button><button disabled={busy} onClick={() => { setKind('receipt'); void sample('/demo/sample-receipt-photo.jpg', 'sample-receipt-photo.jpg', 'image/jpeg', 'receipt'); }} className="rounded-lg border border-[#cdded5] px-3 py-2 text-xs font-bold text-[#365b4d] disabled:opacity-40">Try photographed receipt</button></div><p className="mt-2 text-[10px] text-[#73837c]">Receipt photo is a fictional filedone.ai specimen (CC0 1.0). The MYR invoice is a fictional scan created for OCR testing; neither is a customer record.</p>
     </div>
 
     <div className="mt-5 grid gap-3 lg:grid-cols-[1fr_1fr_1fr_2fr_auto]">

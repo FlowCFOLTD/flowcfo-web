@@ -11,7 +11,7 @@ export type ProductWorkspace = { id: string; name: string; workspace_type: 'pers
 export type ProductAccount = { id: string; name: string; currency: string; current_balance: string | null; available_balance: string | null };
 export type ProductCommitment = { id: string; name: string; direction: 'inflow' | 'outflow'; amount: string; currency: string; due_on: string; state: string };
 export type ProductAlert = { id: string; rule_key: string; severity: string; title: string; message: string; evidence: Record<string, unknown>; triggered_at: string };
-export type FxExposureItem = { currency: string; account_balance: number | null; inflows: number | null; outflows: number | null; net_flow: number | null; entry_count: number; committed_due: number | null; committed_count: number; next_due_on: string | null };
+export type FxExposureItem = { currency: string; account_balance: number | null; inflows: number | null; outflows: number | null; net_flow: number | null; entry_count: number; committed_due: number | null; committed_count: number; next_due_on: string | null; rate_to_base?: number; rate_date?: string; rate_source?: string; account_balance_in_base?: number; committed_due_in_base?: number };
 export type FxExposure = { base_currency: string; window_days: number; horizon_days: number; currencies: FxExposureItem[] };
 export type ProductOfferMatch = { offer_id: string; type: string; provider: string; name: string; description: string; reason: string; matching_exposure_currencies: string[]; exposure?: FxExposureItem | null; requires_provider_assessment: boolean };
 export type ProductLedgerEntry = { id: string; direction: 'inflow' | 'outflow'; amount: string; currency: string; occurred_on: string; description: string; category: string | null; event_kind: string };
@@ -25,8 +25,9 @@ export type ProductOverview = {
   guidance: { actions: Array<{ priority: string; action: string; reason: string }> };
 };
 export type ProductSpending = {
+  period?: { start: string; end: string; days: number };
   category_spend: Array<{ category: string; amount: number; gross_spend?: number; linked_refunds?: number; net_spend?: number }>;
-  budgets: Array<{ budget_id: string; category: string; limit: number; spent: number; status: string; period: string; currency: string }>;
+  budgets: Array<{ budget_id: string; category: string; limit: number; spent: number; status: string; period: string; period_start?: string; currency: string }>;
   recommendations: Array<{ type: string; priority: string; category?: string; message: string }>;
   data_quality: Record<string, unknown>;
 };
@@ -144,7 +145,9 @@ function scenarioCsv(scenario: 'consumer' | 'business') {
 async function ensureWorkspace(scenario: 'consumer' | 'business') {
   const kind = scenario === 'consumer' ? 'personal' : 'business';
   const today = isoDay(new Date());
-  const workspaceName = `FlowCFO demo ${scenario} ${today}`;
+  // v3 isolates the current repeatable fixture from prior demo workspaces whose
+  // accounts or imported rows may be stale or incomplete.
+  const workspaceName = `FlowCFO demo v3 ${scenario} ${today}`;
   const list = await request<Page<ProductWorkspace>>('/workspaces');
   let workspace = list.data.find((item) => item.name === workspaceName && item.workspace_type === kind);
   if (!workspace) {
@@ -196,7 +199,7 @@ async function ensureWorkspace(scenario: 'consumer' | 'business') {
     ? [{ offer_type: 'banking', provider_name: 'Demonstration catalogue', name: 'Spending account review', description: 'Illustrative bank account catalogue entry for category-spend matching.', target_categories: ['Dining'], supported_currencies: ['MYR'] }]
     : [
         { offer_type: 'financing', provider_name: 'Demonstration catalogue', name: 'Working-capital discussion', description: 'Route a recorded projected cash gap for a provider eligibility assessment.', target_categories: [], supported_currencies: ['MYR'], minimum_cash_gap: '1.00' },
-        { offer_type: 'fx', provider_name: 'Demonstration catalogue', name: 'FX exposure review', description: 'Review recorded foreign-currency exposure with a qualified treasury provider; no live-rate signal is supplied.', target_categories: [], supported_currencies: ['USD'] },
+        { offer_type: 'fx', provider_name: 'Demonstration catalogue', name: 'FX exposure review', description: 'Review recorded foreign-currency exposure converted at the latest available ECB reference rate; not an executable quote or hedge recommendation.', target_categories: [], supported_currencies: ['USD'] },
       ];
   for (const offer of catalogs) {
     if (!previousMatches.recommendations.some((item) => item.name === offer.name)) {
@@ -257,6 +260,11 @@ export const productDemoApi = {
   verifyNotificationDestination: (workspaceId: string, destinationId: string, code: string) => request(`/workspaces/${workspaceId}/notification-destinations/${destinationId}/verify?code=${encodeURIComponent(code)}`, { method: 'POST' }),
   evaluateAlerts: (workspaceId: string) => request<{ candidate_count: number; new_alert_count: number; alerts: ProductAlert[] }>(`/workspaces/${workspaceId}/alerts/evaluate`, { method: 'POST' }),
   listAlerts: (workspaceId: string) => request<Page<ProductAlert>>(`/workspaces/${workspaceId}/alerts?state=active&limit=100`),
+  askAdvisor: (workspaceId: string, question: string) => request<{
+    query_id: string; answer: string; data_used: string[]; model: string; latency_ms: number; state: string; as_of: string;
+  }>(`/workspaces/${workspaceId}/advisor/chat`, { method: 'POST', body: { question } }),
+  rateAdvisor: (workspaceId: string, queryId: string, rating: 'helpful' | 'not_helpful') => request<{ query_id: string; rating: string }>(
+    `/workspaces/${workspaceId}/advisor/queries/${queryId}/rating`, { method: 'POST', body: { rating } }),
   async sessionReady() {
     if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined'
       && new URLSearchParams(window.location.search).get('preview') === '1'

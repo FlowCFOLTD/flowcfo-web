@@ -26,7 +26,7 @@ const CONSUMER_REQUIREMENTS = [
   { label: 'Analyze spending behaviour', status: 'Working · recorded transactions' },
   { label: 'Remind upcoming commitments', status: 'Rules · recorded due dates' },
   { label: 'Recommend a better budget', status: 'Basic · spending vs. set limits' },
-  { label: 'Personal financial advisor', status: 'Bounded · not a comprehensive advisor' },
+  { label: 'Personal financial guidance', status: 'Live model explanation · bounded to recorded signals' },
   { label: 'Recommend banking products', status: 'Catalogue match · not suitability' },
 ];
 
@@ -35,7 +35,7 @@ const BUSINESS_REQUIREMENTS = [
   { label: 'Predict liquidity gaps', status: 'Baseline · not cross-customer validated' },
   { label: 'Alert upcoming obligations', status: 'Rules · recorded due dates' },
   { label: 'Suggest financing when needed', status: 'Catalogue match · not underwriting' },
-  { label: 'Recommend FX and relevant products', status: 'Exposure match · no live rates' },
+  { label: 'Recommend FX and relevant products', status: 'ECB reference conversion · no executable or hedge signal' },
   { label: 'Virtual CFO for SMEs', status: 'Bounded guidance · not full CFO advice' },
 ];
 
@@ -52,7 +52,7 @@ function Overview() {
       <div className="mt-8 flex flex-wrap gap-3">
         {['Live product API', 'Synthetic test records', 'Deterministic outputs', 'Partner policy stays with partner'].map((item) => <span key={item} className="rounded-full border border-[#DCDCD6] bg-white px-4 py-2 text-xs font-semibold text-[#4F504D] shadow-[0_1px_0_rgba(10,10,10,.03)]">{item}</span>)}
       </div>
-      <div className="mt-9 border-l-4 border-[#D4AF37] bg-white px-5 py-4 shadow-[0_12px_35px_rgba(10,10,10,.06)]"><p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#735C00]">What this demo proves</p><p className="mt-2 text-lg font-semibold leading-7 text-[#1D1E1C]">Recorded financial signals can produce a visible explanation, a rule alert and a configured catalogue match.</p><p className="mt-2 text-xs leading-5 text-[#68746e]">This is not a generative AI advisor, an eligibility decision or proof of prevented delinquency.</p></div>
+      <div className="mt-9 border-l-4 border-[#D4AF37] bg-white px-5 py-4 shadow-[0_12px_35px_rgba(10,10,10,.06)]"><p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#735C00]">What this demo proves</p><p className="mt-2 text-lg font-semibold leading-7 text-[#1D1E1C]">Recorded financial signals drive calculations and alerts; a configured language model explains the resulting picture.</p><p className="mt-2 text-xs leading-5 text-[#68746e]">Recommendations are bounded decision support. Eligibility, suitability, model accuracy and delinquency prevention require separate validation.</p></div>
     </div>
     <div className="relative rounded-[28px] border border-[#DCDCD6] bg-white p-5 shadow-[0_28px_80px_rgba(10,10,10,.09)] md:p-7">
       <div className="absolute -right-3 -top-3 flex h-16 w-16 items-center justify-center rounded-full border-8 border-[#F7F7F4] bg-[#D4AF37] text-[#0A0A0A] shadow-lg"><Sparkles className="h-6 w-6" /></div>
@@ -84,11 +84,11 @@ function Integration() {
   const stages = [
     { icon: DatabaseZap, title: '1. Receive the financial picture', text: 'Transactions, balances, invoices, commitments, repayments and FX exposure arrive through the product API or supported CSV/XLSX files. Direct bank feeds and spreadsheet connectors require partner integration.' },
     { icon: ScanSearch, title: '2. Normalize and calculate', text: 'FlowCFO converts each source into a consistent financial timeline, then runs deterministic cash-flow, budget and early-warning calculations.' },
-    { icon: BrainCircuit, title: '3. Explain the next action', text: 'Current v2 guidance is deterministic and reason-coded. A generative AI advisor is not wired into this API; any model layer must be separately configured and evaluated.' },
+    { icon: BrainCircuit, title: '3. Explain the next action', text: 'A configured language model explains a compact context calculated from stored workspace records. Calculated values remain the source of truth; generated wording must be evaluated and is not a trained model.' },
     { icon: Landmark, title: '4. Match the partner catalogue', text: 'The API can match configured offers to recorded spending, cash-gap or currency signals. Eligibility, pricing, suitability and final decisions remain partner-owned; those policies need integration.' },
   ];
   return <div>
-    <div className="max-w-4xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#8A6D12]">How it works</p><h2 className="mt-3 font-display text-5xl font-bold leading-[1.02] tracking-[-.04em] text-[#0A0A0A]">Data becomes an explainable action—not a black-box answer.</h2><p className="mt-5 max-w-3xl text-lg leading-8 text-[#62625F]">The ingestion layer matters because guidance is only useful when balances, dates, obligations and source quality are understood first. The v2 API separates financial calculations from deterministic guidance and catalogue matching. Model routing, partner-specific policies and direct bank feeds are integration work—not capabilities this demo claims as complete.</p></div>
+    <div className="max-w-4xl"><p className="text-xs font-bold uppercase tracking-[0.2em] text-[#8A6D12]">How it works</p><h2 className="mt-3 font-display text-5xl font-bold leading-[1.02] tracking-[-.04em] text-[#0A0A0A]">Data becomes an explainable action—not a black-box answer.</h2><p className="mt-5 max-w-3xl text-lg leading-8 text-[#62625F]">The ingestion layer matters because guidance is only useful when balances, dates, obligations and source quality are understood first. The v2 API calculates cash flow, spending, budgets, alerts and catalogue matches; a configured language model explains this recorded picture. Model output still requires quality and safety evaluation. Partner policies and direct bank feeds require integration.</p></div>
     <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">{stages.map(({ icon: Icon, title, text }, index) => <article key={title} className="relative overflow-hidden rounded-2xl border border-[#E0DFD9] bg-white p-5 shadow-[0_10px_30px_rgba(10,10,10,.04)]"><span className="absolute right-4 top-3 font-mono text-4xl font-bold text-[#F0EFEA]">0{index + 1}</span><span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFF3B8] text-[#735C00]"><Icon className="h-5 w-5" /></span><h3 className="relative mt-4 font-semibold text-[#0A0A0A]">{title}</h3><p className="relative mt-2 text-sm leading-6 text-[#62625F]">{text}</p></article>)}</div>
     <p className="mt-5 rounded-xl border border-[#e5d9a7] bg-[#fff9dc] px-4 py-3 text-xs leading-5 text-[#5d4a0b]">Early warning currently means deterministic rules over recorded data. Lead time, false-positive rate and delinquency prevention have not yet been validated.</p>
     <div className="mt-6"><ProductIngestionDemo /></div>
