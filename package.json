@@ -6,6 +6,9 @@
     "dev": "next dev --webpack --port 3002",
     "build": "next build",
     "start": "next start",
+    "build:worker": "opennextjs-cloudflare build",
+    "preview:worker": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy:worker": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "lint": "eslint",
     "postinstall": "node -e \"const fs=require('fs');const p='node_modules/pg-cloudflare/package.json';const j=JSON.parse(fs.readFileSync(p,'utf8'));j.exports['.']='./dist/index.js';fs.writeFileSync(p,JSON.stringify(j,null,2))\""
   },
