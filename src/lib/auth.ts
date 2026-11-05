@@ -10,6 +10,11 @@ const BETTER_AUTH_SECRET = process.env.BETTER_AUTH_SECRET;
 const BETTER_AUTH_URL = process.env.BETTER_AUTH_URL;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL || 'FlowCFO <hello@flowcfo.net>';
+const TRUSTED_ORIGINS = [
+  'https://flowcfo.net',
+  'https://www.flowcfo.net',
+  ...(isLocal ? ['http://localhost:3002', 'http://localhost:3000'] : []),
+];
 
 let auth: any = null;
 let initError: Error | null = null;
@@ -82,6 +87,7 @@ try {
     ],
     secret: BETTER_AUTH_SECRET,
     baseURL: BETTER_AUTH_URL,
+    trustedOrigins: TRUSTED_ORIGINS,
   });
 } catch (e) {
   initError = e instanceof Error ? e : new Error(String(e));

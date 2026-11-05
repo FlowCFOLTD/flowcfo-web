@@ -1,7 +1,7 @@
 import { authClient } from '@/lib/auth-client';
 import { apiClientAtBase } from '@/lib/api-client';
 
-const rawBase = process.env.NEXT_PUBLIC_PRODUCT_API_URL || 'http://localhost:8001';
+const rawBase = process.env.NEXT_PUBLIC_PRODUCT_API_URL || 'https://api.flowcfo.net';
 const PRODUCT_API_BASE = rawBase.startsWith('http://') || rawBase.startsWith('https://')
   ? rawBase.replace(/\/$/, '')
   : `http://${rawBase.replace(/\/$/, '')}`;
