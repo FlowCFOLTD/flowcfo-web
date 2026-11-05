@@ -52,7 +52,7 @@ try {
         async sendVerificationOTP({ email, otp, type }) {
           if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY is not set");
           const resend = new Resend(RESEND_API_KEY);
-          await resend.emails.send({
+          const { data: sendData, error: sendError } = await resend.emails.send({
             from: FROM_EMAIL,
             to: email,
             subject:
@@ -72,6 +72,11 @@ try {
               </div>
             `,
           });
+          if (sendError) {
+            console.error('[auth] Resend rejected OTP email:', sendError);
+            throw new Error(`Could not send verification email: ${sendError.message}`);
+          }
+          console.log('[auth] OTP email accepted by Resend', sendData?.id);
         },
       }),
     ],

@@ -71,6 +71,7 @@ export async function apiClientAtBase<T>(
 
   const config: RequestInit = {
     method: body ? 'POST' : 'GET',
+    cache: 'no-store',
     ...customConfig,
     headers: {
       ...headers,

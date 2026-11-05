@@ -9,7 +9,6 @@ import {
   RotateCcw, ScanSearch, ShieldCheck, Sparkles, TrendingDown, UserRound, WalletCards,
 } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
-import { adminApi } from '@/lib/api/users';
 import FinancialScenarioDemo from '@/components/admin/financial-scenario-demo';
 import ProductIngestionDemo from '@/components/admin/product-ingestion-demo';
 import AlertDeliveryDemo from '@/components/admin/alert-delivery-demo';
@@ -105,7 +104,7 @@ export default function PitchPage() {
     // Local visual QA only. The production bundle compiles this branch out.
     const params = new URLSearchParams(window.location.search);
     if (process.env.NODE_ENV !== 'production' && params.get('preview') === '1') { const requested = Number(params.get('chapter') ?? 0); setChapter(Number.isInteger(requested) ? Math.min(CHAPTERS.length - 1, Math.max(0, requested)) : 0); setVisualQa(params.get('autorun') === '1'); setAllowed(true); return; }
-    const { data, error } = await authClient.getSession(); if (error || !data?.user) { router.push('/admin/login'); return; } try { await adminApi.getMe(); setAllowed(true); } catch { router.push('/admin/login'); }
+    const { data, error } = await authClient.getSession(); if (error || !data?.user) { router.push('/admin/login'); return; } setAllowed(true);
   }; void init(); }, [router]);
   useEffect(() => { const keys = (event: KeyboardEvent) => { if (event.key === 'ArrowRight') setChapter((value) => Math.min(CHAPTERS.length - 1, value + 1)); if (event.key === 'ArrowLeft') setChapter((value) => Math.max(0, value - 1)); }; window.addEventListener('keydown', keys); return () => window.removeEventListener('keydown', keys); }, []);
   if (!allowed) return <div className="flex min-h-screen items-center justify-center bg-[#f4faf7]"><Loader2 className="h-7 w-7 animate-spin text-[#087f75]" /></div>;

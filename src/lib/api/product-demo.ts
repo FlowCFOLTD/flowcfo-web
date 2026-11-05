@@ -40,6 +40,7 @@ export type ProductGuidance = {
 export type ProductDemoResult = {
   workspace: ProductWorkspace;
   account: ProductAccount;
+  horizonDays: number;
   overview: ProductOverview;
   spending: ProductSpending;
   guidance: ProductGuidance;
@@ -210,21 +211,22 @@ async function ensureWorkspace(scenario: 'consumer' | 'business') {
 }
 
 export const productDemoApi = {
-  async runScenario(scenario: 'consumer' | 'business'): Promise<ProductDemoResult> {
+  async runScenario(scenario: 'consumer' | 'business', horizonDays: 30 | 60 | 90 = 60): Promise<ProductDemoResult> {
     const started = performance.now();
     const { workspace, account } = await ensureWorkspace(scenario);
     await request(`/workspaces/${workspace.id}/alerts/evaluate`, { method: 'POST' });
     const asOf = isoDay(new Date());
     const queryAsOf = `as_of=${asOf}`;
+    const outlookQuery = `${queryAsOf}&horizon_days=${horizonDays}`;
     const [overview, spending, guidance, alerts, offers, entries] = await Promise.all([
-      request<ProductOverview>(`/workspaces/${workspace.id}/insights/overview?${queryAsOf}&horizon_days=60`),
+      request<ProductOverview>(`/workspaces/${workspace.id}/insights/overview?${outlookQuery}`),
       request<ProductSpending>(`/workspaces/${workspace.id}/insights/spending?${queryAsOf}`),
-      request<ProductGuidance>(`/workspaces/${workspace.id}/insights/guidance?${queryAsOf}&horizon_days=60`),
+      request<ProductGuidance>(`/workspaces/${workspace.id}/insights/guidance?${outlookQuery}`),
       request<Page<ProductAlert>>(`/workspaces/${workspace.id}/alerts?state=active&limit=100`),
       request<{ recommendations: ProductOfferMatch[]; fx_exposure?: FxExposure }>(`/workspaces/${workspace.id}/recommendations/products`),
       request<Page<ProductLedgerEntry>>(`/workspaces/${workspace.id}/ledger-entries?from_date=${dateDaysAgo(60)}&to_date=${asOf}&limit=200`),
     ]);
-    return { workspace, account, overview, spending, guidance, alerts: alerts.data, offers: offers.recommendations, fxExposure: offers.fx_exposure ?? null, entries: entries.data, elapsedMs: Math.round(performance.now() - started) };
+    return { workspace, account, horizonDays, overview, spending, guidance, alerts: alerts.data, offers: offers.recommendations, fxExposure: offers.fx_exposure ?? null, entries: entries.data, elapsedMs: Math.round(performance.now() - started) };
   },
   listWorkspaces: () => request<Page<ProductWorkspace>>('/workspaces'),
   listAccounts: (workspaceId: string) => request<Page<ProductAccount>>(`/workspaces/${workspaceId}/accounts`),

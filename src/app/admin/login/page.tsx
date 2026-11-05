@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { authClient } from '@/lib/auth-client';
-import { adminApi } from '@/lib/api/users';
 import { Button } from '@/components/ui/button';
 import { Mail, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
 
@@ -63,13 +62,12 @@ export default function AdminLoginPage() {
         throw new Error(authError.message || 'Invalid OTP');
       }
 
-      // Verify admin access by calling admin/me
-      try {
-        await adminApi.getMe();
-      } catch {
-        throw new Error('Admin access not granted. Contact support@flowcfo.net.');
+      // v2 auth: the Better Auth session itself is the admin gate.
+      const { data: sessionData, error: sessionError } = await authClient.getSession();
+      if (sessionError || !sessionData?.user) {
+        throw new Error('Admin session could not be established. Please try again.');
       }
-      router.push('/admin/dashboard');
+      router.push('/admin/pitch');
     } catch (err: unknown) {
       setError(
         err instanceof Error

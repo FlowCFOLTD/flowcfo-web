@@ -52,7 +52,7 @@ export default function AlertDeliveryDemo() {
   };
 
   return <section>
-    <div className="max-w-4xl"><p className="text-xs font-bold uppercase tracking-[.2em] text-[#087f75]">Alert lifecycle · verified email · product API</p><h2 className="mt-3 font-display text-4xl font-bold leading-[1.04] tracking-[-.04em] text-[#173b38] md:text-5xl">A rule becomes a notification only after the recipient opts in.</h2><p className="mt-5 max-w-3xl text-base leading-7 text-[#53665f]">This walkthrough uses the standard workspace notification flow: register an address, verify control of the inbox, evaluate the recorded obligations, and enqueue deduplicated delivery. Actual email delivery depends on the notification worker and configured SMTP provider.</p></div>
+    <div className="max-w-4xl"><p className="text-xs font-bold uppercase tracking-[.2em] text-[#087f75]">Alert lifecycle · verified email · product API</p><h2 className="mt-3 font-display text-4xl font-bold leading-[1.04] tracking-[-.04em] text-[#173b38] md:text-5xl">A rule becomes a notification only after the recipient opts in.</h2><p className="mt-5 max-w-3xl text-base leading-7 text-[#53665f]">This walkthrough uses the standard workspace notification flow: register an address, verify control of the inbox, evaluate the recorded obligations, and enqueue deduplicated delivery through Resend. The worker must be running to deliver queued alerts.</p></div>
 
     <div className="mt-8 grid gap-5 xl:grid-cols-[.8fr_1.2fr]">
       <div className="space-y-3">
